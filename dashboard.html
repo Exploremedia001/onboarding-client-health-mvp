@@ -1118,12 +1118,6 @@
             <i data-lucide="mail" style="width: 18px; height: 18px"></i> MailChimp
           </li>
         </ul>
-        <div class="sidebar-section-title">Financial</div>
-        <ul class="sidebar-nav" style="margin-top: 0">
-          <li onclick="showTab('tab-financials')">
-            <i data-lucide="dollar-sign" style="width: 18px; height: 18px"></i> Financial Overview
-          </li>
-        </ul>
       </div>
 
     </aside>
@@ -3483,266 +3477,153 @@
           </div>
         </div>
 
-        <!-- EMAIL AUDIT - MAILCHIMP TAB -->
+                        <!-- EMAIL AUDIT - MAILCHIMP TAB -->
         <div id="tab-mailchimp" class="tab-content">
-          <div class="sub-tabs">
-            <div class="sub-tab active" onclick="showSubTab(this, 'mailchimp-overview', 'tab-mailchimp')">Overview</div>
-          </div>
+          <!-- AI Customer Insights Tab directly visible -->
           <div id="mailchimp-overview" class="sub-tab-content active">
+            <!-- AI Executive Summary Banner -->
+            <div class="chart-card w-100" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(20,47,69,0.02) 0%, rgba(238,104,59,0.02) 100%); border-left: 4px solid var(--color-accent); cursor: default;">
+              <div style="display: flex; align-items: flex-start; gap: 16px;">
+                <div style="background: rgba(238,104,59,0.1); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; color: var(--color-accent);">
+                  <i data-lucide="sparkles" style="width: 24px; height: 24px;"></i>
+                </div>
+                <div style="flex: 1;">
+                  <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--color-accent); letter-spacing: 0.05em; margin-bottom: 4px;">AI Executive Summary</div>
+                  <div id="mailchimp-ai-summary-text" style="font-size: 14px; line-height: 1.6; font-weight: 500; color: var(--color-primary);">
+                    Loading AI customer summary...
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- KPI Row -->
             <div class="kpi-grid" style="margin-bottom: 24px;">
-              <div class="kpi-card">
-                <div class="kpi-label">MailChimp Contacts</div>
-                <div class="kpi-value" id="mailchimp-contacts">24,520</div>
-                <div class="kpi-delta"><span style="background: #10b981;">+6.2%</span></div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Total workspace
-                  list count</div>
+              <!-- Card 1: Sentiment Analysis -->
+              <div class="kpi-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="kpi-label">Customer Sentiment</div>
+                  <div id="mailchimp-sentiment-title" class="kpi-value" style="font-size: 28px; font-weight: 800; margin-bottom: 8px;">0% Positive</div>
+                </div>
+                <div>
+                  <!-- Progress bar -->
+                  <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin-bottom: 8px;">
+                    <div id="mailchimp-sentiment-progress" style="width: 0%; height: 100%; background: var(--color-success); border-radius: 4px; transition: width 0.5s ease;"></div>
+                  </div>
+                  <!-- Counts breakdown -->
+                  <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 600;">
+                    <span style="color: var(--color-success);" id="mailchimp-sentiment-pos">Pos: 0</span>
+                    <span style="color: var(--color-secondary);" id="mailchimp-sentiment-neu">Neu: 0</span>
+                    <span style="color: var(--color-danger);" id="mailchimp-sentiment-neg">Neg: 0</span>
+                  </div>
+                </div>
               </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Average Open Rate</div>
-                <div class="kpi-value" id="mailchimp-open-rate">28.4%</div>
-                <div class="kpi-delta"><span style="background: #10b981;">+1.2%</span></div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Industry median:
-                  21.3%</div>
+
+              <!-- Card 2: Top Customer Complaints -->
+              <div class="kpi-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="kpi-label">Top Customer Complaint</div>
+                  <div id="mailchimp-top-complaint-title" class="kpi-value" style="font-size: 20px; font-weight: 700; line-height: 1.2; margin-top: 4px; color: var(--color-primary);">None</div>
+                </div>
+                <div style="font-size: 12px; color: var(--color-muted); display: flex; align-items: center; gap: 4px;">
+                  <i data-lucide="alert-circle" style="width: 14px; height: 14px; color: var(--color-accent);"></i>
+                  <span id="mailchimp-top-complaint-meta">0 mentions this week</span>
+                </div>
               </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Average Click Rate</div>
-                <div class="kpi-value" id="mailchimp-click-rate">4.82%</div>
-                <div class="kpi-delta"><span style="background: #10b981;">+0.5%</span></div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Total campaign
-                  clicks metrics</div>
+
+              <!-- Card 3: Churn Risk Detection -->
+              <div class="kpi-card" style="display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+                <div>
+                  <div class="kpi-label">Churn Risk Detection</div>
+                  <div id="mailchimp-churn-count" class="kpi-value" style="font-size: 28px; font-weight: 800; color: var(--color-danger); display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="alert-triangle" style="width: 24px; height: 24px; color: var(--color-danger);"></i> 0 Customers
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                  <span style="font-size: 11px; color: var(--color-muted);">Showing signals</span>
+                  <span id="mailchimp-churn-risk-badge" class="badge badge-danger" style="margin: 0; padding: 2px 8px; font-size: 10px; font-weight: 700;">Risk Level: High</span>
+                </div>
               </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Monthly Growth</div>
-                <div class="kpi-value" id="mailchimp-growth">+422</div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Subscribers delta
-                  this month</div>
+
+              <!-- Card 4: Unanswered Emails & Response Time (Modified to make Unanswered Count the Large Font) -->
+              <div class="kpi-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="kpi-label">Unanswered Emails</div>
+                  <div id="mailchimp-unanswered-count-large" class="kpi-value" style="font-size: 28px; font-weight: 800; color: var(--color-primary);">0</div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 600; border-top: 1px solid var(--color-border); padding-top: 8px; margin-top: 4px;">
+                  <span style="color: var(--color-secondary);" id="mailchimp-avg-response">Avg Response: 0.0 hrs</span>
+                  <span style="color: var(--color-danger);" id="mailchimp-urgency-count">0 Urgent</span>
+                </div>
               </div>
             </div>
 
+            <!-- Charts Row 1 -->
             <div class="charts-row" style="margin-bottom: 24px;">
-              <div class="chart-card w-65">
-                <div class="chart-title">Newsletter Click Trends Sinks</div>
-                <div class="chart-container" style="height: 320px; position: relative;">
-                  <canvas id="mailchimp-click-chart"></canvas>
+              <!-- Customer Satisfaction Trend -->
+              <div class="chart-card w-50">
+                <div class="chart-title">Customer Satisfaction Trend (MoM)</div>
+                <div class="chart-container" style="height: 200px; position: relative;">
+                  <canvas id="mailchimp-satisfaction-chart"></canvas>
+                </div>
+                <!-- MoM Alert Box -->
+                <div id="mailchimp-satisfaction-alert" style="margin-top: 16px; background: rgba(238,104,59,0.05); border: 1px dashed var(--color-border); border-radius: 8px; padding: 12px; font-size: 12px; display: flex; align-items: center; gap: 8px; color: var(--color-primary);">
+                  <i data-lucide="info" style="width: 16px; height: 16px; color: var(--color-accent); flex-shrink:0;"></i>
+                  <span id="mailchimp-satisfaction-alert-text">Satisfaction alert data loading...</span>
                 </div>
               </div>
-              <div class="chart-card w-35" style="display: flex; flex-direction: column;">
-                <div class="chart-title">MailChimp Health Indicators</div>
-                <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:20px;">
-                  <div>
-                    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;"><span
-                        style="font-weight:600; color:var(--color-primary);">List Deliverability</span><span
-                        style="color:var(--color-success); font-weight:700;">99.1%</span></div>
-                    <div
-                      style="width:100%; height:8px; background:var(--color-light); border-radius:9999px; overflow:hidden;">
-                      <div style="width:99.1%; height:100%; background:var(--color-success); border-radius:4px;"></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;"><span
-                        style="font-weight:600; color:var(--color-primary);">Subscribes vs Unsubscribes</span><span
-                        style="color:var(--color-success); font-weight:700;">14.2x ratio</span></div>
-                    <div
-                      style="width:100%; height:8px; background:var(--color-light); border-radius:9999px; overflow:hidden;">
-                      <div style="width:85%; height:100%; background:var(--color-primary); border-radius:4px;"></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;"><span
-                        style="font-weight:600; color:var(--color-primary);">Average Spam Complaint Score</span><span
-                        style="color:var(--color-success); font-weight:700;">0.02% (Excellent)</span></div>
-                    <div
-                      style="width:100%; height:8px; background:var(--color-light); border-radius:9999px; overflow:hidden;">
-                      <div style="width:3%; height:100%; background:var(--color-accent); border-radius:4px;"></div>
-                    </div>
-                  </div>
+
+              <!-- Customer Intent Analysis -->
+              <div class="chart-card w-50">
+                <div class="chart-title">Customer Email Intent Analysis</div>
+                <div class="chart-container" style="height: 280px; position: relative;">
+                  <canvas id="mailchimp-intent-chart"></canvas>
                 </div>
               </div>
             </div>
 
-            <div style="margin-top: 12px; margin-bottom: 12px;">
-              <div class="chart-title" style="margin-bottom: 12px;">MailChimp Sent Newsletters & Campaigns</div>
-              <div class="table-container custom-scroll" style="overflow-x: auto;">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Campaign Name</th>
-                      <th>Sent Date</th>
-                      <th style="text-align: right;">Total Contacts Sent</th>
-                      <th style="text-align: right;">Open Rate (Pct)</th>
-                      <th style="text-align: right;">Click-Through Rate</th>
-                      <th style="text-align: center;">Delivery Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td style="font-weight:600; color:var(--color-primary); border-bottom: none;">May Newsletter: 10
-                        Branding Hacks for 2026</td>
-                      <td style="color: var(--color-muted);">May 28, 2026</td>
-                      <td style="text-align: right; font-weight:600;">24,380</td>
-                      <td style="text-align: right; color:var(--color-primary); font-weight:600;">29.1%</td>
-                      <td style="text-align: right; color:var(--color-accent); font-weight:600;">5.20%</td>
-                      <td style="text-align: center;"><span class="badge badge-success">Completed</span></td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight:600; color:var(--color-primary); border-bottom: none;">Q2 Media Strategy
-                        Alignment Announcement</td>
-                      <td style="color: var(--color-muted);">May 14, 2026</td>
-                      <td style="text-align: right; font-weight:600;">24,190</td>
-                      <td style="text-align: right; color:var(--color-primary); font-weight:600;">28.4%</td>
-                      <td style="text-align: right; color:var(--color-accent); font-weight:600;">4.80%</td>
-                      <td style="text-align: center;"><span class="badge badge-success">Completed</span></td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight:600; color:var(--color-primary); border-bottom: none;">Urgent: Media
-                        Dashboards Upgrade Core Fixes</td>
-                      <td style="color: var(--color-muted);">Apr 30, 2026</td>
-                      <td style="text-align: right; font-weight:600;">23,980</td>
-                      <td style="text-align: right; color:var(--color-primary); font-weight:600;">32.7%</td>
-                      <td style="text-align: right; color:var(--color-accent); font-weight:600;">6.40%</td>
-                      <td style="text-align: center;"><span class="badge badge-success">Completed</span></td>
-                    </tr>
-                  </tbody>
-                </table>
+            <!-- Row 2: Complaints and Topic Clustering -->
+            <div class="charts-row" style="margin-bottom: 24px;">
+              <!-- Recurring Complaints Table -->
+              <div class="chart-card w-60">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                  <div class="chart-title" style="margin: 0;">Top Customer Complaints</div>
+                  <span style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase;">Mentions Count</span>
+                </div>
+                <div class="table-container custom-scroll" style="overflow-y: auto; max-height: 250px; border: none; box-shadow: none; border-radius: 0;">
+                  <table style="width: 100%;">
+                    <thead>
+                      <tr style="background: var(--color-warm);">
+                        <th style="padding: 10px;">Complaint Description</th>
+                        <th style="padding: 10px; width: 120px; text-align: center;">Mentions</th>
+                        <th style="padding: 10px; width: 180px;">Visual Weight</th>
+                      </tr>
+                    </thead>
+                    <tbody id="mailchimp-complaints-tbody">
+                      <!-- Dynamically populated -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Topic Clustering -->
+              <div class="chart-card w-40" style="display: flex; flex-direction: column;">
+                <div class="chart-title" style="margin-bottom: 16px;">AI Topic Clustering</div>
+                <div style="font-size: 12px; color: var(--color-muted); margin-bottom: 16px;">Most Discussed Topics:</div>
+                <div id="mailchimp-topics-container" style="display: flex; flex-wrap: wrap; gap: 10px; flex: 1; align-content: flex-start;">
+                  <!-- Dynamic topic bubbles -->
+                </div>
+                <p style="font-size: 11px; color: var(--color-muted); line-height: 1.4; border-top: 1px solid var(--color-border); padding-top: 12px; margin-top: 12px;">
+                  * AI automatically clusters customer emails into topics to save reading time.
+                </p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- FINANCIAL MANAGEMENT TAB -->
-        <div id="tab-financials" class="tab-content">
-          <div class="sub-tabs">
-            <div class="sub-tab active" onclick="showSubTab(this, 'financials-overview', 'tab-financials')">Overview
-            </div>
-          </div>
-          <div id="financials-overview" class="sub-tab-content active">
-            <div class="kpi-grid" style="margin-bottom: 24px;">
-              <div class="kpi-card">
-                <div class="kpi-label">Gross Media Billing</div>
-                <div class="kpi-value" id="financial-billing">$124,500</div>
-                <div class="kpi-delta"><span style="background: #10b981;">+14.2%</span></div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Revenues processed
-                  this period</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Total Media Spend</div>
-                <div class="kpi-value" id="financial-spend">$84,200</div>
-                <div class="kpi-delta"><span style="background: #10b981;">-5.30%</span></div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Sinks in
-                  advertisement channels</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Net Profit Margin</div>
-                <div class="kpi-value" id="financial-margin">32.4%</div>
-                <div class="kpi-delta"><span style="background: #10b981;">+1.50%</span></div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Target threshold
-                  limit: 25%</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Marketing ROI</div>
-                <div class="kpi-value" id="financial-roi" style="color:var(--color-accent);">2.82x</div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Aggregate return
-                  on investment</div>
-              </div>
-            </div>
-
-            <div class="charts-row" style="margin-bottom: 24px;">
-              <div class="chart-card w-65">
-                <div class="chart-title">Income Statement (Billing vs Spending)</div>
-                <div class="chart-container" style="height: 320px; position: relative;">
-                  <canvas id="financial-flow-chart"></canvas>
-                </div>
-              </div>
-              <div class="chart-card w-35">
-                <div class="chart-title">Direct Ad Spending Distribution</div>
-                <div class="chart-container" style="height: 320px; position: relative;">
-                  <canvas id="financial-adspend-pie"></canvas>
-                </div>
-              </div>
-            </div>
-
-            <div style="margin-top: 12px; margin-bottom: 12px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
-                <div class="chart-title" style="margin: 0;">Recent Client Invoices & Receivables</div>
-                <button onclick="triggerFinancialAlert('create-invoice')" class="btn-primary"
-                  style="font-size:12px; padding:6px 12px;"><i data-lucide="plus"
-                    style="width:14px; height:14px; display:inline-block; vertical-align:middle;"></i> Generate
-                  Invoice</button>
-              </div>
-              <div class="table-container custom-scroll" style="overflow-x: auto;">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Invoice ID</th>
-                      <th>Associated Client</th>
-                      <th style="text-align: right;">Gross Ad Sinks</th>
-                      <th style="text-align: right;">Billed Fee</th>
-                      <th style="text-align: center;">Billing Date</th>
-                      <th style="text-align: center;">Payment Status</th>
-                      <th style="text-align: center;">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td style="font-weight: 600; color: var(--color-primary); border-bottom: none;">INV-2026-004</td>
-                      <td style="font-weight: 500; border-bottom: none;">Acme Global Corp</td>
-                      <td
-                        style="text-align: right; color: var(--color-muted); font-family: var(--font-mono); border-bottom: none;">
-                        $34,500</td>
-                      <td
-                        style="text-align: right; font-weight: 700; color: var(--color-primary); font-family: var(--font-mono); border-bottom: none;">
-                        $48,200</td>
-                      <td style="text-align: center; border-bottom: none;">Jun 04, 2026</td>
-                      <td style="text-align: center; border-bottom: none;"><span class="badge badge-success">PAID</span>
-                      </td>
-                      <td style="text-align: center; border-bottom: none;">
-                        <button onclick="triggerFinancialAlert('send-receipt', 'INV-2026-004')"
-                          style="background:none; border:none; color: var(--color-primary); cursor:pointer; font-size:11px; font-weight:600; display:inline-flex; align-items:center; gap:4px;"><i
-                            data-lucide="mail" style="width:14px; height:14px;"></i> Receipt</button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: 600; color: var(--color-primary); border-bottom: none;">INV-2026-003</td>
-                      <td style="font-weight: 500; border-bottom: none;">Delta Media Group Inc</td>
-                      <td
-                        style="text-align: right; color: var(--color-muted); font-family: var(--font-mono); border-bottom: none;">
-                        $18,400</td>
-                      <td
-                        style="text-align: right; font-weight: 700; color: var(--color-primary); font-family: var(--font-mono); border-bottom: none;">
-                        $26,100</td>
-                      <td style="text-align: center; border-bottom: none;">May 28, 2026</td>
-                      <td style="text-align: center; border-bottom: none;"><span class="badge badge-success">PAID</span>
-                      </td>
-                      <td style="text-align: center; border-bottom: none;">
-                        <button onclick="triggerFinancialAlert('send-receipt', 'INV-2026-003')"
-                          style="background:none; border:none; color: var(--color-primary); cursor:pointer; font-size:11px; font-weight:600; display:inline-flex; align-items:center; gap:4px;"><i
-                            data-lucide="mail" style="width:14px; height:14px;"></i> Receipt</button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: 600; color: var(--color-primary); border-bottom: none;">INV-2026-002</td>
-                      <td style="font-weight: 500; border-bottom: none;">Stellar Launch Labs</td>
-                      <td
-                        style="text-align: right; color: var(--color-muted); font-family: var(--font-mono); border-bottom: none;">
-                        $12,020</td>
-                      <td
-                        style="text-align: right; font-weight: 700; color: var(--color-primary); font-family: var(--font-mono); border-bottom: none;">
-                        $17,450</td>
-                      <td style="text-align: center; border-bottom: none;">May 15, 2026</td>
-                      <td style="text-align: center; border-bottom: none;"><span
-                          class="badge badge-neutral">PROCESSING</span></td>
-                      <td style="text-align: center; border-bottom: none;">
-                        <button onclick="triggerFinancialAlert('ping-invoice', 'INV-2026-002')"
-                          style="background:none; border:none; color: var(--color-accent); cursor:pointer; font-size:11px; font-weight:600; display:inline-flex; align-items:center; gap:4px;"><i
-                            data-lucide="bell" style="width:14px; height:14px;"></i> Remind Client</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+      </div>
           </div>
         </div>
+
       </div>
     </main>
   </div> <!-- End of app-layout -->
@@ -7379,51 +7260,12 @@
         renderCallTranscripts();
       }
 
-      // 4. MailChimp Campaigns Click Rates Chart
+      // Render MailChimp Dynamic Dashboard
       if (
-        document.getElementById("mailchimp-click-chart") &&
-        document.getElementById("mailchimp-click-chart").offsetWidth > 0
+        document.getElementById("tab-mailchimp") &&
+        document.getElementById("tab-mailchimp").offsetWidth > 0
       ) {
-        if (chartInstances["mailchimp-click-chart"]) {
-          chartInstances["mailchimp-click-chart"].destroy();
-        }
-        chartInstances["mailchimp-click-chart"] = new Chart(
-          document.getElementById("mailchimp-click-chart"),
-          {
-            type: "line",
-            data: {
-              labels: ["Campaign A", "Campaign B", "Campaign C", "Campaign D", "Latest Campaign"],
-              datasets: [
-                {
-                  label: "Open Rate (%)",
-                  data: [24.1, 25.8, 26.4, 28.4, 29.1],
-                  borderColor: "#142f45",
-                  backgroundColor: "rgba(20, 47, 69, 0.05)",
-                  borderWidth: 2,
-                  tension: 0.3,
-                  yAxisID: "y-open"
-                },
-                {
-                  label: "CTR (%)",
-                  data: [4.2, 4.4, 4.8, 4.82, 5.2],
-                  borderColor: "#ee683b",
-                  backgroundColor: "rgba(238, 104, 59, 0.05)",
-                  borderWidth: 2,
-                  tension: 0.3,
-                  yAxisID: "y-click"
-                }
-              ]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                "y-open": { type: "linear", position: "left", title: { display: true, text: "Open Rate (%)" } },
-                "y-click": { type: "linear", position: "right", grid: { drawOnChartArea: false }, title: { display: true, text: "CTR (%)" } }
-              }
-            }
-          }
-        );
+        renderMailChimpDashboard();
       }
 
       // 5. Financial Flow (Billed Revenue vs Direct Media Spend)
@@ -7922,6 +7764,574 @@
     }
 
 
+    
+    // ==========================================
+    
+    // ==========================================
+    // --- MAILCHIMP CLIENT-SPECIFIC SENTIMENT DATA ---
+    // ==========================================
+    const MAILCHIMP_CLIENT_DATA = {
+      "Foundation Health & Wellness": {
+        sentiment: { positive: 124, neutral: 89, negative: 21, pct: 82, summary: "Customer sentiment is 82% positive. Main complaints are delayed service appointments and pricing concerns." },
+        complaints: [
+          { name: "Delayed service appointment", mentions: 15 },
+          { name: "Price too high", mentions: 12 },
+          { name: "Billing discrepancy", mentions: 8 },
+          { name: "Long phone wait time", mentions: 5 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 48 },
+          { category: "Support Request", count: 22 },
+          { category: "Complaint", count: 15 },
+          { category: "Cancellation", count: 8 },
+          { category: "Billing Question", count: 12 }
+        ],
+        churn: { count: 3, risk: "Medium" },
+        urgency: { count: 8 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [84, 86, 82],
+          alert: "Satisfaction score dropped 4 points in June, mainly related to appointment delays."
+        },
+        topics: ["Treatment Plans", "Skin Care Memberships", "Practitioner Schedules", "Billing & Invoices", "Cancellation Policies"],
+        responseTime: { avg: "2.4 hrs", unanswered: 6, delayed: 2 },
+        executiveSummary: "This week customers were primarily asking about treatment plans and membership pricing. Negative sentiment was low (8%), mainly related to practitioner scheduling constraints. 6 customers showed intent to upgrade to premium memberships, while 3 showed cancellation signals."
+      },
+      "JAG Medical Spa": {
+        sentiment: { positive: 98, neutral: 72, negative: 14, pct: 84, summary: "Customer sentiment is 84% positive. Main complaints are practitioner availability and booking confusion." },
+        complaints: [
+          { name: "Practitioner fully booked", mentions: 10 },
+          { name: "Double bookings", mentions: 8 },
+          { name: "Pricing clarity", mentions: 5 },
+          { name: "Room cleanliness", mentions: 2 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 35 },
+          { category: "Support Request", count: 18 },
+          { category: "Complaint", count: 9 },
+          { category: "Cancellation", count: 4 },
+          { category: "Billing Question", count: 8 }
+        ],
+        churn: { count: 2, risk: "Low" },
+        urgency: { count: 5 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [80, 83, 84],
+          alert: "Satisfaction trend continues to rise steadily, up 4 points since April."
+        },
+        topics: ["Botox Treatments", "Laser Therapy", "Esthetician Schedules", "Gift Cards", "Payment Plans"],
+        responseTime: { avg: "1.9 hrs", unanswered: 3, delayed: 1 },
+        executiveSummary: "This week patients focused on laser appointment availability and laser package promotions. High satisfaction remains for treatment outcomes. 4 patients showed minor dissatisfaction with long wait times in the lobby."
+      },
+      "Vital Roots Functional Medicine": {
+        sentiment: { positive: 110, neutral: 64, negative: 28, pct: 79, summary: "Customer sentiment is 79% positive. Main concerns involve lab result delays and supplement pricing." },
+        complaints: [
+          { name: "Lab results delay", mentions: 18 },
+          { name: "Supplement cost", mentions: 14 },
+          { name: "Insurance processing", mentions: 9 },
+          { name: "Difficult patient portal", mentions: 4 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 42 },
+          { category: "Support Request", count: 30 },
+          { category: "Complaint", count: 18 },
+          { category: "Cancellation", count: 9 },
+          { category: "Billing Question", count: 14 }
+        ],
+        churn: { count: 6, risk: "High" },
+        urgency: { count: 11 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [83, 81, 79],
+          alert: "Satisfaction dropped 4 points since April, mainly due to external lab processing backlogs."
+        },
+        topics: ["Blood Work Analysis", "Thyroid Protocols", "Supplement Shipments", "Portal Messaging", "Invoice Claims"],
+        responseTime: { avg: "3.5 hrs", unanswered: 12, delayed: 4 },
+        executiveSummary: "High inquiry volume about lab portal logins and supplement order tracking. Churn signals increased due to delays in blood work review schedules. Urgent replies relate to prescription refill approvals."
+      },
+      "Core Wellness & Recovery": {
+        sentiment: { positive: 135, neutral: 80, negative: 12, pct: 87, summary: "Customer sentiment is 87% positive. Main complaints are cryotherapy machine downtime and lockers." },
+        complaints: [
+          { name: "Cryo chamber offline", mentions: 8 },
+          { name: "Locker room crowd", mentions: 6 },
+          { name: "Membership freeze rules", mentions: 5 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 52 },
+          { category: "Support Request", count: 20 },
+          { category: "Complaint", count: 8 },
+          { category: "Cancellation", count: 3 },
+          { category: "Billing Question", count: 5 }
+        ],
+        churn: { count: 1, risk: "Low" },
+        urgency: { count: 3 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [85, 86, 87],
+          alert: "Customer satisfaction remains exceptionally high, peaking at 87% in June."
+        },
+        topics: ["Cryotherapy Sessions", "Sauna Bookings", "Cold Plunge Pass", "Corporate Discounts", "Account Suspensions"],
+        responseTime: { avg: "1.5 hrs", unanswered: 2, delayed: 0 },
+        executiveSummary: "Excellent weekly reviews focusing on sauna and cold plunge therapies. Cryotherapy downtime caused minor complaints, which are being resolved. Churn risk is extremely low."
+      },
+      "Vitality Medical Spa": {
+        sentiment: { positive: 90, neutral: 62, negative: 18, pct: 81, summary: "Customer sentiment is 81% positive. Main complaints are receptionist coordination and parking." },
+        complaints: [
+          { name: "Receptionist check-in delays", mentions: 12 },
+          { name: "No parking spaces", mentions: 8 },
+          { name: "Incorrect invoice details", mentions: 4 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 32 },
+          { category: "Support Request", count: 24 },
+          { category: "Complaint", count: 11 },
+          { category: "Cancellation", count: 5 },
+          { category: "Billing Question", count: 9 }
+        ],
+        churn: { count: 3, risk: "Medium" },
+        urgency: { count: 6 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [82, 80, 81],
+          alert: "Satisfaction is stable, hovering around 81%. Front desk staffing is being adjusted."
+        },
+        topics: ["Dermal Fillers", "IV Hydration Therapy", "Facial Packages", "Staff Invoicing", "Membership Discounts"],
+        responseTime: { avg: "2.1 hrs", unanswered: 5, delayed: 2 },
+        executiveSummary: "Positive feedback on IV hydration packages. Reception check-in delays raised minor negative feedback. 3 customers requested cancellations due to personal financial adjustments."
+      },
+      "Inner Calm Therapy Center": {
+        sentiment: { positive: 115, neutral: 58, negative: 10, pct: 88, summary: "Customer sentiment is 88% positive. Minor complaints around session rescheduling policies." },
+        complaints: [
+          { name: "Late cancel penalty fee", mentions: 7 },
+          { name: "Room acoustic privacy", mentions: 4 },
+          { name: "Therapist delay", mentions: 2 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 38 },
+          { category: "Support Request", count: 15 },
+          { category: "Complaint", count: 6 },
+          { category: "Cancellation", count: 2 },
+          { category: "Billing Question", count: 4 }
+        ],
+        churn: { count: 1, risk: "Low" },
+        urgency: { count: 2 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [85, 87, 88],
+          alert: "Satisfaction scores rose 3 points this quarter. Therapy outcomes are highly rated."
+        },
+        topics: ["CBT Sessions", "Massage Therapy", "Therapist Matches", "Cancellation Policy", "Insurance Claims"],
+        responseTime: { avg: "1.7 hrs", unanswered: 1, delayed: 0 },
+        executiveSummary: "Exceptional feedback regarding patient-therapist matchmaking. The main source of friction is the strict 24-hour cancellation penalty fee policy. Churn signals are near zero."
+      },
+      "Precision HVAC Experts": {
+        sentiment: { positive: 124, neutral: 89, negative: 21, pct: 82, summary: "Customer sentiment is 82% positive. Main complaints are delayed service appointments and pricing concerns." },
+        complaints: [
+          { name: "Service appointment delay", mentions: 32 },
+          { name: "Price too high", mentions: 19 },
+          { name: "No response to inquiry", mentions: 15 },
+          { name: "Scheduling issue", mentions: 12 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 48 },
+          { category: "Support Request", count: 22 },
+          { category: "Complaint", count: 15 },
+          { category: "Cancellation", count: 8 },
+          { category: "Billing Question", count: 12 }
+        ],
+        churn: { count: 5, risk: "High" },
+        urgency: { count: 14 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [81, 84, 72],
+          alert: "Satisfaction dropped 12 points in June due to summer AC repair response delays."
+        },
+        topics: ["Pricing & Quotes", "HVAC Repairs", "Maintenance Plans", "Appointment Scheduling", "Financing Options"],
+        responseTime: { avg: "3.2 hrs", unanswered: 17, delayed: 5 },
+        executiveSummary: "This week customers were primarily asking about maintenance plans and financing options. Negative sentiment increased by 8%, mainly related to appointment delays. 12 customers showed strong purchase intent and 3 customers showed churn risk."
+      },
+      "Apex Climate Control": {
+        sentiment: { positive: 104, neutral: 78, negative: 32, pct: 75, summary: "Customer sentiment is 75% positive. Main complaints are high dispatch fees and slow emergency callback times." },
+        complaints: [
+          { name: "Slow callback response", mentions: 24 },
+          { name: "High dispatch fee", mentions: 21 },
+          { name: "Unprofessional technician", mentions: 12 },
+          { name: "Parts out of stock", mentions: 8 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 39 },
+          { category: "Support Request", count: 28 },
+          { category: "Complaint", count: 22 },
+          { category: "Cancellation", count: 11 },
+          { category: "Billing Question", count: 15 }
+        ],
+        churn: { count: 7, risk: "High" },
+        urgency: { count: 18 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [80, 77, 75],
+          alert: "Satisfaction has slipped 5 points over the summer. Long callback queues are the main issue."
+        },
+        topics: ["AC Recharging", "Ductwork Leaks", "Dispatch Fees", "Thermostat Reset", "Warranty Claims"],
+        responseTime: { avg: "4.1 hrs", unanswered: 22, delayed: 8 },
+        executiveSummary: "High complaint volume about dispatch costs. Technical support queues are backlogged. Multiple customers threatened to switch providers due to slow dispatch times during the heatwave."
+      },
+      "Comfort Zone Heating & Air": {
+        sentiment: { positive: 118, neutral: 66, negative: 14, pct: 85, summary: "Customer sentiment is 85% positive. Complaints involve billing mismatches and quote accuracy." },
+        complaints: [
+          { name: "Quote mismatch on invoice", mentions: 11 },
+          { name: "Delayed email replies", mentions: 7 },
+          { name: "Filter delivery delays", mentions: 5 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 41 },
+          { category: "Support Request", count: 19 },
+          { category: "Complaint", count: 11 },
+          { category: "Cancellation", count: 3 },
+          { category: "Billing Question", count: 10 }
+        ],
+        churn: { count: 2, risk: "Low" },
+        urgency: { count: 6 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [82, 84, 85],
+          alert: "Satisfaction increased 3 points. Technical performance ratings remain excellent."
+        },
+        topics: ["Heat Pump Install", "Filter Subscription", "Service Estimates", "Billing Audits", "Winter Prep"],
+        responseTime: { avg: "2.1 hrs", unanswered: 4, delayed: 1 },
+        executiveSummary: "Excellent reviews for residential heat pump installations. Minor billing adjustments required for quote mismatches. Overall churn risk is very low."
+      },
+      "Elite Air Systems": {
+        sentiment: { positive: 95, neutral: 84, negative: 25, pct: 78, summary: "Customer sentiment is 78% positive. Main complaints center around scheduling conflicts and parts delays." },
+        complaints: [
+          { name: "Rescheduled appointments", mentions: 16 },
+          { name: "Backordered parts delay", mentions: 14 },
+          { name: "No technician callback", mentions: 10 },
+          { name: "Overpriced diagnostics", mentions: 7 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 32 },
+          { category: "Support Request", count: 25 },
+          { category: "Complaint", count: 18 },
+          { category: "Cancellation", count: 6 },
+          { category: "Billing Question", count: 11 }
+        ],
+        churn: { count: 4, risk: "Medium" },
+        urgency: { count: 8 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [81, 79, 78],
+          alert: "Satisfaction score dropped 3 points this quarter, primarily due to backordered replacement blowers."
+        },
+        topics: ["Compressor Swap", "Parts Ordering", "Diagnostic Billing", "Rescheduling Alerts", "System Upgrades"],
+        responseTime: { avg: "3.0 hrs", unanswered: 9, delayed: 3 },
+        executiveSummary: "Parts delays for older systems caused minor friction. High inquiry volume regarding replacement warranty coverage. 4 customers flagged for cancellation due to rescheduled technician appointments."
+      },
+      "Rapid Response Air": {
+        sentiment: { positive: 88, neutral: 52, negative: 36, pct: 71, summary: "Customer sentiment is 71% positive. Customer complaints focus heavily on missed emergency appointment promises." },
+        complaints: [
+          { name: "Missed emergency window", mentions: 28 },
+          { name: "No technician show", mentions: 20 },
+          { name: "Unresponsive dispatcher", mentions: 18 },
+          { name: "Unfair overtime rates", mentions: 12 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 28 },
+          { category: "Support Request", count: 34 },
+          { category: "Complaint", count: 26 },
+          { category: "Cancellation", count: 15 },
+          { category: "Billing Question", count: 19 }
+        ],
+        churn: { count: 9, risk: "High" },
+        urgency: { count: 21 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [78, 74, 71],
+          alert: "Satisfaction fell 7 points. Customers complain that emergency dispatch promises are not being met."
+        },
+        topics: ["Emergency Dispatch", "Overtime Billing", "No-Show Investigations", "Tech Live Tracking", "Compressor Repairs"],
+        responseTime: { avg: "4.8 hrs", unanswered: 25, delayed: 11 },
+        executiveSummary: "High volume of emergency dispatcher escalations. Major negative sentiment due to techs missing scheduled night windows. 9 customers showed extreme churn risk."
+      },
+      "Pure Air Solutions": {
+        sentiment: { positive: 110, neutral: 74, negative: 16, pct: 83, summary: "Customer sentiment is 83% positive. Complaints involve air filter subscription shipping charges." },
+        complaints: [
+          { name: "Shipping costs on filters", mentions: 14 },
+          { name: "Wrong filter size sent", mentions: 9 },
+          { name: "Billing portal glitch", mentions: 6 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 44 },
+          { category: "Support Request", count: 21 },
+          { category: "Complaint", count: 12 },
+          { category: "Cancellation", count: 5 },
+          { category: "Billing Question", count: 8 }
+        ],
+        churn: { count: 2, risk: "Low" },
+        urgency: { count: 4 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [82, 85, 83],
+          alert: "Satisfaction is stable. Filter subscription shipping fees are the primary source of complaints."
+        },
+        topics: ["UV Air Purifiers", "Filter Sizing Guide", "Auto-Delivery Plans", "Billing Errors", "Indoor Air Quality"],
+        responseTime: { avg: "2.3 hrs", unanswered: 5, delayed: 1 },
+        executiveSummary: "Strong sales of residential UV purifier upgrades. Minor complaints about subscription shipment billing details. Low overall churn risk."
+      },
+      "Airflow Masters": {
+        sentiment: { positive: 102, neutral: 80, negative: 20, pct: 81, summary: "Customer sentiment is 81% positive. Main complaints relate to thermostat configuration difficulties." },
+        complaints: [
+          { name: "Smart thermostat setup", mentions: 15 },
+          { name: "Uneven room heating", mentions: 12 },
+          { name: "Delayed email responses", mentions: 9 },
+          { name: "Diagnostic fee cost", mentions: 6 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 36 },
+          { category: "Support Request", count: 29 },
+          { category: "Complaint", count: 14 },
+          { category: "Cancellation", count: 4 },
+          { category: "Billing Question", count: 9 }
+        ],
+        churn: { count: 3, risk: "Medium" },
+        urgency: { count: 6 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [83, 80, 81],
+          alert: "Satisfaction remains constant at 81%. Smart thermostat tech issues are being addressed with video guides."
+        },
+        topics: ["Smart Thermostats", "Zoned Damper Controls", "Air Balance Reports", "Diagnostic Fees", "Email Support Response"],
+        responseTime: { avg: "2.9 hrs", unanswered: 7, delayed: 3 },
+        executiveSummary: "Zoned air balancing requests increased. Smart thermostat setup issues represent the highest support queue volume. 3 customers showing churn indicators due to communication delays."
+      },
+      "Frosty Systems": {
+        sentiment: { positive: 91, neutral: 76, negative: 28, pct: 77, summary: "Customer sentiment is 77% positive. Complaints are centered on refrigerator coolant leaks and scheduling delays." },
+        complaints: [
+          { name: "Coolant leak callbacks", mentions: 18 },
+          { name: "Commercial scheduler lag", mentions: 14 },
+          { name: "Tech arrival delays", mentions: 12 },
+          { name: "Emergency rates hike", mentions: 9 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 31 },
+          { category: "Support Request", count: 28 },
+          { category: "Complaint", count: 19 },
+          { category: "Cancellation", count: 8 },
+          { category: "Billing Question", count: 11 }
+        ],
+        churn: { count: 5, risk: "High" },
+        urgency: { count: 12 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [80, 78, 77],
+          alert: "Satisfaction decreased 3 points. Commercial customers report slower daytime callback response times."
+        },
+        topics: ["Coolant Recharging", "Commercial Freezers", "Scheduling Priority", "Overtime Dispatch", "Condenser Coils"],
+        responseTime: { avg: "3.8 hrs", unanswered: 14, delayed: 6 },
+        executiveSummary: "High volume of commercial refrigeration inquiries. Coolant recharge callback disputes increased. Churn indicators are high among retail restaurant accounts."
+      },
+      "Prime Comfort HVAC": {
+        sentiment: { positive: 116, neutral: 68, negative: 12, pct: 86, summary: "Customer sentiment is 86% positive. Customer complaints involve new installation duct noise." },
+        complaints: [
+          { name: "Duct vibration noise", mentions: 10 },
+          { name: "Thermostat app sync", mentions: 7 },
+          { name: "Paper invoices request", mentions: 4 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 45 },
+          { category: "Support Request", count: 18 },
+          { category: "Complaint", count: 9 },
+          { category: "Cancellation", count: 2 },
+          { category: "Billing Question", count: 6 }
+        ],
+        churn: { count: 1, risk: "Low" },
+        urgency: { count: 5 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [83, 85, 86],
+          alert: "Satisfaction increased 3 points. Install satisfaction is rated exceptionally high."
+        },
+        topics: ["Duct Vibration Dampers", "System Commissioning", "App Integrations", "Invoice Processing", "Extended Warranties"],
+        responseTime: { avg: "2.0 hrs", unanswered: 3, delayed: 1 },
+        executiveSummary: "Excellent installation reviews this week. Technical team successfully addressed minor duct vibration reports. Churn and support backlogs remain extremely low."
+      }
+    };
+
+    function renderMailChimpDashboard() {
+      const clientName = document.getElementById("selected-client-name").innerText.replace("✓ ", "").trim();
+      const data = MAILCHIMP_CLIENT_DATA[clientName] || MAILCHIMP_CLIENT_DATA["Foundation Health & Wellness"];
+      
+      // Update Executive Summary Text
+      if (document.getElementById("mailchimp-ai-summary-text")) {
+        document.getElementById("mailchimp-ai-summary-text").innerText = data.executiveSummary;
+      }
+      
+      // Update Sentiment Card
+      if (document.getElementById("mailchimp-sentiment-title")) {
+        document.getElementById("mailchimp-sentiment-title").innerText = `${data.sentiment.pct}% Positive`;
+      }
+      if (document.getElementById("mailchimp-sentiment-progress")) {
+        document.getElementById("mailchimp-sentiment-progress").style.width = `${data.sentiment.pct}%`;
+      }
+      if (document.getElementById("mailchimp-sentiment-pos")) {
+        document.getElementById("mailchimp-sentiment-pos").innerText = `Pos: ${data.sentiment.positive}`;
+      }
+      if (document.getElementById("mailchimp-sentiment-neu")) {
+        document.getElementById("mailchimp-sentiment-neu").innerText = `Neu: ${data.sentiment.neutral}`;
+      }
+      if (document.getElementById("mailchimp-sentiment-neg")) {
+        document.getElementById("mailchimp-sentiment-neg").innerText = `Neg: ${data.sentiment.negative}`;
+      }
+      
+      // Update Top Complaint Card
+      const topComplaint = data.complaints[0] || { name: "None", mentions: 0 };
+      if (document.getElementById("mailchimp-top-complaint-title")) {
+        document.getElementById("mailchimp-top-complaint-title").innerText = topComplaint.name;
+      }
+      if (document.getElementById("mailchimp-top-complaint-meta")) {
+        document.getElementById("mailchimp-top-complaint-meta").innerText = `${topComplaint.mentions} mentions this week`;
+      }
+      
+      // Update Churn Card
+      if (document.getElementById("mailchimp-churn-count")) {
+        document.getElementById("mailchimp-churn-count").innerHTML = `
+          <i data-lucide="alert-triangle" style="width: 24px; height: 24px; color: var(--color-danger); margin-right: 8px; display: inline-block; vertical-align: middle;"></i>
+          ${data.churn.count} Customers
+        `;
+      }
+      if (document.getElementById("mailchimp-churn-risk-badge")) {
+        const badge = document.getElementById("mailchimp-churn-risk-badge");
+        badge.innerText = `Risk Level: ${data.churn.risk}`;
+        badge.className = `badge ${data.churn.risk === 'High' ? 'badge-danger' : data.churn.risk === 'Medium' ? 'badge-blue' : 'badge-neutral'}`;
+      }
+      
+      // Update Unanswered & Response Time Card (Unanswered count is large font)
+      if (document.getElementById("mailchimp-unanswered-count-large")) {
+        document.getElementById("mailchimp-unanswered-count-large").innerText = data.responseTime.unanswered;
+      }
+      if (document.getElementById("mailchimp-avg-response")) {
+        document.getElementById("mailchimp-avg-response").innerText = `Avg Response: ${data.responseTime.avg}`;
+      }
+      if (document.getElementById("mailchimp-urgency-count")) {
+        document.getElementById("mailchimp-urgency-count").innerText = `${data.urgency.count} Urgent`;
+      }
+      
+      // Update MoM Trend Alert
+      if (document.getElementById("mailchimp-satisfaction-alert-text")) {
+        document.getElementById("mailchimp-satisfaction-alert-text").innerText = data.satisfactionTrend.alert;
+      }
+      
+      // Render Satisfaction MoM line chart
+      if (
+        document.getElementById("mailchimp-satisfaction-chart") &&
+        document.getElementById("mailchimp-satisfaction-chart").offsetWidth > 0
+      ) {
+        if (chartInstances["mailchimp-satisfaction-chart"]) {
+          chartInstances["mailchimp-satisfaction-chart"].destroy();
+        }
+        chartInstances["mailchimp-satisfaction-chart"] = new Chart(
+          document.getElementById("mailchimp-satisfaction-chart"),
+          {
+            type: "line",
+            data: {
+              labels: data.satisfactionTrend.months,
+              datasets: [
+                {
+                  label: "Sentiment Score",
+                  data: data.satisfactionTrend.scores,
+                  borderColor: "#ee683b",
+                  backgroundColor: "rgba(238, 104, 59, 0.05)",
+                  borderWidth: 3,
+                  pointRadius: 5,
+                  pointHoverRadius: 7,
+                  tension: 0.3,
+                  fill: true
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: { min: 0, max: 100, ticks: { stepSize: 20 } },
+                x: { grid: { display: false } }
+              }
+            }
+          }
+        );
+      }
+      
+      // Render Intent horizontal bar chart
+      if (
+        document.getElementById("mailchimp-intent-chart") &&
+        document.getElementById("mailchimp-intent-chart").offsetWidth > 0
+      ) {
+        if (chartInstances["mailchimp-intent-chart"]) {
+          chartInstances["mailchimp-intent-chart"].destroy();
+        }
+        chartInstances["mailchimp-intent-chart"] = new Chart(
+          document.getElementById("mailchimp-intent-chart"),
+          {
+            type: "bar",
+            data: {
+              labels: data.intent.map(i => i.category),
+              datasets: [
+                {
+                  label: "Email Count",
+                  data: data.intent.map(i => i.count),
+                  backgroundColor: "#142f45",
+                  borderRadius: 4
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              indexAxis: 'y',
+              scales: {
+                x: { beginAtZero: true, ticks: { precision: 0 } },
+                y: { grid: { display: false } }
+              }
+            }
+          }
+        );
+      }
+      
+      // Render Topic Clustering Tags
+      const topicsContainer = document.getElementById("mailchimp-topics-container");
+      if (topicsContainer) {
+        topicsContainer.innerHTML = data.topics.map(t => `
+          <div style="background: rgba(20, 47, 69, 0.04); color: var(--color-primary); border: 1px solid var(--color-border); border-radius: 20px; padding: 6px 14px; font-size: 12px; font-weight: 600; cursor: default; transition: all 0.2s;" class="topic-bubble">
+            ${t}
+          </div>
+        `).join("");
+      }
+      
+      // Render Complaints Table Rows
+      const complaintsTbody = document.getElementById("mailchimp-complaints-tbody");
+      if (complaintsTbody) {
+        const maxMentions = Math.max(...data.complaints.map(c => c.mentions)) || 1;
+        complaintsTbody.innerHTML = data.complaints.map(c => {
+          const pct = (c.mentions / maxMentions) * 100;
+          return `
+            <tr style="border-bottom: 1px solid var(--color-border);">
+              <td style="padding: 10px; font-weight: 600; color: var(--color-primary);">${c.name}</td>
+              <td style="padding: 10px; text-align: center; font-weight: 700; color: var(--color-accent);">${c.mentions}</td>
+              <td style="padding: 10px;">
+                <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                  <div style="width: ${pct}%; height: 100%; background: var(--color-primary); border-radius: 4px;"></div>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join("");
+      }
+      
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+    
     const ALL_CLIENTS = [
       "Foundation Health & Wellness",
       "JAG Medical Spa",
