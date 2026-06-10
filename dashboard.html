@@ -565,6 +565,50 @@
       width: 35%;
     }
 
+    .w-30 {
+      width: 30%;
+    }
+
+    @keyframes cardRefresh {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .transcript-card-animate {
+      animation: cardRefresh 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .delay-1 { animation-delay: 35ms; }
+    .delay-2 { animation-delay: 70ms; }
+    .delay-3 { animation-delay: 105ms; }
+    .delay-4 { animation-delay: 140ms; }
+    .delay-5 { animation-delay: 175ms; }
+    .delay-6 { animation-delay: 210ms; }
+    .delay-7 { animation-delay: 245ms; }
+    .delay-8 { animation-delay: 280ms; }
+    .delay-9 { animation-delay: 315ms; }
+
+    /* Enhance Hover Effect on Call Transcripts Dashboard Cards */
+    #transcripts-overview .kpi-card, 
+    #transcripts-overview .chart-card {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                  box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                  border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    #transcripts-overview .kpi-card:hover, 
+    #transcripts-overview .chart-card:hover {
+      transform: translateY(-6px) scale(1.015) !important;
+      box-shadow: 0 20px 25px -5px rgba(20, 47, 69, 0.1), 0 10px 10px -5px rgba(20, 47, 69, 0.05) !important;
+      border-color: var(--color-accent) !important;
+    }
+
     .w-55 {
       width: 55%;
     }
@@ -3371,109 +3415,8 @@
             <div class="sub-tab active" onclick="showSubTab(this, 'transcripts-overview', 'tab-call-transcripts')">
               Overview</div>
           </div>
-          <div id="transcripts-overview" class="sub-tab-content active">
-            <div class="kpi-grid" style="margin-bottom: 24px;">
-              <div class="kpi-card">
-                <div class="kpi-label">Recorded Calls</div>
-                <div class="kpi-value">32 Calls</div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Full stereo audio
-                  records</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Total Duration</div>
-                <div class="kpi-value">18.4 Hrs</div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Indexed metadata
-                  transcripts</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Avg Sentiment</div>
-                <div class="kpi-value" style="color: var(--color-success);">84.2%</div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Positively
-                  categorized sentences</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Flagged Issues</div>
-                <div class="kpi-value" style="color: var(--color-accent);">1 Pending</div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Marked for Client
-                  Manager Review</div>
-              </div>
-            </div>
-
-            <div class="charts-row" style="height: 540px;">
-              <!-- Call Sidebar -->
-              <div class="chart-card w-35"
-                style="display: flex; flex-direction: column; overflow: hidden; height: 100%;">
-                <div class="chart-title" style="margin-bottom: 12px;">Call Sessions Archive</div>
-                <input type="text" id="transcript-search" placeholder="Search callers or companies..."
-                  class="form-input" style="margin-bottom: 16px; width: 100%;" oninput="searchCallTranscripts()">
-                <div style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;"
-                  id="call-list-container" class="custom-scroll">
-                  <!-- Dynamically rendered -->
-                </div>
-              </div>
-
-              <!-- Transcript Dialog Viewer -->
-              <div class="chart-card w-65"
-                style="display: flex; flex-direction: column; overflow: hidden; height: 100%;">
-                <div
-                  style="border-bottom: 1px solid var(--color-border); padding-bottom: 16px; margin-bottom: 16px; display:flex; justify-content:space-between; align-items:flex-start;">
-                  <div>
-                    <h3
-                      style="font-family: var(--font-serif); font-size: 16px; font-weight: 700; color: var(--color-primary);"
-                      id="preview-call-title">Call Loading</h3>
-                    <div style="font-size: 11px; color: var(--color-muted); margin-top: 2px;" id="preview-call-meta">-
-                    </div>
-                  </div>
-                  <span class="badge" id="preview-call-sentiment-badge">-</span>
-                </div>
-
-                <!-- Custom Interactive Media Player Controls -->
-                <div
-                  style="background: var(--color-warm); border: 1px solid var(--color-border); border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display:flex; align-items:center; gap:16px;">
-                  <button onclick="toggleTranscriptAudioPlay()"
-                    style="background: var(--color-primary); color:white; border:none; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer;"
-                    id="transcript-play-btn">
-                    <i data-lucide="play" style="width:18px; height:18px;"></i>
-                  </button>
-                  <div style="flex:1;">
-                    <div
-                      style="width:100%; height:4px; background:#e2e8f0; border-radius:2px; position:relative; cursor:pointer;"
-                      onclick="seekTranscriptPlayer(event)" id="audio-progress-bar-container">
-                      <div style="width:0%; height:100%; background:var(--color-primary); border-radius:2px;"
-                        id="audio-progress-bar"></div>
-                    </div>
-                    <div
-                      style="display:flex; justify-content:space-between; font-size:10px; color:var(--color-muted); margin-top:6px;">
-                      <span id="audio-current-time">00:00</span>
-                      <span id="audio-total-time">14:22</span>
-                    </div>
-                  </div>
-                  <button style="background:none; border:none; cursor:pointer; color:var(--color-muted);"><i
-                      data-lucide="volume-2" style="width:18px; height:18px;"></i></button>
-                </div>
-
-                <!-- Dialogue bubbles -->
-                <div
-                  style="flex: 1; overflow-y: auto; padding-right: 8px; display:flex; flex-direction:column; gap:12px; margin-bottom: 16px;"
-                  id="dialogue-bubbles-container" class="custom-scroll">
-                  <!-- Dynamically rendered bubbles -->
-                </div>
-
-                <!-- Summary/Action items box -->
-                <div
-                  style="background: var(--color-warm); border:1px solid var(--color-border); border-radius:8px; padding:12px 16px; font-size:12px;">
-                  <div
-                    style="font-weight:700; color:var(--color-primary); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-                    <i data-lucide="sparkles"
-                      style="width:14px; height:14px; color: var(--color-accent); display:inline-block;"></i> AI Summary
-                    & Next Steps</div>
-                  <ul style="padding-left:16px; margin:0; line-height:1.5; color: var(--color-primary);"
-                    id="transcript-action-items">
-                    <!-- Dynamically populated action items -->
-                  </ul>
-                </div>
-              </div>
-            </div>
+          <div id="transcripts-overview" class="sub-tab-content active" style="display: flex; flex-direction: column; gap: 24px;">
+            <!-- Call Transcript Health Analysis Dashboard will render dynamically here -->
           </div>
         </div>
 
@@ -7467,265 +7410,821 @@
     // ==========================================
     // --- INTERACTIVE CALL TRANSCRIPTS BROWSING ---
     // ==========================================
-    let callsData = [
-      {
-        id: "call-1",
-        title: "Weekly Analytics Review: Acme Corp",
-        client: "John Davis (CEO, Acme Corp)",
-        date: "Jun 04, 2026",
-        duration: "14m 22s",
+    const CALL_TRANSCRIPT_ANALYSIS_DATA = {
+      "Foundation Health & Wellness": {
+        healthScore: 92,
+        healthLabel: "Green",
+        healthSummary: "Excellent alignment. Strong trust and high satisfaction scores across all campaigns.",
+        churnRisk: "Low",
+        warningSignals: ["Minor feedback on booking tool delays", "No billing escalations"],
         sentiment: "Positive",
-        sentimentClass: "badge-success",
-        bullets: [
-          "Acme Corp approved the Q3 budgeting guidelines.",
-          "Requested higher emphasis on Instagram Reels coverage.",
-          "Umang J. to resolve the Google Ads pixel delay."
+        sentimentTrend: "+4% Month-over-Month",
+        moodTrend: "Improving",
+        actionItems: {
+          total: 3,
+          pending: 3,
+          overdue: 0,
+          tasks: [
+            { name: "Finalize Instagram Reels video draft", overdue: false },
+            { name: "Optimize local Google Ads campaign budgets", overdue: false },
+            { name: "Sync ClickUp milestones calendar views", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Practitioner Scheduling Constraints", count: 4 },
+          { name: "Instagram Reels Placement Cost", count: 2 },
+          { name: "ClickUp Integration Setup", count: 1 }
         ],
-        dialogue: [
-          { speaker: "John Davis (Acme)", time: "00:15", text: "Hi team, I looked at the GA4 views this morning. Incredible numbers on the brand impressions." },
-          { speaker: "Sarah K. (Explore)", time: "00:42", text: "Yes John, we adjusted the bids on the local campaign. It reduced our CPC by almost 18%." },
-          { speaker: "John Davis (Acme)", time: "01:22", text: "Fantastic. Let's make sure the ClickUp sync triggers alerts when our core milestones are completed." },
-          { speaker: "Umang J. (Explore)", time: "02:10", text: "Absolutely, I've got a task in ClickUp to wire up the SLA slack webhook tomorrow." }
+        satisfaction: { communication: 94, results: 90, strategy: 92 },
+        trust: { agency: 96, results: 92 },
+        repeatedIssues: [
+          { name: "Front desk booking software sync lag", count: 2, resolved: false },
+          { name: "Duplicate pixel tracking tags on checkout page", count: 2, resolved: true }
+        ],
+        executiveSummary: [
+          "Successfully approved Q3 budgets and Reels campaign strategy.",
+          "Identified and paused high-CPC search keywords on Google Ads to save $450/mo.",
+          "Completed transition of monthly lead reports to the interactive dashboard.",
+          "New opportunities: Launch custom local campaigns for the new West Branch opening."
         ]
       },
-      {
-        id: "call-2",
-        title: "Delta Q2 Strategy Wrap-up",
-        client: "Marcus Aurelius (CMO, Delta Group)",
-        date: "Jun 03, 2026",
-        duration: "28m 10s",
+      "JAG Medical Spa": {
+        healthScore: 88,
+        healthLabel: "Green",
+        healthSummary: "Consistent positive feedback. High trust in strategy and campaign results.",
+        churnRisk: "Low",
+        warningSignals: ["Occasional complaints about double-booking in clinic"],
+        sentiment: "Positive",
+        sentimentTrend: "Stable MoM",
+        moodTrend: "Stable",
+        actionItems: {
+          total: 4,
+          pending: 4,
+          overdue: 0,
+          tasks: [
+            { name: "Confirm July promotional banners", overdue: false },
+            { name: "Update Botox landing page copy", overdue: false },
+            { name: "Review local SEO citations checklist", overdue: false },
+            { name: "Schedule Q3 planning sync session", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Esthetician Calendar Double-Bookings", count: 3 },
+          { name: "Local Listing Accuracy on Maps", count: 2 },
+          { name: "Vite App Local Cache Speed", count: 1 }
+        ],
+        satisfaction: { communication: 90, results: 88, strategy: 86 },
+        trust: { agency: 92, results: 90 },
+        repeatedIssues: [
+          { name: "Google Maps double pin verification error", count: 3, resolved: true },
+          { name: "Slow response from the support widget", count: 2, resolved: false }
+        ],
+        executiveSummary: [
+          "Client is highly satisfied with laser hair removal lead flow.",
+          "Optimized Google Business Profile posts to increase search views by 15%.",
+          "Minor concerns about double bookings resolved by integrating a custom API webhook.",
+          "Opportunities: Propose budget expansion for high-margin dermal filler campaigns."
+        ]
+      },
+      "Vital Roots Functional Medicine": {
+        healthScore: 68,
+        healthLabel: "Yellow",
+        healthSummary: "Satisfactory results, but lab result review scheduling delays are impacting mood.",
+        churnRisk: "Medium",
+        warningSignals: ["Complaints about lab delays ↑", "Patient portal login bugs", "Sentiment ↓"],
         sentiment: "Neutral",
-        sentimentClass: "badge-blue",
-        bullets: [
-          "Discussed LinkedIn leads performance discrepancy.",
-          "Allocated temporary budget buffer of $5,000 for A/B testing campaigns.",
-          "Next review meeting scheduled for June 18th report alignment."
+        sentimentTrend: "-6% Month-over-Month",
+        moodTrend: "Declining",
+        actionItems: {
+          total: 6,
+          pending: 6,
+          overdue: 2,
+          tasks: [
+            { name: "Resolve Patient Portal API authentication bug", overdue: true },
+            { name: "Draft thyroid supplement Google Ads ad groups", overdue: false },
+            { name: "Deploy lab review schedule landing page", overdue: true },
+            { name: "Sync MailChimp newsletter subscriber segments", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Lab Result Delivery Wait Time", count: 12 },
+          { name: "Patient Portal Login Failures", count: 8 },
+          { name: "Supplement Supply Chain Delay", count: 4 }
         ],
-        dialogue: [
-          { speaker: "Marcus (Delta)", time: "01:05", text: "The LinkedIn CTR has been hover-loading around 1.8%. Any ideas from the dashboard stats?" },
-          { speaker: "Alex M. (Explore)", time: "01:30", text: "We need more display graphics. I can mock up three custom formats for testing by Friday." },
-          { speaker: "Marcus (Delta)", time: "02:15", text: "Sounds wise. I've unlocked $5k to support this testing. Keep us updated on ClickUp." }
+        satisfaction: { communication: 75, results: 65, strategy: 70 },
+        trust: { agency: 80, results: 68 },
+        repeatedIssues: [
+          { name: "Patients complaining about password reset loop", count: 4, resolved: false },
+          { name: "Lab email attachments going to spam folder", count: 3, resolved: false }
+        ],
+        executiveSummary: [
+          "Lead generation for thyroid health programs remains stable, but patient retention is threatened.",
+          "Portal sync issues are generating high support ticket volumes, dragging overall health down.",
+          "Identified competitor bids on local brand name keywords; search protection campaigns are active.",
+          "Urgent action: Deploy the portal hotfix to prevent sign-in loop issues."
         ]
       },
-      {
-        id: "call-3",
-        title: "Stellar Launch Technical Brief",
-        client: "Dr. Evelyn Stone (Stellar Labs)",
-        date: "Jun 01, 2026",
-        duration: "18m 45s",
+      "Core Wellness & Recovery": {
+        healthScore: 94,
+        healthLabel: "Green",
+        healthSummary: "Outstanding results. Locker room crowd and cryotherapy machine downtime are minor issues.",
+        churnRisk: "Low",
+        warningSignals: ["Cryo chamber maintenance reports"],
         sentiment: "Positive",
-        sentimentClass: "badge-success",
-        bullets: [
-          "Briefed server performance metrics for the main site launch.",
-          "Verified Google Tag Manager tags firing successfully in testing.",
-          "Requested MailChimp setup confirmation for subscriber audit."
+        sentimentTrend: "+8% Month-over-Month",
+        moodTrend: "Improving",
+        actionItems: {
+          total: 2,
+          pending: 2,
+          overdue: 0,
+          tasks: [
+            { name: "Submit corporate discount proposal deck", overdue: false },
+            { name: "Verify cold plunge pass tracking links", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Cryo Chamber Maintenance Delay", count: 5 },
+          { name: "Sauna Scheduling Conflicts", count: 2 },
+          { name: "Locker Room Congestion Reports", count: 2 }
         ],
-        dialogue: [
-          { speaker: "Evelyn (Stellar)", time: "02:45", text: "Is the MailChimp campaign fully ready for our email list tomorrow?" },
-          { speaker: "Sarah K. (Explore)", time: "03:10", text: "Yes, Evelyn. Deliverability tests came back at 99.1%. It is queued for 8 AM CST." }
+        satisfaction: { communication: 96, results: 94, strategy: 92 },
+        trust: { agency: 98, results: 94 },
+        repeatedIssues: [
+          { name: "Cryotherapy device heater sensor failure", count: 2, resolved: true },
+          { name: "Corporate account signup links failing on Safari", count: 2, resolved: false }
+        ],
+        executiveSummary: [
+          "Sauna and cold plunge therapy promotion campaigns exceeded goal by 22%.",
+          "Corporate partnership outreach draft has been finalized and approved.",
+          "Low churn risk backed by high engagement with custom marketing automation workflows.",
+          "Opportunities: Expand targeted ads for the high-end hyperbaric chamber launch."
         ]
       },
-      {
-        id: "call-4",
-        title: "Billing & Budget Hold-up Dialog",
-        client: "Roger Sterling (Sterling Partners)",
-        date: "May 28, 2026",
-        duration: "9m 15s",
-        sentiment: "Negative",
-        sentimentClass: "badge-danger",
-        bullets: [
-          "Hold up on Delta invoice (INV-2026-003) resolved today.",
-          "Client was concerned about duplicate CPC spend indicators.",
-          "Resolved after reconciling analytics ledger and ledger report."
+      "Vitality Medical Spa": {
+        healthScore: 78,
+        healthLabel: "Yellow",
+        healthSummary: "Good results. Reception check-in delays and parking issues are key customer friction points.",
+        churnRisk: "Medium",
+        warningSignals: ["Receptionist check-in delays", "Incorrect invoice details in system"],
+        sentiment: "Neutral",
+        sentimentTrend: "+1% Month-over-Month",
+        moodTrend: "Stable",
+        actionItems: {
+          total: 5,
+          pending: 5,
+          overdue: 1,
+          tasks: [
+            { name: "Correct IV Hydration billing invoice mismatch", overdue: true },
+            { name: "Create Facebook Ads copy for filler promotions", overdue: false },
+            { name: "Review spa front-office scheduling logic", overdue: false },
+            { name: "Verify pixel tracker on checkout screen", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Spa Front-Office Check-in Delays", count: 8 },
+          { name: "Incorrect Billing Records Sent", count: 4 },
+          { name: "Parking Lot Congestion", count: 3 }
         ],
-        dialogue: [
-          { speaker: "Roger (Sterling)", time: "00:40", text: "We see duplicate CPC bills in our dashboard. We need a detailed audit on this stat." },
-          { speaker: "Umang J. (Explore)", time: "01:15", text: "That was a visual sync lag between the API and the local cache, Roger. Let me pull the actual ledger to verify." },
-          { speaker: "Roger (Sterling)", time: "02:30", text: "Aha, I see. As long as the billing match is perfect. Send over the invoice adjustment." }
+        satisfaction: { communication: 82, results: 78, strategy: 80 },
+        trust: { agency: 84, results: 78 },
+        repeatedIssues: [
+          { name: "Customer invoicing sent with double taxes", count: 2, resolved: false },
+          { name: "Front desk scheduling system scheduling conflicts", count: 3, resolved: true }
+        ],
+        executiveSummary: [
+          "IV Hydration promotion continues to drive high traffic, but lobby wait times are causing frustration.",
+          "Drafted and resolved diagnostic billing discrepancies under INV-2026-004.",
+          "Client requested physical/paper statements mail-outs option for senior members.",
+          "Improvements: Social ad campaigns showing strong engagement at low CPC."
+        ]
+      },
+      "Inner Calm Therapy Center": {
+        healthScore: 95,
+        healthLabel: "Green",
+        healthSummary: "Exceptional sentiment. Therapist matchmaking system is highly rated.",
+        churnRisk: "Low",
+        warningSignals: ["Friction on strict 24h late cancellation fees"],
+        sentiment: "Positive",
+        sentimentTrend: "+5% Month-over-Month",
+        moodTrend: "Improving",
+        actionItems: {
+          total: 3,
+          pending: 3,
+          overdue: 0,
+          tasks: [
+            { name: "Write copy for therapist matchmaking landing page", overdue: false },
+            { name: "Launch Google Search campaigns for stress management", overdue: false },
+            { name: "Test insurance verification API triggers", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Late Cancellation Penalty Dispute", count: 6 },
+          { name: "Acoustic Noise Privacy In Rooms", count: 3 },
+          { name: "Therapist Match Delay Reports", count: 2 }
+        ],
+        satisfaction: { communication: 98, results: 94, strategy: 95 },
+        trust: { agency: 96, results: 96 },
+        repeatedIssues: [
+          { name: "Late penalty fees automatically charged before confirmation", count: 3, resolved: true },
+          { name: "Portal document upload failures during intake", count: 2, resolved: false }
+        ],
+        executiveSummary: [
+          "Excellent reviews for matching patients with specialized CBT therapists.",
+          "The only major complaints focus on the strict late cancellation policy; we drafted mitigation copy.",
+          "Organic SEO traffic to the therapy blog increased 24% after keyword optimization.",
+          "Opportunities: Promote corporate mindfulness workshop packages next month."
+        ]
+      },
+      "Precision HVAC Experts": {
+        healthScore: 70,
+        healthLabel: "Yellow",
+        healthSummary: "Moderate health. High summer AC repair demand causing booking backlogs.",
+        churnRisk: "Medium",
+        warningSignals: ["AC repair response delays", "Scheduling errors in database"],
+        sentiment: "Neutral",
+        sentimentTrend: "-4% Month-over-Month",
+        moodTrend: "Stable",
+        actionItems: {
+          total: 5,
+          pending: 5,
+          overdue: 2,
+          tasks: [
+            { name: "Resolve AC dispatch system scheduling backlog", overdue: true },
+            { name: "Optimize local service keywords on Google Ads", overdue: false },
+            { name: "Set up automatic SMS callback notifications", overdue: true },
+            { name: "Audit Google Maps local citations map list", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Summer AC Repair Appointment Delay", count: 18 },
+          { name: "Emergency Dispatch Fee Costs", count: 12 },
+          { name: "Missed Scheduled Time Window", count: 7 }
+        ],
+        satisfaction: { communication: 78, results: 72, strategy: 70 },
+        trust: { agency: 76, results: 72 },
+        repeatedIssues: [
+          { name: "Technician failed to call before arrival", count: 4, resolved: false },
+          { name: "Overpriced diagnostic quotes compared to online estimators", count: 3, resolved: true }
+        ],
+        executiveSummary: [
+          "AC repair inquiries spiked, but scheduling bottlenecks limited campaign conversion efficiency.",
+          "Created automated reminders for SMS notifications to reduce no-shows.",
+          "Pending action: Resolving the dispatch API lag database syncing issue.",
+          "Opportunities: Launch HVAC maintenance plan subscription campaign in late summer."
+        ]
+      },
+      "Apex Climate Control": {
+        healthScore: 62,
+        healthLabel: "Yellow",
+        healthSummary: "Low-end Yellow. Summer dispatch fee complaints and callback response times are dragging health down.",
+        churnRisk: "Medium",
+        warningSignals: ["Callback response delays", "High dispatch fee friction"],
+        sentiment: "Neutral",
+        sentimentTrend: "-7% Month-over-Month",
+        moodTrend: "Declining",
+        actionItems: {
+          total: 7,
+          pending: 7,
+          overdue: 3,
+          tasks: [
+            { name: "Fix emergency callback dispatch webhooks", overdue: true },
+            { name: "Draft social media post addressing dispatch costs", overdue: false },
+            { name: "Integrate Twilio SMS notification with ClickUp", overdue: true },
+            { name: "Reconcile June marketing budget variance", overdue: true }
+          ]
+        },
+        concerns: [
+          { name: "Dispatch Callback Delay (Emergency)", count: 24 },
+          { name: "High Diagnostic & Call Out Fees", count: 21 },
+          { name: "Technician Professionalism Reports", count: 8 }
+        ],
+        satisfaction: { communication: 68, results: 65, strategy: 64 },
+        trust: { agency: 70, results: 66 },
+        repeatedIssues: [
+          { name: "Emergency calls not routed to active operator", count: 5, resolved: false },
+          { name: "Billing portal invoice disputes (unresolved)", count: 3, resolved: false }
+        ],
+        executiveSummary: [
+          "High negative feedback concerning dispatch wait times and high entry fees.",
+          "Marketing campaign conversion rates are high, but backend logistics are bottlenecked.",
+          "Urgent integration of Twilio SLA triggers in progress to resolve callback delays.",
+          "Opportunities: Create clear transparent pricing comparison page to build trust."
+        ]
+      },
+      "Comfort Zone Heating & Air": {
+        healthScore: 90,
+        healthLabel: "Green",
+        healthSummary: "Very positive alignment. Technical performance and heat pump campaigns are executing well.",
+        churnRisk: "Low",
+        warningSignals: ["Minor billing discrepancies resolved quickly"],
+        sentiment: "Positive",
+        sentimentTrend: "+5% Month-over-Month",
+        moodTrend: "Improving",
+        actionItems: {
+          total: 3,
+          pending: 3,
+          overdue: 0,
+          tasks: [
+            { name: "Finalize Heat Pump Installation video edit", overdue: false },
+            { name: "Verify filter subscription email trigger", overdue: false },
+            { name: "Draft AC service landing page content", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Quote Mismatch on Final Billing", count: 5 },
+          { name: "Delayed Email Replies (General)", count: 3 },
+          { name: "Filter Shipping Delivery Delays", count: 2 }
+        ],
+        satisfaction: { communication: 92, results: 88, strategy: 90 },
+        trust: { agency: 94, results: 90 },
+        repeatedIssues: [
+          { name: "Incorrect quote details sent to commercial accounts", count: 2, resolved: true },
+          { name: "Auto-renewal filters delivered to wrong addresses", count: 2, resolved: false }
+        ],
+        executiveSummary: [
+          "Outstanding performance on residential heat pump installs promotion campaigns.",
+          "Resolved a minor invoicing ledger dispute for commercial billing discrepancy.",
+          "Overall churn risk remains extremely low due to proactive project updates.",
+          "Opportunities: Propose winter prep campaign expansion during August meetings."
+        ]
+      },
+      "Elite Air Systems": {
+        healthScore: 76,
+        healthLabel: "Yellow",
+        healthSummary: "Stable health. Backordered blower parts are causing minor scheduling delays.",
+        churnRisk: "Medium",
+        warningSignals: ["Part delivery delays", "Missed callbacks due to service load"],
+        sentiment: "Neutral",
+        sentimentTrend: "-2% Month-over-Month",
+        moodTrend: "Stable",
+        actionItems: {
+          total: 4,
+          pending: 4,
+          overdue: 1,
+          tasks: [
+            { name: "Reconcile parts backlog with supplier invoices", overdue: true },
+            { name: "Deploy updated scheduler widget on website", overdue: false },
+            { name: "Verify Google local ads billing limit", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Backordered Replacement Blower Delay", count: 14 },
+          { name: "Missed Scheduled Technician Callback", count: 9 },
+          { name: "Diagnostic Fee Pricing Structure", count: 5 }
+        ],
+        satisfaction: { communication: 80, results: 76, strategy: 74 },
+        trust: { agency: 82, results: 78 },
+        repeatedIssues: [
+          { name: "Replacement compressor scheduling delay", count: 3, resolved: false },
+          { name: "Online discount coupon codes failing to apply", count: 2, resolved: true }
+        ],
+        executiveSummary: [
+          "Parts delays for blowers are dragging customer experience scores down.",
+          "Google Ads campaigns are meeting lead volume projections consistently.",
+          "Recommended implementing automated parts arrival notifications to manage customer expectations.",
+          "Opportunities: Launch HVAC compressor system upgrade promos next week."
+        ]
+      },
+      "Rapid Response Air": {
+        healthScore: 45,
+        healthLabel: "Red",
+        healthSummary: "High Risk. Severe escalation regarding missed emergency windows and slow dispatcher callbacks.",
+        churnRisk: "High",
+        warningSignals: ["Missed emergency windows ↑", "No-show technician reports", "Unresponsive dispatcher"],
+        sentiment: "Negative",
+        sentimentTrend: "-15% Month-over-Month",
+        moodTrend: "Declining",
+        actionItems: {
+          total: 9,
+          pending: 9,
+          overdue: 4,
+          tasks: [
+            { name: "Reconcile emergency dispatcher no-show reports", overdue: true },
+            { name: "Deploy real-time technician GPS tracking link", overdue: true },
+            { name: "Draft emergency rate structure update", overdue: true },
+            { name: "Send SLA credit adjustments to billing department", overdue: true },
+            { name: "Re-engage paused Google Ads emergency search campaigns", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Missed Emergency Dispatch Window", count: 28 },
+          { name: "Technician No-Show (Commercial)", count: 20 },
+          { name: "Unresponsive Front-Office Dispatcher", count: 18 }
+        ],
+        satisfaction: { communication: 50, results: 42, strategy: 48 },
+        trust: { agency: 54, results: 46 },
+        repeatedIssues: [
+          { name: "Commercial kitchen emergency calls ignored", count: 6, resolved: false },
+          { name: "Overtime diagnostic rate disputes (INV-2026-004)", count: 4, resolved: false }
+        ],
+        executiveSummary: [
+          "Critical churn danger due to operational failures on emergency SLAs.",
+          "Technician no-shows are generating significant negative customer reviews on Google Maps.",
+          "Pausing brand campaigns temporarily to align marketing with operational capacity.",
+          "Urgent SLA credit adjustments and direct client mediation are underway."
+        ]
+      },
+      "Pure Air Solutions": {
+        healthScore: 88,
+        healthLabel: "Green",
+        healthSummary: "Strong alignment. Excellent UV air purifier product sales; minor filter shipping disputes.",
+        churnRisk: "Low",
+        warningSignals: ["Filter shipping subscription charges disputes"],
+        sentiment: "Positive",
+        sentimentTrend: "Stable MoM",
+        moodTrend: "Stable",
+        actionItems: {
+          total: 3,
+          pending: 3,
+          overdue: 0,
+          tasks: [
+            { name: "Verify auto-ship email notification flows", overdue: false },
+            { name: "Optimize UV Purifier shopping feed listings", overdue: false },
+            { name: "Re-engage lost newsletter subscriber campaign", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Filter Shipping Costs (Subscription)", count: 12 },
+          { name: "Incorrect Filter Sizes Dispatched", count: 8 },
+          { name: "Billing portal credit card declines", count: 3 }
+        ],
+        satisfaction: { communication: 90, results: 86, strategy: 88 },
+        trust: { agency: 92, results: 90 },
+        repeatedIssues: [
+          { name: "Auto-ship subscriptions charged on wrong date", count: 2, resolved: true },
+          { name: "Filter size selection dropdown on site glitching", count: 2, resolved: false }
+        ],
+        executiveSummary: [
+          "Strong demand and purchase volumes for high-efficiency UV purifiers.",
+          "Addressed filter size selection UI glitch to prevent future wrong orders.",
+          "Customer satisfaction is high; minor complaints on shipping costs are being minimized.",
+          "Opportunities: Create bundles for smart home integrations (Nest/Ecobee)."
+        ]
+      },
+      "Airflow Masters": {
+        healthScore: 82,
+        healthLabel: "Green",
+        healthSummary: "Positive health. Thermostat configuration support and room air balancing are top customer concerns.",
+        churnRisk: "Low",
+        warningSignals: ["Smart thermostat support ticket delays"],
+        sentiment: "Positive",
+        sentimentTrend: "+2% Month-over-Month",
+        moodTrend: "Stable",
+        actionItems: {
+          total: 4,
+          pending: 4,
+          overdue: 0,
+          tasks: [
+            { name: "Publish smart thermostat setup video guide", overdue: false },
+            { name: "Deploy zoned damper landing page template", overdue: false },
+            { name: "Verify Google Maps reviews response triggers", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Smart Thermostat Setup Issues", count: 15 },
+          { name: "Uneven Zoned Room Heating", count: 11 },
+          { name: "Delayed Email Callback Support", count: 7 }
+        ],
+        satisfaction: { communication: 86, results: 82, strategy: 84 },
+        trust: { agency: 88, results: 84 },
+        repeatedIssues: [
+          { name: "Smart thermostat fails to connect to local Wi-Fi", count: 4, resolved: false },
+          { name: "Air balancing reports missing for new construction", count: 2, resolved: true }
+        ],
+        executiveSummary: [
+          "High volume of zoned room balancing inquiries, driving strong booking leads.",
+          "Configured automated email sequences to answer smart thermostat FAQ questions.",
+          "Minor churn indicator related to front desk response lag resolved.",
+          "Opportunities: Propose smart home integration upsells on current lead forms."
+        ]
+      },
+      "Frosty Systems": {
+        healthScore: 65,
+        healthLabel: "Yellow",
+        healthSummary: "Moderate health. Refrigerator coolant leak callbacks are generating operational pressure.",
+        churnRisk: "Medium",
+        warningSignals: ["Coolant leak callback backlog", "Diagnostic fee complaints"],
+        sentiment: "Neutral",
+        sentimentTrend: "-5% Month-over-Month",
+        moodTrend: "Declining",
+        actionItems: {
+          total: 6,
+          pending: 6,
+          overdue: 2,
+          tasks: [
+            { name: "Resolve coolant recharge warranty callbacks", overdue: true },
+            { name: "Optimize Google Ads budgets for commercial freezers", overdue: false },
+            { name: "Implement diagnostic fee transparent calculator", overdue: true },
+            { name: "Integrate commercial scheduler API webhook", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Coolant Leak Callback Delays", count: 18 },
+          { name: "Commercial Freezer Scheduler Backlog", count: 14 },
+          { name: "High Diagnostic & Callout Rates", count: 10 }
+        ],
+        satisfaction: { communication: 74, results: 66, strategy: 68 },
+        trust: { agency: 78, results: 70 },
+        repeatedIssues: [
+          { name: "Coolant recharge failed on same freezer twice", count: 3, resolved: false },
+          { name: "Billing disputes regarding overtime fees", count: 2, resolved: false }
+        ],
+        executiveSummary: [
+          "Commercial refrigeration campaigns performing well, but technician dispatch backlogs limit closure.",
+          "High coolant callback rate is leading to negative commercial client reviews.",
+          "Created transparent diagnostic pricing tool to decrease pricing disputes.",
+          "Opportunities: Run specialized restaurant proactive maintenance plans next month."
+        ]
+      },
+      "Prime Comfort HVAC": {
+        healthScore: 92,
+        healthLabel: "Green",
+        healthSummary: "Excellent overall health. Installation quality and communication scores are outstanding.",
+        churnRisk: "Low",
+        warningSignals: ["Minor feedback on new duct vibration noise"],
+        sentiment: "Positive",
+        sentimentTrend: "+6% Month-over-Month",
+        moodTrend: "Improving",
+        actionItems: {
+          total: 3,
+          pending: 3,
+          overdue: 0,
+          tasks: [
+            { name: "Optimize local SEO rankings list", overdue: false },
+            { name: "Review customer service call transcripts reports", overdue: false },
+            { name: "Verify new extended warranty page forms", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Duct Vibration Vibration Noise", count: 10 },
+          { name: "Thermostat Smartphone App Sync", count: 7 },
+          { name: "Requests for Physical Paper Invoices", count: 4 }
+        ],
+        satisfaction: { communication: 94, results: 92, strategy: 90 },
+        trust: { agency: 96, results: 94 },
+        repeatedIssues: [
+          { name: "Duct dampener rattle after install", count: 2, resolved: true },
+          { name: "Paper invoices delayed in standard post mail", count: 2, resolved: false }
+        ],
+        executiveSummary: [
+          "Client is highly satisfied with residential replacement campaign lead conversions.",
+          "Resolved all duct vibration concerns using premium anti-vibration dampers.",
+          "Organic rankings improved by 14% this month, reducing need for paid budget.",
+          "Opportunities: Introduce seasonal maintenance subscription programs in local mailers."
         ]
       }
-    ];
-
-    let selectedCallId = "call-1";
-    let callsSearchQuery = "";
-
-    // Simulated Player intervals
-    let transcriptAudioPlaying = false;
-    let transcriptProgressInterval = null;
-    let transcriptProgressPct = 0;
+    };
 
     function renderCallTranscripts() {
-      const listContainer = document.getElementById("call-list-container");
-      if (!listContainer) return;
+      const container = document.getElementById("transcripts-overview");
+      if (!container) return;
 
-      // Filter calls
-      const filtered = callsData.filter(c =>
-        c.title.toLowerCase().includes(callsSearchQuery.toLowerCase()) ||
-        c.client.toLowerCase().includes(callsSearchQuery.toLowerCase())
-      );
+      const clientName = document.getElementById("selected-client-name").innerText.replace("✓ ", "").trim();
+      const data = CALL_TRANSCRIPT_ANALYSIS_DATA[clientName] || CALL_TRANSCRIPT_ANALYSIS_DATA["Foundation Health & Wellness"];
 
-      listContainer.innerHTML = filtered.map(c => `
-          <div onclick="selectTranscriptCall('${c.id}', this)" 
-               class="custom-dropdown-item ${c.id === selectedCallId ? "active" : ""}" 
-               style="padding: 12px; border-radius: 8px; border: 1px solid var(--color-border); background: ${c.id === selectedCallId ? "var(--color-warm)" : "white"}; cursor: pointer; display: flex; flex-direction: column; gap: 4px; transition: all 0.2s;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-weight: 700; font-size:12px; color: ${c.id === selectedCallId ? "var(--color-primary)" : "#1e293b"};">${c.title}</span>
-              <span class="badge ${c.sentimentClass}" style="font-size:10px; margin:0;">${c.sentiment}</span>
+      container.innerHTML = `
+        <div class="kpi-grid" style="margin-bottom: 24px;">
+          <!-- Metric 1: 🟢 Overall Client Health Score -->
+          <div class="kpi-card transcript-card-animate delay-1" style="cursor: default;">
+            <div class="kpi-label" style="background: ${data.healthLabel === 'Green' ? '#dcfce7' : data.healthLabel === 'Yellow' ? '#fef9c3' : '#ffe4e6'}; color: ${data.healthLabel === 'Green' ? '#15803d' : data.healthLabel === 'Yellow' ? '#a16207' : '#be123c'}; margin-bottom: 8px;">
+              Overall Health
             </div>
-            <div style="font-size: 11px; color: var(--color-muted); display:flex; justify-content:space-between;">
-              <span>${c.client}</span>
-              <span>${c.duration}</span>
+            <div class="kpi-value" style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size: 24px; vertical-align: middle;">
+                ${data.healthLabel === 'Green' ? '🟢' : data.healthLabel === 'Yellow' ? '🟡' : '🔴'}
+              </span>
+              ${data.healthScore}%
             </div>
-            <span style="font-size: 10px; color: var(--color-muted); text-align:right;">${c.date}</span>
+            <div style="font-size: 11px; color: var(--color-muted); line-height: 1.4; margin-top: 4px;">
+              ${data.healthSummary}
+            </div>
           </div>
-        `).join("");
 
-      // Render current dialog
-      renderSelectedTranscriptDialogue();
-    }
+          <!-- Metric 2: ⚠️ Churn Risk Score -->
+          <div class="kpi-card transcript-card-animate delay-2" style="cursor: default;">
+            <div class="kpi-label" style="background: #f1f5f9; color: var(--color-muted); margin-bottom: 8px;">
+              Churn Risk
+            </div>
+            <div class="kpi-value" style="color: ${data.churnRisk === 'Low' ? 'var(--color-success)' : data.churnRisk === 'Medium' ? '#eab308' : 'var(--color-danger)'}; font-size: 28px; display:flex; align-items:center; gap:6px;">
+              <span>⚠️</span> ${data.churnRisk}
+            </div>
+            <div style="font-size: 11px; color: var(--color-muted); line-height: 1.4; margin-top: 4px;">
+              Warning signals: ${data.warningSignals.join(", ")}
+            </div>
+          </div>
 
-    function searchCallTranscripts() {
-      const input = document.getElementById("transcript-search");
-      if (input) {
-        callsSearchQuery = input.value;
-        renderCallTranscripts();
-      }
-    }
+          <!-- Metric 3: 😊 Overall Sentiment Trend -->
+          <div class="kpi-card transcript-card-animate delay-3" style="cursor: default;">
+            <div class="kpi-label" style="background: #f1f5f9; color: var(--color-muted); margin-bottom: 8px;">
+              Sentiment Trend
+            </div>
+            <div class="kpi-value" style="color: ${data.sentiment === 'Positive' ? 'var(--color-success)' : data.sentiment === 'Neutral' ? '#64748b' : 'var(--color-danger)'}; font-size: 28px; display:flex; align-items:center; gap:6px;">
+              <span>${data.sentiment === 'Positive' ? '😊' : data.sentiment === 'Neutral' ? '😐' : '🙁'}</span>
+              ${data.sentiment}
+            </div>
+            <div style="font-size: 11px; color: var(--color-muted); line-height: 1.4; margin-top: 4px;">
+              Trend: ${data.sentimentTrend}
+            </div>
+          </div>
 
-    function selectTranscriptCall(callId, el) {
-      selectedCallId = callId;
+          <!-- Metric 4: 📉 Client Mood Trend -->
+          <div class="kpi-card transcript-card-animate delay-4" style="cursor: default;">
+            <div class="kpi-label" style="background: #f1f5f9; color: var(--color-muted); margin-bottom: 8px;">
+              Mood Trend
+            </div>
+            <div class="kpi-value" style="color: ${data.moodTrend === 'Improving' ? 'var(--color-success)' : data.moodTrend === 'Stable' ? '#64748b' : 'var(--color-danger)'}; font-size: 28px; display:flex; align-items:center; gap:6px;">
+              <span>${data.moodTrend === 'Improving' ? '📈' : data.moodTrend === 'Stable' ? '➡️' : '📉'}</span>
+              ${data.moodTrend}
+            </div>
+            <div style="font-size: 11px; color: var(--color-muted); line-height: 1.4; margin-top: 4px;">
+              Easy to understand mood indicator
+            </div>
+          </div>
+        </div>
 
-      // Reset player
-      if (transcriptAudioPlaying) {
-        toggleTranscriptAudioPlay();
-      }
-      transcriptProgressPct = 0;
-      updateTranscriptAudioPlayerUI();
-
-      // Highlight selected
-      document.querySelectorAll("#call-list-container > div").forEach(div => {
-        div.style.background = "white";
-        div.style.borderColor = "var(--color-border)";
-      });
-      if (el) {
-        el.style.background = "var(--color-warm)";
-      }
-
-      renderCallTranscripts();
-    }
-
-    function renderSelectedTranscriptDialogue() {
-      const call = callsData.find(c => c.id === selectedCallId);
-      if (!call) return;
-
-      // Populate titles & meta
-      if (document.getElementById("preview-call-title")) {
-        document.getElementById("preview-call-title").innerText = call.title;
-      }
-      if (document.getElementById("preview-call-meta")) {
-        document.getElementById("preview-call-meta").innerText = `Client: ${call.client} | Date: ${call.date} | Length: ${call.duration}`;
-      }
-
-      const badge = document.getElementById("preview-call-sentiment-badge");
-      if (badge) {
-        badge.className = `badge ${call.sentimentClass}`;
-        badge.innerText = `Sentiment: ${call.sentiment}`;
-      }
-
-      if (document.getElementById("audio-total-time")) {
-        document.getElementById("audio-total-time").innerText = call.duration;
-      }
-
-      // Dialogue bubbles
-      const bubblesContainer = document.getElementById("dialogue-bubbles-container");
-      if (bubblesContainer) {
-        bubblesContainer.innerHTML = call.dialogue.map(msg => {
-          const isClient = msg.speaker.indexOf("Explore") === -1;
-          return `
-              <div style="display:flex; flex-direction:column; align-items: ${isClient ? "flex-start" : "flex-end"}; width:100%;">
-                <div style="display:flex; gap:6.08px; align-items:center; margin-bottom:2px; font-size:10px; color: var(--color-muted);">
-                  <span style="font-weight:700;">${msg.speaker}</span>
-                  <span>${msg.time}</span>
+        <div class="charts-row" style="margin-bottom: 24px; gap: 24px; align-items: stretch;">
+          <!-- Metric 10: 🧠 AI Executive Summary -->
+          <div class="chart-card w-60 transcript-card-animate delay-5" style="padding: 24px; display: flex; flex-direction: column;">
+            <div class="chart-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="brain-circuit" style="width: 20px; height: 20px; color: var(--color-accent);"></i>
+              AI Executive Summary ("What Changed?")
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 12px; justify-content: center;">
+              ${data.executiveSummary.map(bullet => `
+                <div style="display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; line-height: 1.5; color: var(--color-primary);">
+                  <i data-lucide="sparkles" style="width: 14px; height: 14px; color: var(--color-accent); flex-shrink: 0; margin-top: 3px;"></i>
+                  <span>${bullet}</span>
                 </div>
-                <div style="max-width:80%; padding:10px 14px; border-radius:12px; font-size:12px; line-height:1.4; 
-                            background: ${isClient ? "#f1f5f9" : "var(--color-primary)"}; 
-                            color: ${isClient ? "#0f172a" : "white"}; 
-                            border-top-${isClient ? "left" : "right"}-radius: 2px;">
-                  ${msg.text}
+              `).join("")}
+            </div>
+          </div>
+
+          <!-- Metric 5: 📌 Open Action Items (Critical) -->
+          <div class="chart-card w-40 transcript-card-animate delay-6" style="padding: 24px; display: flex; flex-direction: column;">
+            <div class="chart-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px; justify-content: space-between;">
+              <span style="display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="pin" style="width: 20px; height: 20px; color: var(--color-accent);"></i>
+                Open Action Items
+              </span>
+              <span class="badge ${data.actionItems.overdue > 0 ? 'badge-danger' : 'badge-success'}" style="font-size: 12px; font-weight: 700; margin: 0;">
+                ${data.actionItems.total} Pending
+              </span>
+            </div>
+            
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; overflow-y: auto;">
+              ${data.actionItems.tasks.map(task => `
+                <div style="padding: 10px 12px; border-radius: 8px; border: 1px solid ${task.overdue ? 'rgba(225, 29, 72, 0.2)' : 'var(--color-border)'}; background: ${task.overdue ? 'rgba(225, 29, 72, 0.04)' : 'white'}; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                  <span style="font-size: 12.5px; font-weight: 500; color: ${task.overdue ? 'var(--color-danger)' : 'var(--color-primary)'};">
+                    ${task.name}
+                  </span>
+                  ${task.overdue ? `
+                    <span class="badge badge-danger" style="font-size: 10px; margin: 0; flex-shrink: 0;">
+                      OVERDUE
+                    </span>
+                  ` : `
+                    <span class="badge badge-neutral" style="font-size: 10px; margin: 0; flex-shrink: 0;">
+                      Pending
+                    </span>
+                  `}
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+
+        <div class="charts-row" style="gap: 24px; align-items: stretch; margin-bottom: 24px;">
+          <!-- Metrics 7 & 8: 💬 Satisfaction Score & 🤝 Trust Score -->
+          <div class="chart-card w-35 transcript-card-animate delay-7" style="padding: 24px;">
+            <div class="chart-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="smile" style="width: 20px; height: 20px; color: var(--color-accent);"></i>
+              Satisfaction & Trust Scores
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <!-- Satisfaction Subsections -->
+              <div>
+                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--color-muted); margin-bottom: 8px; border-bottom: 1px solid var(--color-border); padding-bottom: 4px;">
+                  💬 Satisfaction Score
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                      <span>Communication</span>
+                      <span>${data.satisfaction.communication}%</span>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                      <div style="width: ${data.satisfaction.communication}%; height: 100%; background: var(--color-primary); border-radius: 3px;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                      <span>Results</span>
+                      <span>${data.satisfaction.results}%</span>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                      <div style="width: ${data.satisfaction.results}%; height: 100%; background: var(--color-primary); border-radius: 3px;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                      <span>Strategy</span>
+                      <span>${data.satisfaction.strategy}%</span>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                      <div style="width: ${data.satisfaction.strategy}%; height: 100%; background: var(--color-primary); border-radius: 3px;"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            `;
-        }).join("");
 
-        bubblesContainer.scrollTop = bubblesContainer.scrollHeight;
-      }
+              <!-- Trust Subsections -->
+              <div>
+                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--color-muted); margin-bottom: 8px; border-bottom: 1px solid var(--color-border); padding-bottom: 4px;">
+                  🤝 Trust Score
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                      <span>Trust in Agency</span>
+                      <span>${data.trust.agency}%</span>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                      <div style="width: ${data.trust.agency}%; height: 100%; background: var(--color-accent); border-radius: 3px;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                      <span>Trust in Results</span>
+                      <span>${data.trust.results}%</span>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                      <div style="width: ${data.trust.results}%; height: 100%; background: var(--color-accent); border-radius: 3px;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-      // AI Recommendations
-      const bulletList = document.getElementById("transcript-action-items");
-      if (bulletList) {
-        bulletList.innerHTML = call.bullets.map(b => `
-            <li style="margin-bottom:4px;">${b}</li>
-          `).join("");
-      }
-    }
+          <!-- Metric 6: 🚨 Key Client Concerns (Top 3) -->
+          <div class="chart-card w-35 transcript-card-animate delay-8" style="padding: 24px;">
+            <div class="chart-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="alert-octagon" style="width: 20px; height: 20px; color: var(--color-accent);"></i>
+              Key Client Concerns (Top 3)
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                <thead>
+                  <tr style="border-bottom: 2px solid var(--color-border); color: var(--color-muted); font-weight: 700; text-align: left;">
+                    <th style="padding: 8px 4px; font-size: 10px; text-transform: uppercase;">Concern Topic</th>
+                    <th style="padding: 8px 4px; font-size: 10px; text-transform: uppercase; text-align: center; width: 60px;">Frequency</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${data.concerns.map(concern => `
+                    <tr style="border-bottom: 1px solid var(--color-border);">
+                      <td style="padding: 10px 4px; font-weight: 600; color: var(--color-primary);">${concern.name}</td>
+                      <td style="padding: 10px 4px; text-align: center;">
+                        <span class="badge ${concern.count >= 15 ? 'badge-danger' : concern.count >= 8 ? 'badge-blue' : 'badge-neutral'}" style="margin: 0; font-size: 11px; padding: 4px 8px;">
+                          ${concern.count}x
+                        </span>
+                      </td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-    function toggleTranscriptAudioPlay() {
-      const btn = document.getElementById("transcript-play-btn");
-      if (!btn) return;
+          <!-- Metric 9: 🔁 Repeated Issues / Escalation Risk -->
+          <div class="chart-card w-30 transcript-card-animate delay-9" style="padding: 24px;">
+            <div class="chart-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="refresh-cw" style="width: 20px; height: 20px; color: var(--color-accent);"></i>
+              Repeated Issues & Escalation Risk
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px; overflow-y: auto;">
+              ${data.repeatedIssues.map(issue => `
+                <div style="padding: 12px; border-radius: 8px; border: 1px solid ${issue.resolved ? 'var(--color-border)' : 'rgba(238, 104, 59, 0.3)'}; background: ${issue.resolved ? '#f8fafc' : 'rgba(238, 104, 59, 0.02)'}; display: flex; flex-direction: column; gap: 6px;">
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+                    <span style="font-size: 12.5px; font-weight: 600; color: var(--color-primary); line-height: 1.3;">
+                      ${issue.name}
+                    </span>
+                    <span class="badge ${issue.resolved ? 'badge-success' : 'badge-danger'}" style="margin: 0; font-size: 9px; padding: 2px 6px; flex-shrink: 0;">
+                      ${issue.resolved ? 'RESOLVED' : 'UNRESOLVED'}
+                    </span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--color-muted);">
+                    <span>Escalation Mentions</span>
+                    <span style="font-weight: 700; color: ${issue.resolved ? 'var(--color-success)' : 'var(--color-accent)'};">${issue.count} times</span>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      `;
 
-      transcriptAudioPlaying = !transcriptAudioPlaying;
-      if (transcriptAudioPlaying) {
-        btn.innerHTML = `<i data-lucide="pause" style="width:18px; height:18px;"></i>`;
+      if (window.lucide) {
         lucide.createIcons();
-
-        transcriptProgressInterval = setInterval(() => {
-          transcriptProgressPct += 0.5;
-          if (transcriptProgressPct >= 100) {
-            transcriptProgressPct = 100;
-            toggleTranscriptAudioPlay();
-          }
-          updateTranscriptAudioPlayerUI();
-        }, 100);
-      } else {
-        btn.innerHTML = `<i data-lucide="play" style="width:18px; height:18px;"></i>`;
-        lucide.createIcons();
-        clearInterval(transcriptProgressInterval);
-      }
-    }
-
-    function updateTranscriptAudioPlayerUI() {
-      const progBar = document.getElementById("audio-progress-bar");
-      const currTimeLabel = document.getElementById("audio-current-time");
-      if (progBar) {
-        progBar.style.width = transcriptProgressPct + "%";
-      }
-
-      // Calculate timestamp label
-      const call = callsData.find(c => c.id === selectedCallId);
-      if (call && currTimeLabel) {
-        // Extract seconds from total
-        const parts = call.duration.split(" ");
-        let totalSecs = 0;
-        parts.forEach(p => {
-          if (p.includes("m")) totalSecs += parseInt(p) * 60;
-          if (p.includes("s")) totalSecs += parseInt(p);
-        });
-
-        const currentSecs = Math.floor((transcriptProgressPct / 100) * totalSecs);
-        const minsStr = String(Math.floor(currentSecs / 60)).padStart(2, '0');
-        const secsStr = String(currentSecs % 60).padStart(2, '0');
-        currTimeLabel.innerText = `${minsStr}:${secsStr}`;
-      }
-    }
-
-    function seekTranscriptPlayer(event) {
-      const container = document.getElementById("audio-progress-bar-container");
-      if (container) {
-        const rect = container.getBoundingClientRect();
-        const clickX = event.clientX - rect.left;
-        const percentage = (clickX / rect.width) * 100;
-        transcriptProgressPct = Math.max(0, Math.min(100, percentage));
-        updateTranscriptAudioPlayerUI();
       }
     }
 
