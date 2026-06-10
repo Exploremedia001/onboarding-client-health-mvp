@@ -38,8 +38,8 @@ export default function MainDashboard() {
 
         {/* KPI row */}
         <div>
-          <h1 className="text-2xl font-bold text-[#142f45] mb-1">Client Health Overview</h1>
-          <p className="text-slate-500 text-sm mb-6">See which clients are healthy, on watchlist, or need attention — all in one view.</p>
+          <h1 className="text-2xl font-bold text-[#142f45] mb-1">exploreHVAC Client Health</h1>
+          <p className="text-slate-500 text-sm mb-6">HVAC, plumbing & home services clients — monitor health, leads, and campaign performance at a glance.</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
             <KpiStatCard label="Total Clients" value={stats.total} icon={<Users size={24} />} accent="#142f45" bg="#142f45" />

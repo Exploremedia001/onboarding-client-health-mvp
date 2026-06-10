@@ -1186,7 +1186,7 @@
           <!-- Left: Client selector -->
           <div class="custom-dropdown-container" id="client-dropdown-container">
             <div class="custom-dropdown-toggle" onclick="toggleDropdown('client-dropdown-menu', event)">
-              <span id="selected-client-name" style="flex: 1">✓ Foundation Health & Wellness</span>
+              <span id="selected-client-name" style="flex: 1">✓ Pure Air Solutions</span>
               <i data-lucide="chevron-down" style="width: 16px; height: 16px; color: var(--color-muted)"></i>
             </div>
             <div id="client-dropdown-menu" class="custom-dropdown-menu">
@@ -7422,10 +7422,10 @@
     // --- INTERACTIVE CALL TRANSCRIPTS BROWSING ---
     // ==========================================
     const CALL_TRANSCRIPT_ANALYSIS_DATA = {
-      "Foundation Health & Wellness": {
+      "Keystone Home Comfort": {
         healthScore: 92,
         healthLabel: "Green",
-        healthSummary: "Excellent alignment. Strong trust and high satisfaction scores across all campaigns.",
+        healthSummary: "Strong home services performance. HVAC, electrical, and handyman leads trending up across local campaigns.",
         churnRisk: "Low",
         warningSignals: ["Minor feedback on booking tool delays", "No billing escalations"],
         sentiment: "Positive",
@@ -7459,10 +7459,10 @@
           "New opportunities: Launch custom local campaigns for the new West Branch opening."
         ]
       },
-      "JAG Medical Spa": {
+      "ProFlow Plumbing Co.": {
         healthScore: 88,
         healthLabel: "Green",
-        healthSummary: "Consistent positive feedback. High trust in strategy and campaign results.",
+        healthSummary: "Plumbing lead volume softening. Emergency call campaigns need optimization before peak season.",
         churnRisk: "Low",
         warningSignals: ["Occasional complaints about double-booking in clinic"],
         sentiment: "Positive",
@@ -7497,7 +7497,7 @@
           "Opportunities: Propose budget expansion for high-margin dermal filler campaigns."
         ]
       },
-      "Vital Roots Functional Medicine": {
+      "Summit Plumbing & Drain": {
         healthScore: 68,
         healthLabel: "Yellow",
         healthSummary: "Satisfactory results, but lab result review scheduling delays are impacting mood.",
@@ -7535,7 +7535,7 @@
           "Urgent action: Deploy the portal hotfix to prevent sign-in loop issues."
         ]
       },
-      "Core Wellness & Recovery": {
+      "TotalCare Home Solutions": {
         healthScore: 94,
         healthLabel: "Green",
         healthSummary: "Outstanding results. Locker room crowd and cryotherapy machine downtime are minor issues.",
@@ -7571,7 +7571,7 @@
           "Opportunities: Expand targeted ads for the high-end hyperbaric chamber launch."
         ]
       },
-      "Vitality Medical Spa": {
+      "AllSeason Home Services": {
         healthScore: 78,
         healthLabel: "Yellow",
         healthSummary: "Good results. Reception check-in delays and parking issues are key customer friction points.",
@@ -7609,7 +7609,7 @@
           "Improvements: Social ad campaigns showing strong engagement at low CPC."
         ]
       },
-      "Inner Calm Therapy Center": {
+      "BlueLine Plumbing Services": {
         healthScore: 95,
         healthLabel: "Green",
         healthSummary: "Exceptional sentiment. Therapist matchmaking system is highly rated.",
@@ -7991,7 +7991,7 @@
       if (!container) return;
 
       const clientName = document.getElementById("selected-client-name").innerText.replace("✓ ", "").trim();
-      const data = CALL_TRANSCRIPT_ANALYSIS_DATA[clientName] || CALL_TRANSCRIPT_ANALYSIS_DATA["Foundation Health & Wellness"];
+      const data = CALL_TRANSCRIPT_ANALYSIS_DATA[clientName] || CALL_TRANSCRIPT_ANALYSIS_DATA["Pure Air Solutions"];
 
       container.innerHTML = `
         <!-- AI Executive Summary Banner (Full Width at the Top) -->
@@ -8306,7 +8306,7 @@
     // --- MAILCHIMP CLIENT-SPECIFIC SENTIMENT DATA ---
     // ==========================================
     const MAILCHIMP_CLIENT_DATA = {
-      "Foundation Health & Wellness": {
+      "Keystone Home Comfort": {
         sentiment: { positive: 124, neutral: 89, negative: 21, pct: 82, summary: "Customer sentiment is 82% positive. Main complaints are delayed service appointments and pricing concerns." },
         complaints: [
           { name: "Delayed service appointment", mentions: 15 },
@@ -8332,7 +8332,7 @@
         responseTime: { avg: "2.4 hrs", unanswered: 6, delayed: 2 },
         executiveSummary: "This week customers were primarily asking about treatment plans and membership pricing. Negative sentiment was low (8%), mainly related to practitioner scheduling constraints. 6 customers showed intent to upgrade to premium memberships, while 3 showed cancellation signals."
       },
-      "JAG Medical Spa": {
+      "ProFlow Plumbing Co.": {
         sentiment: { positive: 98, neutral: 72, negative: 14, pct: 84, summary: "Customer sentiment is 84% positive. Main complaints are practitioner availability and booking confusion." },
         complaints: [
           { name: "Practitioner fully booked", mentions: 10 },
@@ -8358,7 +8358,7 @@
         responseTime: { avg: "1.9 hrs", unanswered: 3, delayed: 1 },
         executiveSummary: "This week patients focused on laser appointment availability and laser package promotions. High satisfaction remains for treatment outcomes. 4 patients showed minor dissatisfaction with long wait times in the lobby."
       },
-      "Vital Roots Functional Medicine": {
+      "Summit Plumbing & Drain": {
         sentiment: { positive: 110, neutral: 64, negative: 28, pct: 79, summary: "Customer sentiment is 79% positive. Main concerns involve lab result delays and supplement pricing." },
         complaints: [
           { name: "Lab results delay", mentions: 18 },
@@ -8384,7 +8384,7 @@
         responseTime: { avg: "3.5 hrs", unanswered: 12, delayed: 4 },
         executiveSummary: "High inquiry volume about lab portal logins and supplement order tracking. Churn signals increased due to delays in blood work review schedules. Urgent replies relate to prescription refill approvals."
       },
-      "Core Wellness & Recovery": {
+      "TotalCare Home Solutions": {
         sentiment: { positive: 135, neutral: 80, negative: 12, pct: 87, summary: "Customer sentiment is 87% positive. Main complaints are cryotherapy machine downtime and lockers." },
         complaints: [
           { name: "Cryo chamber offline", mentions: 8 },
@@ -8409,7 +8409,7 @@
         responseTime: { avg: "1.5 hrs", unanswered: 2, delayed: 0 },
         executiveSummary: "Excellent weekly reviews focusing on sauna and cold plunge therapies. Cryotherapy downtime caused minor complaints, which are being resolved. Churn risk is extremely low."
       },
-      "Vitality Medical Spa": {
+      "AllSeason Home Services": {
         sentiment: { positive: 90, neutral: 62, negative: 18, pct: 81, summary: "Customer sentiment is 81% positive. Main complaints are receptionist coordination and parking." },
         complaints: [
           { name: "Receptionist check-in delays", mentions: 12 },
@@ -8434,7 +8434,7 @@
         responseTime: { avg: "2.1 hrs", unanswered: 5, delayed: 2 },
         executiveSummary: "Positive feedback on IV hydration packages. Reception check-in delays raised minor negative feedback. 3 customers requested cancellations due to personal financial adjustments."
       },
-      "Inner Calm Therapy Center": {
+      "BlueLine Plumbing Services": {
         sentiment: { positive: 115, neutral: 58, negative: 10, pct: 88, summary: "Customer sentiment is 88% positive. Minor complaints around session rescheduling policies." },
         complaints: [
           { name: "Late cancel penalty fee", mentions: 7 },
@@ -8693,7 +8693,7 @@
     };
 
     const GHL_CLIENT_DATA = {
-      "Foundation Health & Wellness": {
+      "Keystone Home Comfort": {
         pipelineValue: "$34,500",
         totalLeads: 142,
         conversionRate: 72,
@@ -8718,7 +8718,7 @@
           { source: "Referrals", count: 12 }
         ]
       },
-      "JAG Medical Spa": {
+      "ProFlow Plumbing Co.": {
         pipelineValue: "$28,400",
         totalLeads: 110,
         conversionRate: 75,
@@ -8741,7 +8741,7 @@
           { source: "Referrals", count: 10 }
         ]
       },
-      "Vital Roots Functional Medicine": {
+      "Summit Plumbing & Drain": {
         pipelineValue: "$18,200",
         totalLeads: 85,
         conversionRate: 58,
@@ -8763,7 +8763,7 @@
           { source: "Website Blog", count: 12 }
         ]
       },
-      "Core Wellness & Recovery": {
+      "TotalCare Home Solutions": {
         pipelineValue: "$41,000",
         totalLeads: 168,
         conversionRate: 80,
@@ -8786,7 +8786,7 @@
           { source: "Facebook Ads", count: 20 }
         ]
       },
-      "Vitality Medical Spa": {
+      "AllSeason Home Services": {
         pipelineValue: "$21,500",
         totalLeads: 95,
         conversionRate: 68,
@@ -8809,7 +8809,7 @@
           { source: "Referrals", count: 25 }
         ]
       },
-      "Inner Calm Therapy Center": {
+      "BlueLine Plumbing Services": {
         pipelineValue: "$15,600",
         totalLeads: 78,
         conversionRate: 82,
@@ -9017,7 +9017,7 @@
       if (!container) return;
 
       const clientName = document.getElementById("selected-client-name").innerText.replace("✓ ", "").trim();
-      const data = GHL_CLIENT_DATA[clientName] || GHL_CLIENT_DATA["Foundation Health & Wellness"];
+      const data = GHL_CLIENT_DATA[clientName] || GHL_CLIENT_DATA["Pure Air Solutions"];
 
       // Retrieve only the first lead and appointment
       const lead = data.leads[0] || { 
@@ -9265,7 +9265,7 @@
 
     function renderMailChimpDashboard() {
       const clientName = document.getElementById("selected-client-name").innerText.replace("✓ ", "").trim();
-      const data = MAILCHIMP_CLIENT_DATA[clientName] || MAILCHIMP_CLIENT_DATA["Foundation Health & Wellness"];
+      const data = MAILCHIMP_CLIENT_DATA[clientName] || MAILCHIMP_CLIENT_DATA["Pure Air Solutions"];
       
       // Update Executive Summary Text
       if (document.getElementById("mailchimp-ai-summary-text")) {
@@ -9430,21 +9430,21 @@
     }
     
     const ALL_CLIENTS = [
-      "Foundation Health & Wellness",
-      "JAG Medical Spa",
-      "Vital Roots Functional Medicine",
-      "Core Wellness & Recovery",
-      "Vitality Medical Spa",
-      "Inner Calm Therapy Center",
-      "Precision HVAC Experts",
-      "Apex Climate Control",
-      "Comfort Zone Heating & Air",
-      "Elite Air Systems",
-      "Rapid Response Air",
       "Pure Air Solutions",
-      "Airflow Masters",
       "Frosty Systems",
-      "Prime Comfort HVAC"
+      "Precision HVAC Experts",
+      "Elite Air Systems",
+      "Keystone Home Comfort",
+      "Summit Plumbing & Drain",
+      "AllSeason Home Services",
+      "ProFlow Plumbing Co.",
+      "BlueLine Plumbing Services",
+      "Airflow Masters",
+      "Comfort Zone Heating & Air",
+      "Apex Climate Control",
+      "Prime Comfort HVAC",
+      "TotalCare Home Solutions",
+      "Rapid Response Air"
     ];
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -9452,10 +9452,10 @@
       const clientListEl = document.getElementById("client-list");
       if (clientListEl) {
         const urlParams = new URLSearchParams(window.location.search);
-        let initialClient = urlParams.get('client') || localStorage.getItem('selectedClient') || "Foundation Health & Wellness";
+        let initialClient = urlParams.get('client') || localStorage.getItem('selectedClient') || "Pure Air Solutions";
 
         if (!ALL_CLIENTS.includes(initialClient)) {
-          initialClient = "Foundation Health & Wellness";
+          initialClient = "Pure Air Solutions";
         }
 
         localStorage.setItem('selectedClient', initialClient);
