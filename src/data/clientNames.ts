@@ -1,5 +1,5 @@
-/** Canonical exploreHVAC client list — single source of truth for React + dashboard.html */
-export const EXPLORE_HVAC_CLIENT_NAMES = [
+/** Canonical Explore Media client list — single source of truth for React + dashboard.html */
+export const EXPLORE_MEDIA_CLIENT_NAMES = [
   'Pure Air Solutions',
   'Frosty Systems',
   'Precision HVAC Experts',
@@ -17,14 +17,10 @@ export const EXPLORE_HVAC_CLIENT_NAMES = [
   'Rapid Response Air',
 ] as const;
 
+/** @deprecated Use EXPLORE_MEDIA_CLIENT_NAMES */
+export const EXPLORE_HVAC_CLIENT_NAMES = EXPLORE_MEDIA_CLIENT_NAMES;
+
 export const DEFAULT_CLIENT = 'Pure Air Solutions';
 
-/** Old mock names → exploreHVAC names (for dashboard.html migration) */
-export const LEGACY_CLIENT_NAME_MAP: Record<string, string> = {
-  'Foundation Health & Wellness': 'Keystone Home Comfort',
-  'JAG Medical Spa': 'ProFlow Plumbing Co.',
-  'Vital Roots Functional Medicine': 'Summit Plumbing & Drain',
-  'Core Wellness & Recovery': 'TotalCare Home Solutions',
-  'Vitality Medical Spa': 'AllSeason Home Services',
-  'Inner Calm Therapy Center': 'BlueLine Plumbing Services',
-};
+/** Silent localStorage redirect for legacy dashboard keys (migration complete — no spa names retained). */
+export const LEGACY_CLIENT_NAME_MAP: Record<string, string> = {};

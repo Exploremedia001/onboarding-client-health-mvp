@@ -85,7 +85,7 @@
           { page: "/local-search-seo",          pageviews: 4210, bounce_rate: 35.6, avg_time: 184 },
           { page: "/success-stories",           pageviews: 3180, bounce_rate: 24.8, avg_time: 265 },
           { page: "/about",                     pageviews: 2940, bounce_rate: 38.2, avg_time: 127 },
-          { page: "/blog/wellness-seo-tips",    pageviews: 2310, bounce_rate: 42.1, avg_time: 198 },
+          { page: "/blog/local-seo-for-contractors",    pageviews: 2310, bounce_rate: 42.1, avg_time: 198 },
           { page: "/contact",                   pageviews: 1840, bounce_rate: 18.6, avg_time: 93  },
         ],
         events: [
@@ -148,23 +148,23 @@
           { date: "2024-05-28", clicks: 412, impressions: 5840 },
         ],
         top_queries: [
-          { query: "wellness marketing agency",       clicks: 842,  impressions: 9240,  ctr: 9.1,  position: 2.1  },
-          { query: "health clinic digital marketing", clicks: 710,  impressions: 8100,  ctr: 8.8,  position: 3.4  },
-          { query: "salt marketing",                  clicks: 680,  impressions: 2840,  ctr: 23.9, position: 1.2  },
-          { query: "wellness seo agency",             clicks: 524,  impressions: 7600,  ctr: 6.9,  position: 5.8  },
-          { query: "local seo for wellness",          clicks: 498,  impressions: 8420,  ctr: 5.9,  position: 7.2  },
-          { query: "chiropractor marketing agency",   clicks: 412,  impressions: 6840,  ctr: 6.0,  position: 4.1  },
-          { query: "yoga studio seo",                 clicks: 368,  impressions: 7120,  ctr: 5.2,  position: 9.3  },
-          { query: "wellness clinic google ads",      clicks: 340,  impressions: 5980,  ctr: 5.7,  position: 6.4  },
-          { query: "health practice marketing",       clicks: 298,  impressions: 6210,  ctr: 4.8,  position: 11.2 },
-          { query: "get more wellness clients",       clicks: 248,  impressions: 5840,  ctr: 4.2,  position: 13.8 },
+          { query: "hvac marketing agency",           clicks: 842,  impressions: 9240,  ctr: 9.1,  position: 2.1  },
+          { query: "plumbing leads google ads",       clicks: 710,  impressions: 8100,  ctr: 8.8,  position: 3.4  },
+          { query: "explore media case studies",      clicks: 680,  impressions: 2840,  ctr: 23.9, position: 1.2  },
+          { query: "local seo for contractors",       clicks: 524,  impressions: 7600,  ctr: 6.9,  position: 5.8  },
+          { query: "home services ppc agency",        clicks: 498,  impressions: 8420,  ctr: 5.9,  position: 7.2  },
+          { query: "ac repair near me",               clicks: 412,  impressions: 6840,  ctr: 6.0,  position: 4.1  },
+          { query: "emergency plumber",               clicks: 368,  impressions: 7120,  ctr: 5.2,  position: 9.3  },
+          { query: "hvac installation quote",         clicks: 340,  impressions: 5980,  ctr: 5.7,  position: 6.4  },
+          { query: "drain cleaning service",          clicks: 298,  impressions: 6210,  ctr: 4.8,  position: 11.2 },
+          { query: "furnace repair cost",             clicks: 248,  impressions: 5840,  ctr: 4.2,  position: 13.8 },
         ],
         top_pages: [
           { page: "/",                       clicks: 2140, impressions: 28400, ctr: 7.5, position: 2.8  },
           { page: "/growth-accelerator",     clicks: 1840, impressions: 24200, ctr: 7.6, position: 3.1  },
           { page: "/local-search-seo",       clicks: 1320, impressions: 18600, ctr: 7.1, position: 5.4  },
           { page: "/success-stories",        clicks: 980,  impressions: 14800, ctr: 6.6, position: 7.2  },
-          { page: "/blog/wellness-seo-tips", clicks: 840,  impressions: 16200, ctr: 5.2, position: 9.8  },
+          { page: "/blog/local-seo-for-contractors", clicks: 840,  impressions: 16200, ctr: 5.2, position: 9.8  },
         ],
       },
       gbp: {
@@ -274,17 +274,17 @@
           { date: "2024-05-30", spend: 180.60, clicks: 132, conversions: 10 },
         ],
         campaigns: [
-          { name: "Wellness Brand — Search",     impressions: 32400, clicks: 1240, spend: 1680.40, conversions: 72,  ctr: 3.83, cpc: 1.36, roas: 5.2, status: "active"  },
+          { name: "Emergency HVAC — Search",     impressions: 32400, clicks: 1240, spend: 1680.40, conversions: 72,  ctr: 3.83, cpc: 1.36, roas: 5.2, status: "active"  },
           { name: "Local SEO Services — Search", impressions: 24800, clicks: 892,  spend: 1120.60, conversions: 58,  ctr: 3.60, cpc: 1.26, roas: 4.8, status: "active"  },
           { name: "GBP Promo — Display",         impressions: 28600, clicks: 480,  spend: 682.80,  conversions: 28,  ctr: 1.68, cpc: 1.42, roas: 3.2, status: "active"  },
           { name: "Retargeting — All Visitors",  impressions: 12600, clicks: 508,  spend: 796.20,  conversions: 28,  ctr: 4.03, cpc: 1.57, roas: 4.1, status: "active"  },
         ],
         top_keywords: [
-          { keyword: "wellness marketing agency",       match: "Exact", impressions: 8420, clicks: 398, spend: 542.80, ctr: 4.73, cpc: 1.36, conv: 22, quality: 9 },
-          { keyword: "health clinic seo",               match: "Phrase",impressions: 6840, clicks: 312, spend: 418.60, ctr: 4.56, cpc: 1.34, conv: 18, quality: 8 },
-          { keyword: "digital marketing for wellness",  match: "Broad", impressions: 9200, clicks: 284, spend: 396.40, ctr: 3.09, cpc: 1.40, conv: 14, quality: 7 },
-          { keyword: "yoga studio marketing",           match: "Exact", impressions: 5640, clicks: 268, spend: 352.20, ctr: 4.75, cpc: 1.31, conv: 16, quality: 8 },
-          { keyword: "chiropractor google ads",         match: "Phrase",impressions: 7120, clicks: 248, spend: 338.60, ctr: 3.48, cpc: 1.37, conv: 13, quality: 7 },
+          { keyword: "ac repair near me",               match: "Exact", impressions: 8420, clicks: 398, spend: 542.80, ctr: 4.73, cpc: 1.36, conv: 22, quality: 9 },
+          { keyword: "emergency plumber",               match: "Phrase",impressions: 6840, clicks: 312, spend: 418.60, ctr: 4.56, cpc: 1.34, conv: 18, quality: 8 },
+          { keyword: "hvac installation quote",         match: "Broad", impressions: 9200, clicks: 284, spend: 396.40, ctr: 3.09, cpc: 1.40, conv: 14, quality: 7 },
+          { keyword: "drain cleaning near me",          match: "Exact", impressions: 5640, clicks: 268, spend: 352.20, ctr: 4.75, cpc: 1.31, conv: 16, quality: 8 },
+          { keyword: "furnace tune up",                 match: "Phrase",impressions: 7120, clicks: 248, spend: 338.60, ctr: 3.48, cpc: 1.37, conv: 13, quality: 7 },
         ],
         ad_groups: [
           { name: "Brand Terms", spend: 420.50, conversions: 24 },
@@ -294,10 +294,10 @@
         ],
         recommendations: [
           {
-            campaign: "Wellness Brand — Search", count: 3,
+            campaign: "Emergency HVAC — Search", count: 3,
             items: [
-              { title: "ADD SITELINK ASSET", type: "SUGGESTED ACTION", desc: 'Applies to budget "Wellness Brand — Search". Review recommendation in Google Ads.', impact: null },
-              { title: "MAXIMIZE CONVERSIONS OPT IN", type: "ESTIMATED IMPACT", desc: 'Applies to budget "Wellness Brand — Search".', impact: { imp: 850, clicks: 42, cost: 84.50 } }
+              { title: "ADD SITELINK ASSET", type: "SUGGESTED ACTION", desc: 'Applies to budget "Emergency HVAC — Search". Review recommendation in Google Ads.', impact: null },
+              { title: "MAXIMIZE CONVERSIONS OPT IN", type: "ESTIMATED IMPACT", desc: 'Applies to budget "Emergency HVAC — Search".', impact: { imp: 850, clicks: 42, cost: 84.50 } }
             ]
           },
           {

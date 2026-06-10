@@ -2,7 +2,7 @@ import { DEFAULT_CLIENT, EXPLORE_HVAC_CLIENT_NAMES } from './clientNames';
 
 export type HealthStatus = 'green' | 'yellow' | 'red';
 export type RiskLevel = 'Low' | 'Medium' | 'High' | 'Critical';
-export type LifecycleStage = 'Onboarding' | 'Growing' | 'Stable' | 'At Risk' | 'Recovery' | 'Expansion';
+export type LifecycleStage = 'Onboarding' | 'Growing' | 'Stable' | 'At Risk' | 'Re-engagement' | 'Expansion';
 export type ServiceCategory = 'HVAC' | 'Plumbing' | 'Home Services';
 
 export interface Client {
@@ -173,14 +173,14 @@ export const ALL_CLIENTS: Client[] = [
     meetingFrequency: 55, emailEngagement: 62, responseRate: 70, executiveInvolvement: 45,
     breakdown: { traffic: 70, leads: 65, revenue: 72, sentiment: 68, delivery: 78, communication: 62 },
     aiFlags: ['Negative Sentiment', 'Lead Drop'],
-    aiRecommendations: ['Audit emergency plumbing LSA campaigns', 'Review Google Ads call-only extensions', 'Launch drain cleaning seasonal offer'],
-    redFlags: ['Emergency leads down 8%'],
+    aiRecommendations: ['Audit LSA call extensions and tracking', 'Review Google Ads CPL by ad group', 'Launch seasonal offer landing page'],
+    redFlags: ['MQL volume down 8%'],
     upsellOpportunity: false, crossSellOpportunity: true, budgetIncreaseSignal: false,
   },
   {
     id: 9, name: 'BlueLine Plumbing Services', status: 'yellow', category: 'Plumbing',
     score: 78, alerts: 1, trend: 'up', revenue: '$1,200', lastChecked: '3h ago',
-    healthScore: 78, risk: 'Medium', churnRisk: 28, accountManager: 'Sarah', lifecycleStage: 'Recovery',
+    healthScore: 78, risk: 'Medium', churnRisk: 28, accountManager: 'Sarah', lifecycleStage: 'Re-engagement',
     monthlyChange: 4, lastMeeting: '14 days ago', lastEmailReply: '4 days ago', lastTouchpoint: '4 days ago',
     daysSinceContact: 4, openTasks: 5, overdueTasks: 1, delayedDeliverables: 0, blockedProjects: 0,
     trafficGrowth: 6, leadGrowth: 3, revenueGrowth: 2, roasTrend: 1,
@@ -189,14 +189,14 @@ export const ALL_CLIENTS: Client[] = [
     meetingFrequency: 65, emailEngagement: 70, responseRate: 75, executiveInvolvement: 55,
     breakdown: { traffic: 75, leads: 72, revenue: 78, sentiment: 76, delivery: 82, communication: 70 },
     aiFlags: ['Communication Issues'],
-    aiRecommendations: ['Increase check-in calls on water heater campaign', 'Send GBP review response report'],
+    aiRecommendations: ['Schedule 90-day performance recovery roadmap', 'Send GBP review response report'],
     redFlags: [],
     upsellOpportunity: false, crossSellOpportunity: false, budgetIncreaseSignal: false,
   },
   {
     id: 10, name: 'Airflow Masters', status: 'yellow', category: 'HVAC',
     score: 72, alerts: 1, trend: 'up', revenue: '$4,100', lastChecked: '2h ago',
-    healthScore: 72, risk: 'Medium', churnRisk: 35, accountManager: 'Sarah', lifecycleStage: 'Recovery',
+    healthScore: 72, risk: 'Medium', churnRisk: 35, accountManager: 'Sarah', lifecycleStage: 'Re-engagement',
     monthlyChange: 3, lastMeeting: '12 days ago', lastEmailReply: '5 days ago', lastTouchpoint: '5 days ago',
     daysSinceContact: 5, openTasks: 6, overdueTasks: 1, delayedDeliverables: 0, blockedProjects: 0,
     trafficGrowth: 4, leadGrowth: 2, revenueGrowth: 1, roasTrend: 0,
@@ -205,7 +205,7 @@ export const ALL_CLIENTS: Client[] = [
     meetingFrequency: 60, emailEngagement: 65, responseRate: 68, executiveInvolvement: 50,
     breakdown: { traffic: 68, leads: 65, revenue: 72, sentiment: 70, delivery: 78, communication: 65 },
     aiFlags: [],
-    aiRecommendations: ['Continue AC tune-up recovery plan', 'Schedule quarterly HVAC strategy review'],
+    aiRecommendations: ['Execute 90-day performance recovery roadmap', 'Schedule quarterly strategy QBR'],
     redFlags: [],
     upsellOpportunity: false, crossSellOpportunity: false, budgetIncreaseSignal: false,
   },
@@ -221,8 +221,8 @@ export const ALL_CLIENTS: Client[] = [
     meetingFrequency: 50, emailEngagement: 55, responseRate: 60, executiveInvolvement: 40,
     breakdown: { traffic: 62, leads: 58, revenue: 65, sentiment: 60, delivery: 72, communication: 55 },
     aiFlags: ['Lead Drop', 'Communication Issues'],
-    aiRecommendations: ['Schedule HVAC check-in call', 'Review local SEO for furnace repair keywords'],
-    redFlags: ['Service leads down 10%'],
+    aiRecommendations: ['Schedule retainer check-in call', 'Review local SEO keyword performance report'],
+    redFlags: ['MQL volume down 10%'],
     upsellOpportunity: false, crossSellOpportunity: false, budgetIncreaseSignal: false,
   },
   {
@@ -237,8 +237,8 @@ export const ALL_CLIENTS: Client[] = [
     meetingFrequency: 40, emailEngagement: 45, responseRate: 50, executiveInvolvement: 30,
     breakdown: { traffic: 55, leads: 50, revenue: 58, sentiment: 52, delivery: 60, communication: 45 },
     aiFlags: ['Churn Risk', 'Traffic Drop', 'Revenue Drop', 'Lead Drop'],
-    aiRecommendations: ['Schedule strategy call', 'Audit PPC for AC repair keywords', 'Review GBP review response rate'],
-    redFlags: ['Booked jobs down 14%', 'Emergency leads down 15%', 'No meeting for 35 days'],
+    aiRecommendations: ['Schedule executive strategy call', 'Audit PPC CPL by campaign', 'Review GBP review response rate'],
+    redFlags: ['Cost per lead up 14%', 'MQL volume down 15%', 'No QBR for 35 days'],
     upsellOpportunity: false, crossSellOpportunity: false, budgetIncreaseSignal: false,
   },
   {
@@ -253,8 +253,8 @@ export const ALL_CLIENTS: Client[] = [
     meetingFrequency: 35, emailEngagement: 40, responseRate: 45, executiveInvolvement: 25,
     breakdown: { traffic: 52, leads: 48, revenue: 55, sentiment: 50, delivery: 58, communication: 42 },
     aiFlags: ['Churn Risk', 'Traffic Drop', 'Revenue Drop', 'Communication Issues'],
-    aiRecommendations: ['Schedule strategy call', 'Review lead sources for heating season', 'Present HVAC recovery plan'],
-    redFlags: ['Booked jobs down 18%', 'No meeting for 38 days', 'Service leads down 16%'],
+    aiRecommendations: ['Schedule executive strategy call', 'Review lead source mix report', 'Present retainer save playbook'],
+    redFlags: ['Cost per lead up 18%', 'No QBR for 38 days', 'MQL volume down 16%'],
     upsellOpportunity: false, crossSellOpportunity: false, budgetIncreaseSignal: false,
   },
   {
@@ -269,8 +269,8 @@ export const ALL_CLIENTS: Client[] = [
     meetingFrequency: 30, emailEngagement: 35, responseRate: 40, executiveInvolvement: 20,
     breakdown: { traffic: 48, leads: 42, revenue: 50, sentiment: 45, delivery: 55, communication: 38 },
     aiFlags: ['Churn Risk', 'Negative Sentiment', 'Traffic Drop', 'Revenue Drop', 'Communication Issues'],
-    aiRecommendations: ['Emergency strategy call', 'Audit all home service lead sources', 'Present multi-trade recovery plan', 'Assign senior AM'],
-    redFlags: ['Booked jobs down 22%', 'No meeting for 42 days', 'Home service leads down 22%', 'Deliverables overdue'],
+    aiRecommendations: ['Emergency executive strategy call', 'Audit all lead source channels', 'Present retainer save playbook', 'Assign senior AM'],
+    redFlags: ['Cost per lead up 22%', 'No QBR for 42 days', 'MQL volume down 22%', 'Deliverables overdue'],
     upsellOpportunity: false, crossSellOpportunity: false, budgetIncreaseSignal: false,
   },
   {
@@ -285,8 +285,8 @@ export const ALL_CLIENTS: Client[] = [
     meetingFrequency: 20, emailEngagement: 25, responseRate: 30, executiveInvolvement: 15,
     breakdown: { traffic: 40, leads: 35, revenue: 42, sentiment: 38, delivery: 45, communication: 30 },
     aiFlags: ['Churn Risk', 'Negative Sentiment', 'Traffic Drop', 'Revenue Drop', 'Lead Drop', 'Communication Issues'],
-    aiRecommendations: ['Emergency executive call', 'Full HVAC account audit', 'Recovery plan for emergency AC calls', 'Reassign to senior AM'],
-    redFlags: ['Booked jobs down 28%', 'Negative GBP review received', 'No meeting for 48 days', 'Emergency leads down 30%', 'Churn language detected', 'Deliverables overdue'],
+    aiRecommendations: ['Emergency executive call', 'Full account performance audit', '90-day performance recovery roadmap', 'Reassign to senior AM'],
+    redFlags: ['Cost per lead up 28%', 'Negative GBP review received', 'No QBR for 48 days', 'MQL volume down 30%', 'Churn language detected', 'Deliverables overdue'],
     upsellOpportunity: false, crossSellOpportunity: false, budgetIncreaseSignal: false,
   },
 ];
