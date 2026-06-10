@@ -3446,7 +3446,7 @@
             </div>
 
             <!-- KPI Row -->
-            <div class="kpi-grid" style="margin-bottom: 24px;">
+            <div class="kpi-grid" style="margin-bottom: 24px; grid-template-columns: repeat(3, 1fr);">
               <!-- Card 1: Sentiment Analysis -->
               <div class="kpi-card" style="display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
@@ -3479,21 +3479,7 @@
                 </div>
               </div>
 
-              <!-- Card 3: Churn Risk Detection -->
-              <div class="kpi-card" style="display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
-                <div>
-                  <div class="kpi-label">Churn Risk Detection</div>
-                  <div id="mailchimp-churn-count" class="kpi-value" style="font-size: 28px; font-weight: 800; color: var(--color-danger); display: flex; align-items: center; gap: 8px;">
-                    <i data-lucide="alert-triangle" style="width: 24px; height: 24px; color: var(--color-danger);"></i> 0 Customers
-                  </div>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
-                  <span style="font-size: 11px; color: var(--color-muted);">Showing signals</span>
-                  <span id="mailchimp-churn-risk-badge" class="badge badge-danger" style="margin: 0; padding: 2px 8px; font-size: 10px; font-weight: 700;">Risk Level: High</span>
-                </div>
-              </div>
-
-              <!-- Card 4: Unanswered Emails & Response Time (Modified to make Unanswered Count the Large Font) -->
+              <!-- Card 3: Unanswered Emails & Response Time (Modified to make Unanswered Count the Large Font) -->
               <div class="kpi-card" style="display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
                   <div class="kpi-label">Unanswered Emails</div>
@@ -9312,19 +9298,6 @@
         document.getElementById("mailchimp-top-complaint-meta").innerText = `${topComplaint.mentions} mentions this week`;
       }
       
-      // Update Churn Card
-      if (document.getElementById("mailchimp-churn-count")) {
-        document.getElementById("mailchimp-churn-count").innerHTML = `
-          <i data-lucide="alert-triangle" style="width: 24px; height: 24px; color: var(--color-danger); margin-right: 8px; display: inline-block; vertical-align: middle;"></i>
-          ${data.churn.count} Customers
-        `;
-      }
-      if (document.getElementById("mailchimp-churn-risk-badge")) {
-        const badge = document.getElementById("mailchimp-churn-risk-badge");
-        badge.innerText = `Risk Level: ${data.churn.risk}`;
-        badge.className = `badge ${data.churn.risk === 'High' ? 'badge-danger' : data.churn.risk === 'Medium' ? 'badge-blue' : 'badge-neutral'}`;
-      }
-      
       // Update Unanswered & Response Time Card (Unanswered count is large font)
       if (document.getElementById("mailchimp-unanswered-count-large")) {
         document.getElementById("mailchimp-unanswered-count-large").innerText = data.responseTime.unanswered;
@@ -9445,6 +9418,10 @@
             </tr>
           `;
         }).join("");
+      }
+      
+      if (window.lucide) {
+        lucide.createIcons();
       }
       
       if (window.lucide) {
