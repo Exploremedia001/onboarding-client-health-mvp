@@ -565,6 +565,50 @@
       width: 35%;
     }
 
+    .w-30 {
+      width: 30%;
+    }
+
+    @keyframes cardRefresh {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.985);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .transcript-card-animate {
+      animation: cardRefresh 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .delay-1 { animation-delay: 35ms; }
+    .delay-2 { animation-delay: 70ms; }
+    .delay-3 { animation-delay: 105ms; }
+    .delay-4 { animation-delay: 140ms; }
+    .delay-5 { animation-delay: 175ms; }
+    .delay-6 { animation-delay: 210ms; }
+    .delay-7 { animation-delay: 245ms; }
+    .delay-8 { animation-delay: 280ms; }
+    .delay-9 { animation-delay: 315ms; }
+
+    /* Enhance Hover Effect on Call Transcripts Dashboard Cards */
+    #transcripts-overview .kpi-card, 
+    #transcripts-overview .chart-card {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                  box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                  border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    #transcripts-overview .kpi-card:hover, 
+    #transcripts-overview .chart-card:hover {
+      transform: translateY(-6px) scale(1.015) !important;
+      box-shadow: 0 20px 25px -5px rgba(20, 47, 69, 0.1), 0 10px 10px -5px rgba(20, 47, 69, 0.05) !important;
+      border-color: var(--color-accent) !important;
+    }
+
     .w-55 {
       width: 55%;
     }
@@ -1118,10 +1162,10 @@
             <i data-lucide="mail" style="width: 18px; height: 18px"></i> MailChimp
           </li>
         </ul>
-        <div class="sidebar-section-title">Financial</div>
+        <div class="sidebar-section-title">CRM & Booking</div>
         <ul class="sidebar-nav" style="margin-top: 0">
-          <li onclick="showTab('tab-financials')">
-            <i data-lucide="dollar-sign" style="width: 18px; height: 18px"></i> Financial Overview
+          <li onclick="showTab('tab-ghl')">
+            <i data-lucide="users" style="width: 18px; height: 18px"></i> GHL Insights
           </li>
         </ul>
       </div>
@@ -3377,372 +3421,155 @@
             <div class="sub-tab active" onclick="showSubTab(this, 'transcripts-overview', 'tab-call-transcripts')">
               Overview</div>
           </div>
-          <div id="transcripts-overview" class="sub-tab-content active">
-            <div class="kpi-grid" style="margin-bottom: 24px;">
-              <div class="kpi-card">
-                <div class="kpi-label">Recorded Calls</div>
-                <div class="kpi-value">32 Calls</div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Full stereo audio
-                  records</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Total Duration</div>
-                <div class="kpi-value">18.4 Hrs</div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Indexed metadata
-                  transcripts</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Avg Sentiment</div>
-                <div class="kpi-value" style="color: var(--color-success);">84.2%</div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Positively
-                  categorized sentences</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Flagged Issues</div>
-                <div class="kpi-value" style="color: var(--color-accent);">1 Pending</div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Marked for Client
-                  Manager Review</div>
-              </div>
-            </div>
-
-            <div class="charts-row" style="height: 540px;">
-              <!-- Call Sidebar -->
-              <div class="chart-card w-35"
-                style="display: flex; flex-direction: column; overflow: hidden; height: 100%;">
-                <div class="chart-title" style="margin-bottom: 12px;">Call Sessions Archive</div>
-                <input type="text" id="transcript-search" placeholder="Search callers or companies..."
-                  class="form-input" style="margin-bottom: 16px; width: 100%;" oninput="searchCallTranscripts()">
-                <div style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;"
-                  id="call-list-container" class="custom-scroll">
-                  <!-- Dynamically rendered -->
-                </div>
-              </div>
-
-              <!-- Transcript Dialog Viewer -->
-              <div class="chart-card w-65"
-                style="display: flex; flex-direction: column; overflow: hidden; height: 100%;">
-                <div
-                  style="border-bottom: 1px solid var(--color-border); padding-bottom: 16px; margin-bottom: 16px; display:flex; justify-content:space-between; align-items:flex-start;">
-                  <div>
-                    <h3
-                      style="font-family: var(--font-serif); font-size: 16px; font-weight: 700; color: var(--color-primary);"
-                      id="preview-call-title">Call Loading</h3>
-                    <div style="font-size: 11px; color: var(--color-muted); margin-top: 2px;" id="preview-call-meta">-
-                    </div>
-                  </div>
-                  <span class="badge" id="preview-call-sentiment-badge">-</span>
-                </div>
-
-                <!-- Custom Interactive Media Player Controls -->
-                <div
-                  style="background: var(--color-warm); border: 1px solid var(--color-border); border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; display:flex; align-items:center; gap:16px;">
-                  <button onclick="toggleTranscriptAudioPlay()"
-                    style="background: var(--color-primary); color:white; border:none; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer;"
-                    id="transcript-play-btn">
-                    <i data-lucide="play" style="width:18px; height:18px;"></i>
-                  </button>
-                  <div style="flex:1;">
-                    <div
-                      style="width:100%; height:4px; background:#e2e8f0; border-radius:2px; position:relative; cursor:pointer;"
-                      onclick="seekTranscriptPlayer(event)" id="audio-progress-bar-container">
-                      <div style="width:0%; height:100%; background:var(--color-primary); border-radius:2px;"
-                        id="audio-progress-bar"></div>
-                    </div>
-                    <div
-                      style="display:flex; justify-content:space-between; font-size:10px; color:var(--color-muted); margin-top:6px;">
-                      <span id="audio-current-time">00:00</span>
-                      <span id="audio-total-time">14:22</span>
-                    </div>
-                  </div>
-                  <button style="background:none; border:none; cursor:pointer; color:var(--color-muted);"><i
-                      data-lucide="volume-2" style="width:18px; height:18px;"></i></button>
-                </div>
-
-                <!-- Dialogue bubbles -->
-                <div
-                  style="flex: 1; overflow-y: auto; padding-right: 8px; display:flex; flex-direction:column; gap:12px; margin-bottom: 16px;"
-                  id="dialogue-bubbles-container" class="custom-scroll">
-                  <!-- Dynamically rendered bubbles -->
-                </div>
-
-                <!-- Summary/Action items box -->
-                <div
-                  style="background: var(--color-warm); border:1px solid var(--color-border); border-radius:8px; padding:12px 16px; font-size:12px;">
-                  <div
-                    style="font-weight:700; color:var(--color-primary); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-                    <i data-lucide="sparkles"
-                      style="width:14px; height:14px; color: var(--color-accent); display:inline-block;"></i> AI Summary
-                    & Next Steps</div>
-                  <ul style="padding-left:16px; margin:0; line-height:1.5; color: var(--color-primary);"
-                    id="transcript-action-items">
-                    <!-- Dynamically populated action items -->
-                  </ul>
-                </div>
-              </div>
-            </div>
+          <div id="transcripts-overview" class="sub-tab-content active" style="display: flex; flex-direction: column; gap: 24px;">
+            <!-- Call Transcript Health Analysis Dashboard will render dynamically here -->
           </div>
         </div>
 
-        <!-- EMAIL AUDIT - MAILCHIMP TAB -->
+                        <!-- EMAIL AUDIT - MAILCHIMP TAB -->
         <div id="tab-mailchimp" class="tab-content">
-          <div class="sub-tabs">
-            <div class="sub-tab active" onclick="showSubTab(this, 'mailchimp-overview', 'tab-mailchimp')">Overview</div>
-          </div>
+          <!-- AI Customer Insights Tab directly visible -->
           <div id="mailchimp-overview" class="sub-tab-content active">
-            <div class="kpi-grid" style="margin-bottom: 24px;">
-              <div class="kpi-card">
-                <div class="kpi-label">MailChimp Contacts</div>
-                <div class="kpi-value" id="mailchimp-contacts">24,520</div>
-                <div class="kpi-delta"><span style="background: #10b981;">+6.2%</span></div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Total workspace
-                  list count</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Average Open Rate</div>
-                <div class="kpi-value" id="mailchimp-open-rate">28.4%</div>
-                <div class="kpi-delta"><span style="background: #10b981;">+1.2%</span></div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Industry median:
-                  21.3%</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Average Click Rate</div>
-                <div class="kpi-value" id="mailchimp-click-rate">4.82%</div>
-                <div class="kpi-delta"><span style="background: #10b981;">+0.5%</span></div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Total campaign
-                  clicks metrics</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Monthly Growth</div>
-                <div class="kpi-value" id="mailchimp-growth">+422</div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Subscribers delta
-                  this month</div>
+            <!-- AI Executive Summary Banner -->
+            <div class="chart-card w-100" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(20,47,69,0.02) 0%, rgba(238,104,59,0.02) 100%); border-left: 4px solid var(--color-accent); cursor: default;">
+              <div style="display: flex; align-items: flex-start; gap: 16px;">
+                <div style="background: rgba(238,104,59,0.1); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; color: var(--color-accent);">
+                  <i data-lucide="sparkles" style="width: 24px; height: 24px;"></i>
+                </div>
+                <div style="flex: 1;">
+                  <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--color-accent); letter-spacing: 0.05em; margin-bottom: 4px;">AI Executive Summary</div>
+                  <div id="mailchimp-ai-summary-text" style="font-size: 14px; line-height: 1.6; font-weight: 500; color: var(--color-primary);">
+                    Loading AI customer summary...
+                  </div>
+                </div>
               </div>
             </div>
 
+            <!-- KPI Row -->
+            <div class="kpi-grid" style="margin-bottom: 24px; grid-template-columns: repeat(3, 1fr);">
+              <!-- Card 1: Sentiment Analysis -->
+              <div class="kpi-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="kpi-label">Customer Sentiment</div>
+                  <div id="mailchimp-sentiment-title" class="kpi-value" style="font-size: 28px; font-weight: 800; margin-bottom: 8px;">0% Positive</div>
+                </div>
+                <div>
+                  <!-- Progress bar -->
+                  <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin-bottom: 8px;">
+                    <div id="mailchimp-sentiment-progress" style="width: 0%; height: 100%; background: var(--color-success); border-radius: 4px; transition: width 0.5s ease;"></div>
+                  </div>
+                  <!-- Counts breakdown -->
+                  <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 600;">
+                    <span style="color: var(--color-success);" id="mailchimp-sentiment-pos">Pos: 0</span>
+                    <span style="color: var(--color-secondary);" id="mailchimp-sentiment-neu">Neu: 0</span>
+                    <span style="color: var(--color-danger);" id="mailchimp-sentiment-neg">Neg: 0</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 2: Top Customer Complaints -->
+              <div class="kpi-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="kpi-label">Top Customer Complaint</div>
+                  <div id="mailchimp-top-complaint-title" class="kpi-value" style="font-size: 20px; font-weight: 700; line-height: 1.2; margin-top: 4px; color: var(--color-primary);">None</div>
+                </div>
+                <div style="font-size: 12px; color: var(--color-muted); display: flex; align-items: center; gap: 4px;">
+                  <i data-lucide="alert-circle" style="width: 14px; height: 14px; color: var(--color-accent);"></i>
+                  <span id="mailchimp-top-complaint-meta">0 mentions this week</span>
+                </div>
+              </div>
+
+              <!-- Card 3: Unanswered Emails & Response Time (Modified to make Unanswered Count the Large Font) -->
+              <div class="kpi-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <div class="kpi-label">Unanswered Emails</div>
+                  <div id="mailchimp-unanswered-count-large" class="kpi-value" style="font-size: 28px; font-weight: 800; color: var(--color-primary);">0</div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 600; border-top: 1px solid var(--color-border); padding-top: 8px; margin-top: 4px;">
+                  <span style="color: var(--color-secondary);" id="mailchimp-avg-response">Avg Response: 0.0 hrs</span>
+                  <span style="color: var(--color-danger);" id="mailchimp-urgency-count">0 Urgent</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Charts Row 1 -->
             <div class="charts-row" style="margin-bottom: 24px;">
-              <div class="chart-card w-65">
-                <div class="chart-title">Newsletter Click Trends Sinks</div>
-                <div class="chart-container" style="height: 320px; position: relative;">
-                  <canvas id="mailchimp-click-chart"></canvas>
+              <!-- Customer Satisfaction Trend -->
+              <div class="chart-card w-50">
+                <div class="chart-title">Customer Satisfaction Trend (MoM)</div>
+                <div class="chart-container" style="height: 200px; position: relative;">
+                  <canvas id="mailchimp-satisfaction-chart"></canvas>
+                </div>
+                <!-- MoM Alert Box -->
+                <div id="mailchimp-satisfaction-alert" style="margin-top: 16px; background: rgba(238,104,59,0.05); border: 1px dashed var(--color-border); border-radius: 8px; padding: 12px; font-size: 12px; display: flex; align-items: center; gap: 8px; color: var(--color-primary);">
+                  <i data-lucide="info" style="width: 16px; height: 16px; color: var(--color-accent); flex-shrink:0;"></i>
+                  <span id="mailchimp-satisfaction-alert-text">Satisfaction alert data loading...</span>
                 </div>
               </div>
-              <div class="chart-card w-35" style="display: flex; flex-direction: column;">
-                <div class="chart-title">MailChimp Health Indicators</div>
-                <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:20px;">
-                  <div>
-                    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;"><span
-                        style="font-weight:600; color:var(--color-primary);">List Deliverability</span><span
-                        style="color:var(--color-success); font-weight:700;">99.1%</span></div>
-                    <div
-                      style="width:100%; height:8px; background:var(--color-light); border-radius:9999px; overflow:hidden;">
-                      <div style="width:99.1%; height:100%; background:var(--color-success); border-radius:4px;"></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;"><span
-                        style="font-weight:600; color:var(--color-primary);">Subscribes vs Unsubscribes</span><span
-                        style="color:var(--color-success); font-weight:700;">14.2x ratio</span></div>
-                    <div
-                      style="width:100%; height:8px; background:var(--color-light); border-radius:9999px; overflow:hidden;">
-                      <div style="width:85%; height:100%; background:var(--color-primary); border-radius:4px;"></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px;"><span
-                        style="font-weight:600; color:var(--color-primary);">Average Spam Complaint Score</span><span
-                        style="color:var(--color-success); font-weight:700;">0.02% (Excellent)</span></div>
-                    <div
-                      style="width:100%; height:8px; background:var(--color-light); border-radius:9999px; overflow:hidden;">
-                      <div style="width:3%; height:100%; background:var(--color-accent); border-radius:4px;"></div>
-                    </div>
-                  </div>
+
+              <!-- Customer Intent Analysis -->
+              <div class="chart-card w-50">
+                <div class="chart-title">Customer Email Intent Analysis</div>
+                <div class="chart-container" style="height: 280px; position: relative;">
+                  <canvas id="mailchimp-intent-chart"></canvas>
                 </div>
               </div>
             </div>
 
-            <div style="margin-top: 12px; margin-bottom: 12px;">
-              <div class="chart-title" style="margin-bottom: 12px;">MailChimp Sent Newsletters & Campaigns</div>
-              <div class="table-container custom-scroll" style="overflow-x: auto;">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Campaign Name</th>
-                      <th>Sent Date</th>
-                      <th style="text-align: right;">Total Contacts Sent</th>
-                      <th style="text-align: right;">Open Rate (Pct)</th>
-                      <th style="text-align: right;">Click-Through Rate</th>
-                      <th style="text-align: center;">Delivery Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td style="font-weight:600; color:var(--color-primary); border-bottom: none;">May Newsletter: 10
-                        Branding Hacks for 2026</td>
-                      <td style="color: var(--color-muted);">May 28, 2026</td>
-                      <td style="text-align: right; font-weight:600;">24,380</td>
-                      <td style="text-align: right; color:var(--color-primary); font-weight:600;">29.1%</td>
-                      <td style="text-align: right; color:var(--color-accent); font-weight:600;">5.20%</td>
-                      <td style="text-align: center;"><span class="badge badge-success">Completed</span></td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight:600; color:var(--color-primary); border-bottom: none;">Q2 Media Strategy
-                        Alignment Announcement</td>
-                      <td style="color: var(--color-muted);">May 14, 2026</td>
-                      <td style="text-align: right; font-weight:600;">24,190</td>
-                      <td style="text-align: right; color:var(--color-primary); font-weight:600;">28.4%</td>
-                      <td style="text-align: right; color:var(--color-accent); font-weight:600;">4.80%</td>
-                      <td style="text-align: center;"><span class="badge badge-success">Completed</span></td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight:600; color:var(--color-primary); border-bottom: none;">Urgent: Media
-                        Dashboards Upgrade Core Fixes</td>
-                      <td style="color: var(--color-muted);">Apr 30, 2026</td>
-                      <td style="text-align: right; font-weight:600;">23,980</td>
-                      <td style="text-align: right; color:var(--color-primary); font-weight:600;">32.7%</td>
-                      <td style="text-align: right; color:var(--color-accent); font-weight:600;">6.40%</td>
-                      <td style="text-align: center;"><span class="badge badge-success">Completed</span></td>
-                    </tr>
-                  </tbody>
-                </table>
+            <!-- Row 2: Complaints and Topic Clustering -->
+            <div class="charts-row" style="margin-bottom: 24px;">
+              <!-- Recurring Complaints Table -->
+              <div class="chart-card w-60">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                  <div class="chart-title" style="margin: 0;">Top Customer Complaints</div>
+                  <span style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase;">Mentions Count</span>
+                </div>
+                <div class="table-container custom-scroll" style="overflow-y: auto; max-height: 250px; border: none; box-shadow: none; border-radius: 0;">
+                  <table style="width: 100%;">
+                    <thead>
+                      <tr style="background: var(--color-warm);">
+                        <th style="padding: 10px;">Complaint Description</th>
+                        <th style="padding: 10px; width: 120px; text-align: center;">Mentions</th>
+                        <th style="padding: 10px; width: 180px;">Visual Weight</th>
+                      </tr>
+                    </thead>
+                    <tbody id="mailchimp-complaints-tbody">
+                      <!-- Dynamically populated -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Topic Clustering -->
+              <div class="chart-card w-40" style="display: flex; flex-direction: column;">
+                <div class="chart-title" style="margin-bottom: 16px;">AI Topic Clustering</div>
+                <div style="font-size: 12px; color: var(--color-muted); margin-bottom: 16px;">Most Discussed Topics:</div>
+                <div id="mailchimp-topics-container" style="display: flex; flex-wrap: wrap; gap: 10px; flex: 1; align-content: flex-start;">
+                  <!-- Dynamic topic bubbles -->
+                </div>
+                <p style="font-size: 11px; color: var(--color-muted); line-height: 1.4; border-top: 1px solid var(--color-border); padding-top: 12px; margin-top: 12px;">
+                  * AI automatically clusters customer emails into topics to save reading time.
+                </p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- FINANCIAL MANAGEMENT TAB -->
-        <div id="tab-financials" class="tab-content">
+        <!-- GHL CRM & BOOKING TAB -->
+        <div id="tab-ghl" class="tab-content">
           <div class="sub-tabs">
-            <div class="sub-tab active" onclick="showSubTab(this, 'financials-overview', 'tab-financials')">Overview
-            </div>
+            <div class="sub-tab active" onclick="showSubTab(this, 'ghl-overview', 'tab-ghl')">
+              Overview</div>
           </div>
-          <div id="financials-overview" class="sub-tab-content active">
-            <div class="kpi-grid" style="margin-bottom: 24px;">
-              <div class="kpi-card">
-                <div class="kpi-label">Gross Media Billing</div>
-                <div class="kpi-value" id="financial-billing">$124,500</div>
-                <div class="kpi-delta"><span style="background: #10b981;">+14.2%</span></div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Revenues processed
-                  this period</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Total Media Spend</div>
-                <div class="kpi-value" id="financial-spend">$84,200</div>
-                <div class="kpi-delta"><span style="background: #10b981;">-5.30%</span></div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Sinks in
-                  advertisement channels</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Net Profit Margin</div>
-                <div class="kpi-value" id="financial-margin">32.4%</div>
-                <div class="kpi-delta"><span style="background: #10b981;">+1.50%</span></div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Target threshold
-                  limit: 25%</div>
-              </div>
-              <div class="kpi-card">
-                <div class="kpi-label">Marketing ROI</div>
-                <div class="kpi-value" id="financial-roi" style="color:var(--color-accent);">2.82x</div>
-                <div style="font-size: 11px; color: var(--color-muted); margin-top: 4px; z-index: 2;">Aggregate return
-                  on investment</div>
-              </div>
-            </div>
-
-            <div class="charts-row" style="margin-bottom: 24px;">
-              <div class="chart-card w-65">
-                <div class="chart-title">Income Statement (Billing vs Spending)</div>
-                <div class="chart-container" style="height: 320px; position: relative;">
-                  <canvas id="financial-flow-chart"></canvas>
-                </div>
-              </div>
-              <div class="chart-card w-35">
-                <div class="chart-title">Direct Ad Spending Distribution</div>
-                <div class="chart-container" style="height: 320px; position: relative;">
-                  <canvas id="financial-adspend-pie"></canvas>
-                </div>
-              </div>
-            </div>
-
-            <div style="margin-top: 12px; margin-bottom: 12px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
-                <div class="chart-title" style="margin: 0;">Recent Client Invoices & Receivables</div>
-                <button onclick="triggerFinancialAlert('create-invoice')" class="btn-primary"
-                  style="font-size:12px; padding:6px 12px;"><i data-lucide="plus"
-                    style="width:14px; height:14px; display:inline-block; vertical-align:middle;"></i> Generate
-                  Invoice</button>
-              </div>
-              <div class="table-container custom-scroll" style="overflow-x: auto;">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Invoice ID</th>
-                      <th>Associated Client</th>
-                      <th style="text-align: right;">Gross Ad Sinks</th>
-                      <th style="text-align: right;">Billed Fee</th>
-                      <th style="text-align: center;">Billing Date</th>
-                      <th style="text-align: center;">Payment Status</th>
-                      <th style="text-align: center;">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td style="font-weight: 600; color: var(--color-primary); border-bottom: none;">INV-2026-004</td>
-                      <td style="font-weight: 500; border-bottom: none;">Acme Global Corp</td>
-                      <td
-                        style="text-align: right; color: var(--color-muted); font-family: var(--font-mono); border-bottom: none;">
-                        $34,500</td>
-                      <td
-                        style="text-align: right; font-weight: 700; color: var(--color-primary); font-family: var(--font-mono); border-bottom: none;">
-                        $48,200</td>
-                      <td style="text-align: center; border-bottom: none;">Jun 04, 2026</td>
-                      <td style="text-align: center; border-bottom: none;"><span class="badge badge-success">PAID</span>
-                      </td>
-                      <td style="text-align: center; border-bottom: none;">
-                        <button onclick="triggerFinancialAlert('send-receipt', 'INV-2026-004')"
-                          style="background:none; border:none; color: var(--color-primary); cursor:pointer; font-size:11px; font-weight:600; display:inline-flex; align-items:center; gap:4px;"><i
-                            data-lucide="mail" style="width:14px; height:14px;"></i> Receipt</button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: 600; color: var(--color-primary); border-bottom: none;">INV-2026-003</td>
-                      <td style="font-weight: 500; border-bottom: none;">Delta Media Group Inc</td>
-                      <td
-                        style="text-align: right; color: var(--color-muted); font-family: var(--font-mono); border-bottom: none;">
-                        $18,400</td>
-                      <td
-                        style="text-align: right; font-weight: 700; color: var(--color-primary); font-family: var(--font-mono); border-bottom: none;">
-                        $26,100</td>
-                      <td style="text-align: center; border-bottom: none;">May 28, 2026</td>
-                      <td style="text-align: center; border-bottom: none;"><span class="badge badge-success">PAID</span>
-                      </td>
-                      <td style="text-align: center; border-bottom: none;">
-                        <button onclick="triggerFinancialAlert('send-receipt', 'INV-2026-003')"
-                          style="background:none; border:none; color: var(--color-primary); cursor:pointer; font-size:11px; font-weight:600; display:inline-flex; align-items:center; gap:4px;"><i
-                            data-lucide="mail" style="width:14px; height:14px;"></i> Receipt</button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="font-weight: 600; color: var(--color-primary); border-bottom: none;">INV-2026-002</td>
-                      <td style="font-weight: 500; border-bottom: none;">Stellar Launch Labs</td>
-                      <td
-                        style="text-align: right; color: var(--color-muted); font-family: var(--font-mono); border-bottom: none;">
-                        $12,020</td>
-                      <td
-                        style="text-align: right; font-weight: 700; color: var(--color-primary); font-family: var(--font-mono); border-bottom: none;">
-                        $17,450</td>
-                      <td style="text-align: center; border-bottom: none;">May 15, 2026</td>
-                      <td style="text-align: center; border-bottom: none;"><span
-                          class="badge badge-neutral">PROCESSING</span></td>
-                      <td style="text-align: center; border-bottom: none;">
-                        <button onclick="triggerFinancialAlert('ping-invoice', 'INV-2026-002')"
-                          style="background:none; border:none; color: var(--color-accent); cursor:pointer; font-size:11px; font-weight:600; display:inline-flex; align-items:center; gap:4px;"><i
-                            data-lucide="bell" style="width:14px; height:14px;"></i> Remind Client</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+          <div id="ghl-overview" class="sub-tab-content active" style="display: flex; flex-direction: column; gap: 24px;">
+            <!-- Dynamic GHL dashboard content will render here -->
           </div>
         </div>
+
+      </div>
+          </div>
+        </div>
+
       </div>
     </main>
   </div> <!-- End of app-layout -->
@@ -7379,51 +7206,20 @@
         renderCallTranscripts();
       }
 
-      // 4. MailChimp Campaigns Click Rates Chart
+      // Render MailChimp Dynamic Dashboard
       if (
-        document.getElementById("mailchimp-click-chart") &&
-        document.getElementById("mailchimp-click-chart").offsetWidth > 0
+        document.getElementById("tab-mailchimp") &&
+        document.getElementById("tab-mailchimp").offsetWidth > 0
       ) {
-        if (chartInstances["mailchimp-click-chart"]) {
-          chartInstances["mailchimp-click-chart"].destroy();
-        }
-        chartInstances["mailchimp-click-chart"] = new Chart(
-          document.getElementById("mailchimp-click-chart"),
-          {
-            type: "line",
-            data: {
-              labels: ["Campaign A", "Campaign B", "Campaign C", "Campaign D", "Latest Campaign"],
-              datasets: [
-                {
-                  label: "Open Rate (%)",
-                  data: [24.1, 25.8, 26.4, 28.4, 29.1],
-                  borderColor: "#142f45",
-                  backgroundColor: "rgba(20, 47, 69, 0.05)",
-                  borderWidth: 2,
-                  tension: 0.3,
-                  yAxisID: "y-open"
-                },
-                {
-                  label: "CTR (%)",
-                  data: [4.2, 4.4, 4.8, 4.82, 5.2],
-                  borderColor: "#ee683b",
-                  backgroundColor: "rgba(238, 104, 59, 0.05)",
-                  borderWidth: 2,
-                  tension: 0.3,
-                  yAxisID: "y-click"
-                }
-              ]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                "y-open": { type: "linear", position: "left", title: { display: true, text: "Open Rate (%)" } },
-                "y-click": { type: "linear", position: "right", grid: { drawOnChartArea: false }, title: { display: true, text: "CTR (%)" } }
-              }
-            }
-          }
-        );
+        renderMailChimpDashboard();
+      }
+
+      // Render GHL Dynamic Dashboard
+      if (
+        document.getElementById("tab-ghl") &&
+        document.getElementById("tab-ghl").offsetWidth > 0
+      ) {
+        renderGHLDashboard();
       }
 
       // 5. Financial Flow (Billed Revenue vs Direct Media Spend)
@@ -7625,265 +7421,846 @@
     // ==========================================
     // --- INTERACTIVE CALL TRANSCRIPTS BROWSING ---
     // ==========================================
-    let callsData = [
-      {
-        id: "call-1",
-        title: "Weekly Analytics Review: Acme Corp",
-        client: "John Davis (CEO, Acme Corp)",
-        date: "Jun 04, 2026",
-        duration: "14m 22s",
+    const CALL_TRANSCRIPT_ANALYSIS_DATA = {
+      "Foundation Health & Wellness": {
+        healthScore: 92,
+        healthLabel: "Green",
+        healthSummary: "Excellent alignment. Strong trust and high satisfaction scores across all campaigns.",
+        churnRisk: "Low",
+        warningSignals: ["Minor feedback on booking tool delays", "No billing escalations"],
         sentiment: "Positive",
-        sentimentClass: "badge-success",
-        bullets: [
-          "Acme Corp approved the Q3 budgeting guidelines.",
-          "Requested higher emphasis on Instagram Reels coverage.",
-          "Umang J. to resolve the Google Ads pixel delay."
+        sentimentTrend: "+4% Month-over-Month",
+        moodTrend: "Improving",
+        actionItems: {
+          total: 3,
+          pending: 3,
+          overdue: 0,
+          tasks: [
+            { name: "Finalize Instagram Reels video draft", overdue: false },
+            { name: "Optimize local Google Ads campaign budgets", overdue: false },
+            { name: "Sync ClickUp milestones calendar views", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Practitioner Scheduling Constraints", count: 4 },
+          { name: "Instagram Reels Placement Cost", count: 2 },
+          { name: "ClickUp Integration Setup", count: 1 }
         ],
-        dialogue: [
-          { speaker: "John Davis (Acme)", time: "00:15", text: "Hi team, I looked at the GA4 views this morning. Incredible numbers on the brand impressions." },
-          { speaker: "Sarah K. (Explore)", time: "00:42", text: "Yes John, we adjusted the bids on the local campaign. It reduced our CPC by almost 18%." },
-          { speaker: "John Davis (Acme)", time: "01:22", text: "Fantastic. Let's make sure the ClickUp sync triggers alerts when our core milestones are completed." },
-          { speaker: "Umang J. (Explore)", time: "02:10", text: "Absolutely, I've got a task in ClickUp to wire up the SLA slack webhook tomorrow." }
+        satisfaction: { communication: 94, results: 90, strategy: 92 },
+        trust: { agency: 96, results: 92 },
+        repeatedIssues: [
+          { name: "Front desk booking software sync lag", count: 2, resolved: false },
+          { name: "Duplicate pixel tracking tags on checkout page", count: 2, resolved: true }
+        ],
+        executiveSummary: [
+          "Successfully approved Q3 budgets and Reels campaign strategy.",
+          "Identified and paused high-CPC search keywords on Google Ads to save $450/mo.",
+          "Completed transition of monthly lead reports to the interactive dashboard.",
+          "New opportunities: Launch custom local campaigns for the new West Branch opening."
         ]
       },
-      {
-        id: "call-2",
-        title: "Delta Q2 Strategy Wrap-up",
-        client: "Marcus Aurelius (CMO, Delta Group)",
-        date: "Jun 03, 2026",
-        duration: "28m 10s",
+      "JAG Medical Spa": {
+        healthScore: 88,
+        healthLabel: "Green",
+        healthSummary: "Consistent positive feedback. High trust in strategy and campaign results.",
+        churnRisk: "Low",
+        warningSignals: ["Occasional complaints about double-booking in clinic"],
+        sentiment: "Positive",
+        sentimentTrend: "Stable MoM",
+        moodTrend: "Stable",
+        actionItems: {
+          total: 4,
+          pending: 4,
+          overdue: 0,
+          tasks: [
+            { name: "Confirm July promotional banners", overdue: false },
+            { name: "Update Botox landing page copy", overdue: false },
+            { name: "Review local SEO citations checklist", overdue: false },
+            { name: "Schedule Q3 planning sync session", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Esthetician Calendar Double-Bookings", count: 3 },
+          { name: "Local Listing Accuracy on Maps", count: 2 },
+          { name: "Vite App Local Cache Speed", count: 1 }
+        ],
+        satisfaction: { communication: 90, results: 88, strategy: 86 },
+        trust: { agency: 92, results: 90 },
+        repeatedIssues: [
+          { name: "Google Maps double pin verification error", count: 3, resolved: true },
+          { name: "Slow response from the support widget", count: 2, resolved: false }
+        ],
+        executiveSummary: [
+          "Client is highly satisfied with laser hair removal lead flow.",
+          "Optimized Google Business Profile posts to increase search views by 15%.",
+          "Minor concerns about double bookings resolved by integrating a custom API webhook.",
+          "Opportunities: Propose budget expansion for high-margin dermal filler campaigns."
+        ]
+      },
+      "Vital Roots Functional Medicine": {
+        healthScore: 68,
+        healthLabel: "Yellow",
+        healthSummary: "Satisfactory results, but lab result review scheduling delays are impacting mood.",
+        churnRisk: "Medium",
+        warningSignals: ["Complaints about lab delays ↑", "Patient portal login bugs", "Sentiment ↓"],
         sentiment: "Neutral",
-        sentimentClass: "badge-blue",
-        bullets: [
-          "Discussed LinkedIn leads performance discrepancy.",
-          "Allocated temporary budget buffer of $5,000 for A/B testing campaigns.",
-          "Next review meeting scheduled for June 18th report alignment."
+        sentimentTrend: "-6% Month-over-Month",
+        moodTrend: "Declining",
+        actionItems: {
+          total: 6,
+          pending: 6,
+          overdue: 2,
+          tasks: [
+            { name: "Resolve Patient Portal API authentication bug", overdue: true },
+            { name: "Draft thyroid supplement Google Ads ad groups", overdue: false },
+            { name: "Deploy lab review schedule landing page", overdue: true },
+            { name: "Sync MailChimp newsletter subscriber segments", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Lab Result Delivery Wait Time", count: 12 },
+          { name: "Patient Portal Login Failures", count: 8 },
+          { name: "Supplement Supply Chain Delay", count: 4 }
         ],
-        dialogue: [
-          { speaker: "Marcus (Delta)", time: "01:05", text: "The LinkedIn CTR has been hover-loading around 1.8%. Any ideas from the dashboard stats?" },
-          { speaker: "Alex M. (Explore)", time: "01:30", text: "We need more display graphics. I can mock up three custom formats for testing by Friday." },
-          { speaker: "Marcus (Delta)", time: "02:15", text: "Sounds wise. I've unlocked $5k to support this testing. Keep us updated on ClickUp." }
+        satisfaction: { communication: 75, results: 65, strategy: 70 },
+        trust: { agency: 80, results: 68 },
+        repeatedIssues: [
+          { name: "Patients complaining about password reset loop", count: 4, resolved: false },
+          { name: "Lab email attachments going to spam folder", count: 3, resolved: false }
+        ],
+        executiveSummary: [
+          "Lead generation for thyroid health programs remains stable, but patient retention is threatened.",
+          "Portal sync issues are generating high support ticket volumes, dragging overall health down.",
+          "Identified competitor bids on local brand name keywords; search protection campaigns are active.",
+          "Urgent action: Deploy the portal hotfix to prevent sign-in loop issues."
         ]
       },
-      {
-        id: "call-3",
-        title: "Stellar Launch Technical Brief",
-        client: "Dr. Evelyn Stone (Stellar Labs)",
-        date: "Jun 01, 2026",
-        duration: "18m 45s",
+      "Core Wellness & Recovery": {
+        healthScore: 94,
+        healthLabel: "Green",
+        healthSummary: "Outstanding results. Locker room crowd and cryotherapy machine downtime are minor issues.",
+        churnRisk: "Low",
+        warningSignals: ["Cryo chamber maintenance reports"],
         sentiment: "Positive",
-        sentimentClass: "badge-success",
-        bullets: [
-          "Briefed server performance metrics for the main site launch.",
-          "Verified Google Tag Manager tags firing successfully in testing.",
-          "Requested MailChimp setup confirmation for subscriber audit."
+        sentimentTrend: "+8% Month-over-Month",
+        moodTrend: "Improving",
+        actionItems: {
+          total: 2,
+          pending: 2,
+          overdue: 0,
+          tasks: [
+            { name: "Submit corporate discount proposal deck", overdue: false },
+            { name: "Verify cold plunge pass tracking links", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Cryo Chamber Maintenance Delay", count: 5 },
+          { name: "Sauna Scheduling Conflicts", count: 2 },
+          { name: "Locker Room Congestion Reports", count: 2 }
         ],
-        dialogue: [
-          { speaker: "Evelyn (Stellar)", time: "02:45", text: "Is the MailChimp campaign fully ready for our email list tomorrow?" },
-          { speaker: "Sarah K. (Explore)", time: "03:10", text: "Yes, Evelyn. Deliverability tests came back at 99.1%. It is queued for 8 AM CST." }
+        satisfaction: { communication: 96, results: 94, strategy: 92 },
+        trust: { agency: 98, results: 94 },
+        repeatedIssues: [
+          { name: "Cryotherapy device heater sensor failure", count: 2, resolved: true },
+          { name: "Corporate account signup links failing on Safari", count: 2, resolved: false }
+        ],
+        executiveSummary: [
+          "Sauna and cold plunge therapy promotion campaigns exceeded goal by 22%.",
+          "Corporate partnership outreach draft has been finalized and approved.",
+          "Low churn risk backed by high engagement with custom marketing automation workflows.",
+          "Opportunities: Expand targeted ads for the high-end hyperbaric chamber launch."
         ]
       },
-      {
-        id: "call-4",
-        title: "Billing & Budget Hold-up Dialog",
-        client: "Roger Sterling (Sterling Partners)",
-        date: "May 28, 2026",
-        duration: "9m 15s",
-        sentiment: "Negative",
-        sentimentClass: "badge-danger",
-        bullets: [
-          "Hold up on Delta invoice (INV-2026-003) resolved today.",
-          "Client was concerned about duplicate CPC spend indicators.",
-          "Resolved after reconciling analytics ledger and ledger report."
+      "Vitality Medical Spa": {
+        healthScore: 78,
+        healthLabel: "Yellow",
+        healthSummary: "Good results. Reception check-in delays and parking issues are key customer friction points.",
+        churnRisk: "Medium",
+        warningSignals: ["Receptionist check-in delays", "Incorrect invoice details in system"],
+        sentiment: "Neutral",
+        sentimentTrend: "+1% Month-over-Month",
+        moodTrend: "Stable",
+        actionItems: {
+          total: 5,
+          pending: 5,
+          overdue: 1,
+          tasks: [
+            { name: "Correct IV Hydration billing invoice mismatch", overdue: true },
+            { name: "Create Facebook Ads copy for filler promotions", overdue: false },
+            { name: "Review spa front-office scheduling logic", overdue: false },
+            { name: "Verify pixel tracker on checkout screen", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Spa Front-Office Check-in Delays", count: 8 },
+          { name: "Incorrect Billing Records Sent", count: 4 },
+          { name: "Parking Lot Congestion", count: 3 }
         ],
-        dialogue: [
-          { speaker: "Roger (Sterling)", time: "00:40", text: "We see duplicate CPC bills in our dashboard. We need a detailed audit on this stat." },
-          { speaker: "Umang J. (Explore)", time: "01:15", text: "That was a visual sync lag between the API and the local cache, Roger. Let me pull the actual ledger to verify." },
-          { speaker: "Roger (Sterling)", time: "02:30", text: "Aha, I see. As long as the billing match is perfect. Send over the invoice adjustment." }
+        satisfaction: { communication: 82, results: 78, strategy: 80 },
+        trust: { agency: 84, results: 78 },
+        repeatedIssues: [
+          { name: "Customer invoicing sent with double taxes", count: 2, resolved: false },
+          { name: "Front desk scheduling system scheduling conflicts", count: 3, resolved: true }
+        ],
+        executiveSummary: [
+          "IV Hydration promotion continues to drive high traffic, but lobby wait times are causing frustration.",
+          "Drafted and resolved diagnostic billing discrepancies under INV-2026-004.",
+          "Client requested physical/paper statements mail-outs option for senior members.",
+          "Improvements: Social ad campaigns showing strong engagement at low CPC."
+        ]
+      },
+      "Inner Calm Therapy Center": {
+        healthScore: 95,
+        healthLabel: "Green",
+        healthSummary: "Exceptional sentiment. Therapist matchmaking system is highly rated.",
+        churnRisk: "Low",
+        warningSignals: ["Friction on strict 24h late cancellation fees"],
+        sentiment: "Positive",
+        sentimentTrend: "+5% Month-over-Month",
+        moodTrend: "Improving",
+        actionItems: {
+          total: 3,
+          pending: 3,
+          overdue: 0,
+          tasks: [
+            { name: "Write copy for therapist matchmaking landing page", overdue: false },
+            { name: "Launch Google Search campaigns for stress management", overdue: false },
+            { name: "Test insurance verification API triggers", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Late Cancellation Penalty Dispute", count: 6 },
+          { name: "Acoustic Noise Privacy In Rooms", count: 3 },
+          { name: "Therapist Match Delay Reports", count: 2 }
+        ],
+        satisfaction: { communication: 98, results: 94, strategy: 95 },
+        trust: { agency: 96, results: 96 },
+        repeatedIssues: [
+          { name: "Late penalty fees automatically charged before confirmation", count: 3, resolved: true },
+          { name: "Portal document upload failures during intake", count: 2, resolved: false }
+        ],
+        executiveSummary: [
+          "Excellent reviews for matching patients with specialized CBT therapists.",
+          "The only major complaints focus on the strict late cancellation policy; we drafted mitigation copy.",
+          "Organic SEO traffic to the therapy blog increased 24% after keyword optimization.",
+          "Opportunities: Promote corporate mindfulness workshop packages next month."
+        ]
+      },
+      "Precision HVAC Experts": {
+        healthScore: 70,
+        healthLabel: "Yellow",
+        healthSummary: "Moderate health. High summer AC repair demand causing booking backlogs.",
+        churnRisk: "Medium",
+        warningSignals: ["AC repair response delays", "Scheduling errors in database"],
+        sentiment: "Neutral",
+        sentimentTrend: "-4% Month-over-Month",
+        moodTrend: "Stable",
+        actionItems: {
+          total: 5,
+          pending: 5,
+          overdue: 2,
+          tasks: [
+            { name: "Resolve AC dispatch system scheduling backlog", overdue: true },
+            { name: "Optimize local service keywords on Google Ads", overdue: false },
+            { name: "Set up automatic SMS callback notifications", overdue: true },
+            { name: "Audit Google Maps local citations map list", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Summer AC Repair Appointment Delay", count: 18 },
+          { name: "Emergency Dispatch Fee Costs", count: 12 },
+          { name: "Missed Scheduled Time Window", count: 7 }
+        ],
+        satisfaction: { communication: 78, results: 72, strategy: 70 },
+        trust: { agency: 76, results: 72 },
+        repeatedIssues: [
+          { name: "Technician failed to call before arrival", count: 4, resolved: false },
+          { name: "Overpriced diagnostic quotes compared to online estimators", count: 3, resolved: true }
+        ],
+        executiveSummary: [
+          "AC repair inquiries spiked, but scheduling bottlenecks limited campaign conversion efficiency.",
+          "Created automated reminders for SMS notifications to reduce no-shows.",
+          "Pending action: Resolving the dispatch API lag database syncing issue.",
+          "Opportunities: Launch HVAC maintenance plan subscription campaign in late summer."
+        ]
+      },
+      "Apex Climate Control": {
+        healthScore: 62,
+        healthLabel: "Yellow",
+        healthSummary: "Low-end Yellow. Summer dispatch fee complaints and callback response times are dragging health down.",
+        churnRisk: "Medium",
+        warningSignals: ["Callback response delays", "High dispatch fee friction"],
+        sentiment: "Neutral",
+        sentimentTrend: "-7% Month-over-Month",
+        moodTrend: "Declining",
+        actionItems: {
+          total: 7,
+          pending: 7,
+          overdue: 3,
+          tasks: [
+            { name: "Fix emergency callback dispatch webhooks", overdue: true },
+            { name: "Draft social media post addressing dispatch costs", overdue: false },
+            { name: "Integrate Twilio SMS notification with ClickUp", overdue: true },
+            { name: "Reconcile June marketing budget variance", overdue: true }
+          ]
+        },
+        concerns: [
+          { name: "Dispatch Callback Delay (Emergency)", count: 24 },
+          { name: "High Diagnostic & Call Out Fees", count: 21 },
+          { name: "Technician Professionalism Reports", count: 8 }
+        ],
+        satisfaction: { communication: 68, results: 65, strategy: 64 },
+        trust: { agency: 70, results: 66 },
+        repeatedIssues: [
+          { name: "Emergency calls not routed to active operator", count: 5, resolved: false },
+          { name: "Billing portal invoice disputes (unresolved)", count: 3, resolved: false }
+        ],
+        executiveSummary: [
+          "High negative feedback concerning dispatch wait times and high entry fees.",
+          "Marketing campaign conversion rates are high, but backend logistics are bottlenecked.",
+          "Urgent integration of Twilio SLA triggers in progress to resolve callback delays.",
+          "Opportunities: Create clear transparent pricing comparison page to build trust."
+        ]
+      },
+      "Comfort Zone Heating & Air": {
+        healthScore: 90,
+        healthLabel: "Green",
+        healthSummary: "Very positive alignment. Technical performance and heat pump campaigns are executing well.",
+        churnRisk: "Low",
+        warningSignals: ["Minor billing discrepancies resolved quickly"],
+        sentiment: "Positive",
+        sentimentTrend: "+5% Month-over-Month",
+        moodTrend: "Improving",
+        actionItems: {
+          total: 3,
+          pending: 3,
+          overdue: 0,
+          tasks: [
+            { name: "Finalize Heat Pump Installation video edit", overdue: false },
+            { name: "Verify filter subscription email trigger", overdue: false },
+            { name: "Draft AC service landing page content", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Quote Mismatch on Final Billing", count: 5 },
+          { name: "Delayed Email Replies (General)", count: 3 },
+          { name: "Filter Shipping Delivery Delays", count: 2 }
+        ],
+        satisfaction: { communication: 92, results: 88, strategy: 90 },
+        trust: { agency: 94, results: 90 },
+        repeatedIssues: [
+          { name: "Incorrect quote details sent to commercial accounts", count: 2, resolved: true },
+          { name: "Auto-renewal filters delivered to wrong addresses", count: 2, resolved: false }
+        ],
+        executiveSummary: [
+          "Outstanding performance on residential heat pump installs promotion campaigns.",
+          "Resolved a minor invoicing ledger dispute for commercial billing discrepancy.",
+          "Overall churn risk remains extremely low due to proactive project updates.",
+          "Opportunities: Propose winter prep campaign expansion during August meetings."
+        ]
+      },
+      "Elite Air Systems": {
+        healthScore: 76,
+        healthLabel: "Yellow",
+        healthSummary: "Stable health. Backordered blower parts are causing minor scheduling delays.",
+        churnRisk: "Medium",
+        warningSignals: ["Part delivery delays", "Missed callbacks due to service load"],
+        sentiment: "Neutral",
+        sentimentTrend: "-2% Month-over-Month",
+        moodTrend: "Stable",
+        actionItems: {
+          total: 4,
+          pending: 4,
+          overdue: 1,
+          tasks: [
+            { name: "Reconcile parts backlog with supplier invoices", overdue: true },
+            { name: "Deploy updated scheduler widget on website", overdue: false },
+            { name: "Verify Google local ads billing limit", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Backordered Replacement Blower Delay", count: 14 },
+          { name: "Missed Scheduled Technician Callback", count: 9 },
+          { name: "Diagnostic Fee Pricing Structure", count: 5 }
+        ],
+        satisfaction: { communication: 80, results: 76, strategy: 74 },
+        trust: { agency: 82, results: 78 },
+        repeatedIssues: [
+          { name: "Replacement compressor scheduling delay", count: 3, resolved: false },
+          { name: "Online discount coupon codes failing to apply", count: 2, resolved: true }
+        ],
+        executiveSummary: [
+          "Parts delays for blowers are dragging customer experience scores down.",
+          "Google Ads campaigns are meeting lead volume projections consistently.",
+          "Recommended implementing automated parts arrival notifications to manage customer expectations.",
+          "Opportunities: Launch HVAC compressor system upgrade promos next week."
+        ]
+      },
+      "Rapid Response Air": {
+        healthScore: 45,
+        healthLabel: "Red",
+        healthSummary: "High Risk. Severe escalation regarding missed emergency windows and slow dispatcher callbacks.",
+        churnRisk: "High",
+        warningSignals: ["Missed emergency windows ↑", "No-show technician reports", "Unresponsive dispatcher"],
+        sentiment: "Negative",
+        sentimentTrend: "-15% Month-over-Month",
+        moodTrend: "Declining",
+        actionItems: {
+          total: 9,
+          pending: 9,
+          overdue: 4,
+          tasks: [
+            { name: "Reconcile emergency dispatcher no-show reports", overdue: true },
+            { name: "Deploy real-time technician GPS tracking link", overdue: true },
+            { name: "Draft emergency rate structure update", overdue: true },
+            { name: "Send SLA credit adjustments to billing department", overdue: true },
+            { name: "Re-engage paused Google Ads emergency search campaigns", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Missed Emergency Dispatch Window", count: 28 },
+          { name: "Technician No-Show (Commercial)", count: 20 },
+          { name: "Unresponsive Front-Office Dispatcher", count: 18 }
+        ],
+        satisfaction: { communication: 50, results: 42, strategy: 48 },
+        trust: { agency: 54, results: 46 },
+        repeatedIssues: [
+          { name: "Commercial kitchen emergency calls ignored", count: 6, resolved: false },
+          { name: "Overtime diagnostic rate disputes (INV-2026-004)", count: 4, resolved: false }
+        ],
+        executiveSummary: [
+          "Critical churn danger due to operational failures on emergency SLAs.",
+          "Technician no-shows are generating significant negative customer reviews on Google Maps.",
+          "Pausing brand campaigns temporarily to align marketing with operational capacity.",
+          "Urgent SLA credit adjustments and direct client mediation are underway."
+        ]
+      },
+      "Pure Air Solutions": {
+        healthScore: 88,
+        healthLabel: "Green",
+        healthSummary: "Strong alignment. Excellent UV air purifier product sales; minor filter shipping disputes.",
+        churnRisk: "Low",
+        warningSignals: ["Filter shipping subscription charges disputes"],
+        sentiment: "Positive",
+        sentimentTrend: "Stable MoM",
+        moodTrend: "Stable",
+        actionItems: {
+          total: 3,
+          pending: 3,
+          overdue: 0,
+          tasks: [
+            { name: "Verify auto-ship email notification flows", overdue: false },
+            { name: "Optimize UV Purifier shopping feed listings", overdue: false },
+            { name: "Re-engage lost newsletter subscriber campaign", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Filter Shipping Costs (Subscription)", count: 12 },
+          { name: "Incorrect Filter Sizes Dispatched", count: 8 },
+          { name: "Billing portal credit card declines", count: 3 }
+        ],
+        satisfaction: { communication: 90, results: 86, strategy: 88 },
+        trust: { agency: 92, results: 90 },
+        repeatedIssues: [
+          { name: "Auto-ship subscriptions charged on wrong date", count: 2, resolved: true },
+          { name: "Filter size selection dropdown on site glitching", count: 2, resolved: false }
+        ],
+        executiveSummary: [
+          "Strong demand and purchase volumes for high-efficiency UV purifiers.",
+          "Addressed filter size selection UI glitch to prevent future wrong orders.",
+          "Customer satisfaction is high; minor complaints on shipping costs are being minimized.",
+          "Opportunities: Create bundles for smart home integrations (Nest/Ecobee)."
+        ]
+      },
+      "Airflow Masters": {
+        healthScore: 82,
+        healthLabel: "Green",
+        healthSummary: "Positive health. Thermostat configuration support and room air balancing are top customer concerns.",
+        churnRisk: "Low",
+        warningSignals: ["Smart thermostat support ticket delays"],
+        sentiment: "Positive",
+        sentimentTrend: "+2% Month-over-Month",
+        moodTrend: "Stable",
+        actionItems: {
+          total: 4,
+          pending: 4,
+          overdue: 0,
+          tasks: [
+            { name: "Publish smart thermostat setup video guide", overdue: false },
+            { name: "Deploy zoned damper landing page template", overdue: false },
+            { name: "Verify Google Maps reviews response triggers", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Smart Thermostat Setup Issues", count: 15 },
+          { name: "Uneven Zoned Room Heating", count: 11 },
+          { name: "Delayed Email Callback Support", count: 7 }
+        ],
+        satisfaction: { communication: 86, results: 82, strategy: 84 },
+        trust: { agency: 88, results: 84 },
+        repeatedIssues: [
+          { name: "Smart thermostat fails to connect to local Wi-Fi", count: 4, resolved: false },
+          { name: "Air balancing reports missing for new construction", count: 2, resolved: true }
+        ],
+        executiveSummary: [
+          "High volume of zoned room balancing inquiries, driving strong booking leads.",
+          "Configured automated email sequences to answer smart thermostat FAQ questions.",
+          "Minor churn indicator related to front desk response lag resolved.",
+          "Opportunities: Propose smart home integration upsells on current lead forms."
+        ]
+      },
+      "Frosty Systems": {
+        healthScore: 65,
+        healthLabel: "Yellow",
+        healthSummary: "Moderate health. Refrigerator coolant leak callbacks are generating operational pressure.",
+        churnRisk: "Medium",
+        warningSignals: ["Coolant leak callback backlog", "Diagnostic fee complaints"],
+        sentiment: "Neutral",
+        sentimentTrend: "-5% Month-over-Month",
+        moodTrend: "Declining",
+        actionItems: {
+          total: 6,
+          pending: 6,
+          overdue: 2,
+          tasks: [
+            { name: "Resolve coolant recharge warranty callbacks", overdue: true },
+            { name: "Optimize Google Ads budgets for commercial freezers", overdue: false },
+            { name: "Implement diagnostic fee transparent calculator", overdue: true },
+            { name: "Integrate commercial scheduler API webhook", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Coolant Leak Callback Delays", count: 18 },
+          { name: "Commercial Freezer Scheduler Backlog", count: 14 },
+          { name: "High Diagnostic & Callout Rates", count: 10 }
+        ],
+        satisfaction: { communication: 74, results: 66, strategy: 68 },
+        trust: { agency: 78, results: 70 },
+        repeatedIssues: [
+          { name: "Coolant recharge failed on same freezer twice", count: 3, resolved: false },
+          { name: "Billing disputes regarding overtime fees", count: 2, resolved: false }
+        ],
+        executiveSummary: [
+          "Commercial refrigeration campaigns performing well, but technician dispatch backlogs limit closure.",
+          "High coolant callback rate is leading to negative commercial client reviews.",
+          "Created transparent diagnostic pricing tool to decrease pricing disputes.",
+          "Opportunities: Run specialized restaurant proactive maintenance plans next month."
+        ]
+      },
+      "Prime Comfort HVAC": {
+        healthScore: 92,
+        healthLabel: "Green",
+        healthSummary: "Excellent overall health. Installation quality and communication scores are outstanding.",
+        churnRisk: "Low",
+        warningSignals: ["Minor feedback on new duct vibration noise"],
+        sentiment: "Positive",
+        sentimentTrend: "+6% Month-over-Month",
+        moodTrend: "Improving",
+        actionItems: {
+          total: 3,
+          pending: 3,
+          overdue: 0,
+          tasks: [
+            { name: "Optimize local SEO rankings list", overdue: false },
+            { name: "Review customer service call transcripts reports", overdue: false },
+            { name: "Verify new extended warranty page forms", overdue: false }
+          ]
+        },
+        concerns: [
+          { name: "Duct Vibration Vibration Noise", count: 10 },
+          { name: "Thermostat Smartphone App Sync", count: 7 },
+          { name: "Requests for Physical Paper Invoices", count: 4 }
+        ],
+        satisfaction: { communication: 94, results: 92, strategy: 90 },
+        trust: { agency: 96, results: 94 },
+        repeatedIssues: [
+          { name: "Duct dampener rattle after install", count: 2, resolved: true },
+          { name: "Paper invoices delayed in standard post mail", count: 2, resolved: false }
+        ],
+        executiveSummary: [
+          "Client is highly satisfied with residential replacement campaign lead conversions.",
+          "Resolved all duct vibration concerns using premium anti-vibration dampers.",
+          "Organic rankings improved by 14% this month, reducing need for paid budget.",
+          "Opportunities: Introduce seasonal maintenance subscription programs in local mailers."
         ]
       }
-    ];
+    };
 
-    let selectedCallId = "call-1";
-    let callsSearchQuery = "";
+        function renderCallTranscripts() {
+      const container = document.getElementById("transcripts-overview");
+      if (!container) return;
 
-    // Simulated Player intervals
-    let transcriptAudioPlaying = false;
-    let transcriptProgressInterval = null;
-    let transcriptProgressPct = 0;
+      const clientName = document.getElementById("selected-client-name").innerText.replace("✓ ", "").trim();
+      const data = CALL_TRANSCRIPT_ANALYSIS_DATA[clientName] || CALL_TRANSCRIPT_ANALYSIS_DATA["Foundation Health & Wellness"];
 
-    function renderCallTranscripts() {
-      const listContainer = document.getElementById("call-list-container");
-      if (!listContainer) return;
-
-      // Filter calls
-      const filtered = callsData.filter(c =>
-        c.title.toLowerCase().includes(callsSearchQuery.toLowerCase()) ||
-        c.client.toLowerCase().includes(callsSearchQuery.toLowerCase())
-      );
-
-      listContainer.innerHTML = filtered.map(c => `
-          <div onclick="selectTranscriptCall('${c.id}', this)" 
-               class="custom-dropdown-item ${c.id === selectedCallId ? "active" : ""}" 
-               style="padding: 12px; border-radius: 8px; border: 1px solid var(--color-border); background: ${c.id === selectedCallId ? "var(--color-warm)" : "white"}; cursor: pointer; display: flex; flex-direction: column; gap: 4px; transition: all 0.2s;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-weight: 700; font-size:12px; color: ${c.id === selectedCallId ? "var(--color-primary)" : "#1e293b"};">${c.title}</span>
-              <span class="badge ${c.sentimentClass}" style="font-size:10px; margin:0;">${c.sentiment}</span>
+      container.innerHTML = `
+        <!-- AI Executive Summary Banner (Full Width at the Top) -->
+        <div class="chart-card w-100 transcript-card-animate delay-1" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(20,47,69,0.02) 0%, rgba(238,104,59,0.02) 100%); border-left: 4px solid var(--color-accent); cursor: default; padding: 20px; box-sizing: border-box;">
+          <div style="display: flex; align-items: flex-start; gap: 16px;">
+            <div style="background: rgba(238,104,59,0.1); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; color: var(--color-accent); flex-shrink: 0;">
+              <i data-lucide="sparkles" style="width: 24px; height: 24px;"></i>
             </div>
-            <div style="font-size: 11px; color: var(--color-muted); display:flex; justify-content:space-between;">
-              <span>${c.client}</span>
-              <span>${c.duration}</span>
+            <div style="flex: 1;">
+              <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--color-accent); letter-spacing: 0.05em; margin-bottom: 8px;">AI Executive Summary ("What Changed?")</div>
+              <ul style="font-size: 13.5px; line-height: 1.6; font-weight: 550; color: var(--color-primary); margin-left: 20px; padding-left: 0; display: flex; flex-direction: column; gap: 6px;">
+                ${data.executiveSummary.map(bullet => `<li>${bullet}</li>`).join("")}
+              </ul>
             </div>
-            <span style="font-size: 10px; color: var(--color-muted); text-align:right;">${c.date}</span>
           </div>
-        `).join("");
+        </div>
 
-      // Render current dialog
-      renderSelectedTranscriptDialogue();
-    }
+        <!-- KPI Grid (4 Columns, matching visual style of Reference Image) -->
+        <div class="kpi-grid" style="margin-bottom: 24px;">
+          
+          <!-- Card 1: Sentiment & Overall Health Score -->
+          <div class="kpi-card transcript-card-animate delay-2" style="display: flex; flex-direction: column; justify-content: space-between; cursor: default;">
+            <div>
+              <div class="kpi-label">Overall Client Health Score</div>
+              <div class="kpi-value" style="font-size: 26px; font-weight: 800; margin-bottom: 8px; color: var(--color-primary); display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 20px;">
+                  ${data.healthLabel === 'Green' ? '🟢' : data.healthLabel === 'Yellow' ? '🟡' : '🔴'}
+                </span>
+                ${data.healthScore}% Healthy
+              </div>
+            </div>
+            <div>
+              <!-- Progress bar -->
+              <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin-bottom: 8px;">
+                <div style="width: ${data.healthScore}%; height: 100%; background: ${data.healthLabel === 'Green' ? 'var(--color-success)' : data.healthLabel === 'Yellow' ? '#eab308' : 'var(--color-danger)'}; border-radius: 4px; transition: width 0.5s ease;"></div>
+              </div>
+              <!-- Sub-scores breakdown -->
+              <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 600;">
+                <span style="color: var(--color-success);">Comm: ${data.satisfaction.communication}%</span>
+                <span style="color: var(--color-secondary);">Res: ${data.satisfaction.results}%</span>
+                <span style="color: var(--color-accent);">Strat: ${data.satisfaction.strategy}%</span>
+              </div>
+            </div>
+          </div>
 
-    function searchCallTranscripts() {
-      const input = document.getElementById("transcript-search");
-      if (input) {
-        callsSearchQuery = input.value;
-        renderCallTranscripts();
-      }
-    }
+          <!-- Card 2: Top Customer Complaint / Concern -->
+          <div class="kpi-card transcript-card-animate delay-3" style="display: flex; flex-direction: column; justify-content: space-between; cursor: default;">
+            <div>
+              <div class="kpi-label">Top Customer Complaint</div>
+              <div class="kpi-value" style="font-size: 18px; font-weight: 700; line-height: 1.3; margin-top: 4px; color: var(--color-primary);">
+                ${data.concerns[0] ? data.concerns[0].name : 'None'}
+              </div>
+            </div>
+            <div style="font-size: 12px; color: var(--color-muted); display: flex; align-items: center; gap: 4px; margin-top: auto;">
+              <i data-lucide="alert-circle" style="width: 14px; height: 14px; color: var(--color-accent);"></i>
+              <span>${data.concerns[0] ? data.concerns[0].count : 0} mentions on calls this week</span>
+            </div>
+          </div>
 
-    function selectTranscriptCall(callId, el) {
-      selectedCallId = callId;
+          <!-- Card 3: Churn Risk Detection -->
+          <div class="kpi-card transcript-card-animate delay-4" style="display: flex; flex-direction: column; justify-content: space-between; cursor: default;">
+            <div>
+              <div class="kpi-label">Churn Risk Detection</div>
+              <div class="kpi-value" style="font-size: 26px; font-weight: 800; color: ${data.churnRisk === 'Low' ? 'var(--color-success)' : data.churnRisk === 'Medium' ? '#eab308' : 'var(--color-danger)'}; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="alert-triangle" style="width: 24px; height: 24px;"></i>
+                ${data.churnRisk} Risk
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+              <span style="font-size: 11px; color: var(--color-muted);">Warning signals: ${data.warningSignals.length}</span>
+              <span class="badge ${data.churnRisk === 'High' ? 'badge-danger' : data.churnRisk === 'Medium' ? 'badge-blue' : 'badge-neutral'}" style="margin: 0; font-size: 10px; font-weight: 700; padding: 2px 8px;">
+                ${data.churnRisk.toUpperCase()}
+              </span>
+            </div>
+          </div>
 
-      // Reset player
-      if (transcriptAudioPlaying) {
-        toggleTranscriptAudioPlay();
-      }
-      transcriptProgressPct = 0;
-      updateTranscriptAudioPlayerUI();
+          <!-- Card 4: Open Action Items & Mood -->
+          <div class="kpi-card transcript-card-animate delay-5" style="display: flex; flex-direction: column; justify-content: space-between; cursor: default;">
+            <div>
+              <div class="kpi-label">Open Action Items & Mood</div>
+              <div class="kpi-value" style="font-size: 28px; font-weight: 800; color: var(--color-primary); display: flex; align-items: baseline; gap: 6px;">
+                ${data.actionItems.total}
+                <span style="font-size: 12px; font-weight: 600; color: var(--color-muted);">Pending</span>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+              <span style="font-size: 11.5px; color: ${data.actionItems.overdue > 0 ? 'var(--color-danger)' : 'var(--color-success)'}; font-weight: 600;">
+                ${data.actionItems.overdue > 0 ? `${data.actionItems.overdue} Overdue!` : 'All on time'}
+              </span>
+              <span style="font-size: 12px; font-weight: 600; color: ${data.moodTrend === 'Improving' ? 'var(--color-success)' : data.moodTrend === 'Stable' ? 'var(--color-secondary)' : 'var(--color-danger)'}; display: flex; align-items: center; gap: 4px;">
+                Mood: ${data.moodTrend === 'Improving' ? '📈' : data.moodTrend === 'Stable' ? '➡️' : '📉'}
+              </span>
+            </div>
+          </div>
+        </div>
 
-      // Highlight selected
-      document.querySelectorAll("#call-list-container > div").forEach(div => {
-        div.style.background = "white";
-        div.style.borderColor = "var(--color-border)";
-      });
-      if (el) {
-        el.style.background = "var(--color-warm)";
-      }
-
-      renderCallTranscripts();
-    }
-
-    function renderSelectedTranscriptDialogue() {
-      const call = callsData.find(c => c.id === selectedCallId);
-      if (!call) return;
-
-      // Populate titles & meta
-      if (document.getElementById("preview-call-title")) {
-        document.getElementById("preview-call-title").innerText = call.title;
-      }
-      if (document.getElementById("preview-call-meta")) {
-        document.getElementById("preview-call-meta").innerText = `Client: ${call.client} | Date: ${call.date} | Length: ${call.duration}`;
-      }
-
-      const badge = document.getElementById("preview-call-sentiment-badge");
-      if (badge) {
-        badge.className = `badge ${call.sentimentClass}`;
-        badge.innerText = `Sentiment: ${call.sentiment}`;
-      }
-
-      if (document.getElementById("audio-total-time")) {
-        document.getElementById("audio-total-time").innerText = call.duration;
-      }
-
-      // Dialogue bubbles
-      const bubblesContainer = document.getElementById("dialogue-bubbles-container");
-      if (bubblesContainer) {
-        bubblesContainer.innerHTML = call.dialogue.map(msg => {
-          const isClient = msg.speaker.indexOf("Explore") === -1;
-          return `
-              <div style="display:flex; flex-direction:column; align-items: ${isClient ? "flex-start" : "flex-end"}; width:100%;">
-                <div style="display:flex; gap:6.08px; align-items:center; margin-bottom:2px; font-size:10px; color: var(--color-muted);">
-                  <span style="font-weight:700;">${msg.speaker}</span>
-                  <span>${msg.time}</span>
+        <!-- Row 1: Action Items & Key Concerns -->
+        <div class="charts-row" style="margin-bottom: 24px; gap: 24px; align-items: stretch;">
+          
+          <!-- Open Action Items Checklist -->
+          <div class="chart-card w-50 transcript-card-animate delay-6" style="padding: 24px; display: flex; flex-direction: column;">
+            <div class="chart-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px; justify-content: space-between;">
+              <span style="display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="pin" style="width: 20px; height: 20px; color: var(--color-accent);"></i>
+                Open Action Items
+              </span>
+              <span class="badge ${data.actionItems.overdue > 0 ? 'badge-danger' : 'badge-success'}" style="font-size: 12px; font-weight: 700; margin: 0;">
+                ${data.actionItems.total} Pending
+              </span>
+            </div>
+            
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 10px; justify-content: flex-start; overflow-y: auto;">
+              ${data.actionItems.tasks.map(task => `
+                <div style="padding: 10px 12px; border-radius: 8px; border: 1px solid ${task.overdue ? 'rgba(225, 29, 72, 0.2)' : 'var(--color-border)'}; background: ${task.overdue ? 'rgba(225, 29, 72, 0.04)' : 'white'}; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                  <span style="font-size: 12.5px; font-weight: 500; color: ${task.overdue ? 'var(--color-danger)' : 'var(--color-primary)'};">
+                    ${task.name}
+                  </span>
+                  ${task.overdue ? `
+                    <span class="badge badge-danger" style="font-size: 10px; margin: 0; flex-shrink: 0;">
+                      OVERDUE
+                    </span>
+                  ` : `
+                    <span class="badge badge-neutral" style="font-size: 10px; margin: 0; flex-shrink: 0;">
+                      Pending
+                    </span>
+                  `}
                 </div>
-                <div style="max-width:80%; padding:10px 14px; border-radius:12px; font-size:12px; line-height:1.4; 
-                            background: ${isClient ? "#f1f5f9" : "var(--color-primary)"}; 
-                            color: ${isClient ? "#0f172a" : "white"}; 
-                            border-top-${isClient ? "left" : "right"}-radius: 2px;">
-                  ${msg.text}
+              `).join("")}
+            </div>
+          </div>
+
+          <!-- Key Client Concerns (Top 3) -->
+          <div class="chart-card w-50 transcript-card-animate delay-7" style="padding: 24px; display: flex; flex-direction: column;">
+            <div class="chart-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="alert-octagon" style="width: 20px; height: 20px; color: var(--color-accent);"></i>
+              Key Client Concerns (Top 3)
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 12px; justify-content: center;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 12.5px;">
+                <thead>
+                  <tr style="border-bottom: 2px solid var(--color-border); color: var(--color-muted); font-weight: 700; text-align: left;">
+                    <th style="padding: 8px 4px; font-size: 10.5px; text-transform: uppercase;">Concern Topic</th>
+                    <th style="padding: 8px 4px; font-size: 10.5px; text-transform: uppercase; text-align: center; width: 80px;">Mentions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${data.concerns.map(concern => `
+                    <tr style="border-bottom: 1px solid var(--color-border);">
+                      <td style="padding: 10px 4px; font-weight: 600; color: var(--color-primary); font-size: 13px;">${concern.name}</td>
+                      <td style="padding: 10px 4px; text-align: center;">
+                        <span class="badge ${concern.count >= 4 ? 'badge-danger' : concern.count >= 2 ? 'badge-blue' : 'badge-neutral'}" style="margin: 0; font-size: 11px; padding: 4px 10px; font-weight: 700;">
+                          ${concern.count} mentions
+                        </span>
+                      </td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Row 2: Satisfaction & Trust and Repeated Issues -->
+        <div class="charts-row" style="margin-bottom: 24px; gap: 24px; align-items: stretch;">
+          
+          <!-- Satisfaction & Trust Scores -->
+          <div class="chart-card w-50 transcript-card-animate delay-8" style="padding: 24px;">
+            <div class="chart-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="smile" style="width: 20px; height: 20px; color: var(--color-accent);"></i>
+              Satisfaction & Trust Scores
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <!-- Satisfaction Subsections -->
+              <div>
+                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--color-muted); margin-bottom: 8px; border-bottom: 1px solid var(--color-border); padding-bottom: 4px;">
+                  💬 Satisfaction Score
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                      <span>Communication</span>
+                      <span>${data.satisfaction.communication}%</span>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                      <div style="width: ${data.satisfaction.communication}%; height: 100%; background: var(--color-primary); border-radius: 3px;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                      <span>Results</span>
+                      <span>${data.satisfaction.results}%</span>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                      <div style="width: ${data.satisfaction.results}%; height: 100%; background: var(--color-primary); border-radius: 3px;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                      <span>Strategy</span>
+                      <span>${data.satisfaction.strategy}%</span>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                      <div style="width: ${data.satisfaction.strategy}%; height: 100%; background: var(--color-primary); border-radius: 3px;"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            `;
-        }).join("");
 
-        bubblesContainer.scrollTop = bubblesContainer.scrollHeight;
-      }
+              <!-- Trust Subsections -->
+              <div>
+                <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--color-muted); margin-bottom: 8px; border-bottom: 1px solid var(--color-border); padding-bottom: 4px;">
+                  🤝 Trust Score
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                      <span>Trust in Agency</span>
+                      <span>${data.trust.agency}%</span>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                      <div style="width: ${data.trust.agency}%; height: 100%; background: var(--color-accent); border-radius: 3px;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                      <span>Trust in Results</span>
+                      <span>${data.trust.results}%</span>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                      <div style="width: ${data.trust.results}%; height: 100%; background: var(--color-accent); border-radius: 3px;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-      // AI Recommendations
-      const bulletList = document.getElementById("transcript-action-items");
-      if (bulletList) {
-        bulletList.innerHTML = call.bullets.map(b => `
-            <li style="margin-bottom:4px;">${b}</li>
-          `).join("");
-      }
-    }
+          <!-- Repeated Issues & Escalations -->
+          <div class="chart-card w-50 transcript-card-animate delay-9" style="padding: 24px; display: flex; flex-direction: column;">
+            <div class="chart-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="refresh-cw" style="width: 20px; height: 20px; color: var(--color-accent);"></i>
+              Repeated Issues & Escalation Risk
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 10px; overflow-y: auto;">
+              ${data.repeatedIssues.map(issue => `
+                <div style="padding: 12px; border-radius: 8px; border: 1px solid ${issue.resolved ? 'var(--color-border)' : 'rgba(238, 104, 59, 0.3)'}; background: ${issue.resolved ? '#f8fafc' : 'rgba(238, 104, 59, 0.02)'}; display: flex; flex-direction: column; gap: 6px;">
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+                    <span style="font-size: 12.5px; font-weight: 600; color: var(--color-primary); line-height: 1.3;">
+                      ${issue.name}
+                    </span>
+                    <span class="badge ${issue.resolved ? 'badge-success' : 'badge-danger'}" style="margin: 0; font-size: 9px; padding: 2px 6px; flex-shrink: 0;">
+                      ${issue.resolved ? 'RESOLVED' : 'UNRESOLVED'}
+                    </span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--color-muted);">
+                    <span>Escalation Mentions</span>
+                    <span style="font-weight: 700; color: ${issue.resolved ? 'var(--color-success)' : 'var(--color-accent)'};">${issue.count} times</span>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+          </div>
 
-    function toggleTranscriptAudioPlay() {
-      const btn = document.getElementById("transcript-play-btn");
-      if (!btn) return;
+        </div>
+      `;
 
-      transcriptAudioPlaying = !transcriptAudioPlaying;
-      if (transcriptAudioPlaying) {
-        btn.innerHTML = `<i data-lucide="pause" style="width:18px; height:18px;"></i>`;
+      if (window.lucide) {
         lucide.createIcons();
-
-        transcriptProgressInterval = setInterval(() => {
-          transcriptProgressPct += 0.5;
-          if (transcriptProgressPct >= 100) {
-            transcriptProgressPct = 100;
-            toggleTranscriptAudioPlay();
-          }
-          updateTranscriptAudioPlayerUI();
-        }, 100);
-      } else {
-        btn.innerHTML = `<i data-lucide="play" style="width:18px; height:18px;"></i>`;
-        lucide.createIcons();
-        clearInterval(transcriptProgressInterval);
-      }
-    }
-
-    function updateTranscriptAudioPlayerUI() {
-      const progBar = document.getElementById("audio-progress-bar");
-      const currTimeLabel = document.getElementById("audio-current-time");
-      if (progBar) {
-        progBar.style.width = transcriptProgressPct + "%";
-      }
-
-      // Calculate timestamp label
-      const call = callsData.find(c => c.id === selectedCallId);
-      if (call && currTimeLabel) {
-        // Extract seconds from total
-        const parts = call.duration.split(" ");
-        let totalSecs = 0;
-        parts.forEach(p => {
-          if (p.includes("m")) totalSecs += parseInt(p) * 60;
-          if (p.includes("s")) totalSecs += parseInt(p);
-        });
-
-        const currentSecs = Math.floor((transcriptProgressPct / 100) * totalSecs);
-        const minsStr = String(Math.floor(currentSecs / 60)).padStart(2, '0');
-        const secsStr = String(currentSecs % 60).padStart(2, '0');
-        currTimeLabel.innerText = `${minsStr}:${secsStr}`;
-      }
-    }
-
-    function seekTranscriptPlayer(event) {
-      const container = document.getElementById("audio-progress-bar-container");
-      if (container) {
-        const rect = container.getBoundingClientRect();
-        const clickX = event.clientX - rect.left;
-        const percentage = (clickX / rect.width) * 100;
-        transcriptProgressPct = Math.max(0, Math.min(100, percentage));
-        updateTranscriptAudioPlayerUI();
       }
     }
 
@@ -7922,6 +8299,1136 @@
     }
 
 
+    
+    // ==========================================
+    
+    // ==========================================
+    // --- MAILCHIMP CLIENT-SPECIFIC SENTIMENT DATA ---
+    // ==========================================
+    const MAILCHIMP_CLIENT_DATA = {
+      "Foundation Health & Wellness": {
+        sentiment: { positive: 124, neutral: 89, negative: 21, pct: 82, summary: "Customer sentiment is 82% positive. Main complaints are delayed service appointments and pricing concerns." },
+        complaints: [
+          { name: "Delayed service appointment", mentions: 15 },
+          { name: "Price too high", mentions: 12 },
+          { name: "Billing discrepancy", mentions: 8 },
+          { name: "Long phone wait time", mentions: 5 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 48 },
+          { category: "Support Request", count: 22 },
+          { category: "Complaint", count: 15 },
+          { category: "Cancellation", count: 8 },
+          { category: "Billing Question", count: 12 }
+        ],
+        churn: { count: 3, risk: "Medium" },
+        urgency: { count: 8 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [84, 86, 82],
+          alert: "Satisfaction score dropped 4 points in June, mainly related to appointment delays."
+        },
+        topics: ["Treatment Plans", "Skin Care Memberships", "Practitioner Schedules", "Billing & Invoices", "Cancellation Policies"],
+        responseTime: { avg: "2.4 hrs", unanswered: 6, delayed: 2 },
+        executiveSummary: "This week customers were primarily asking about treatment plans and membership pricing. Negative sentiment was low (8%), mainly related to practitioner scheduling constraints. 6 customers showed intent to upgrade to premium memberships, while 3 showed cancellation signals."
+      },
+      "JAG Medical Spa": {
+        sentiment: { positive: 98, neutral: 72, negative: 14, pct: 84, summary: "Customer sentiment is 84% positive. Main complaints are practitioner availability and booking confusion." },
+        complaints: [
+          { name: "Practitioner fully booked", mentions: 10 },
+          { name: "Double bookings", mentions: 8 },
+          { name: "Pricing clarity", mentions: 5 },
+          { name: "Room cleanliness", mentions: 2 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 35 },
+          { category: "Support Request", count: 18 },
+          { category: "Complaint", count: 9 },
+          { category: "Cancellation", count: 4 },
+          { category: "Billing Question", count: 8 }
+        ],
+        churn: { count: 2, risk: "Low" },
+        urgency: { count: 5 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [80, 83, 84],
+          alert: "Satisfaction trend continues to rise steadily, up 4 points since April."
+        },
+        topics: ["Botox Treatments", "Laser Therapy", "Esthetician Schedules", "Gift Cards", "Payment Plans"],
+        responseTime: { avg: "1.9 hrs", unanswered: 3, delayed: 1 },
+        executiveSummary: "This week patients focused on laser appointment availability and laser package promotions. High satisfaction remains for treatment outcomes. 4 patients showed minor dissatisfaction with long wait times in the lobby."
+      },
+      "Vital Roots Functional Medicine": {
+        sentiment: { positive: 110, neutral: 64, negative: 28, pct: 79, summary: "Customer sentiment is 79% positive. Main concerns involve lab result delays and supplement pricing." },
+        complaints: [
+          { name: "Lab results delay", mentions: 18 },
+          { name: "Supplement cost", mentions: 14 },
+          { name: "Insurance processing", mentions: 9 },
+          { name: "Difficult patient portal", mentions: 4 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 42 },
+          { category: "Support Request", count: 30 },
+          { category: "Complaint", count: 18 },
+          { category: "Cancellation", count: 9 },
+          { category: "Billing Question", count: 14 }
+        ],
+        churn: { count: 6, risk: "High" },
+        urgency: { count: 11 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [83, 81, 79],
+          alert: "Satisfaction dropped 4 points since April, mainly due to external lab processing backlogs."
+        },
+        topics: ["Blood Work Analysis", "Thyroid Protocols", "Supplement Shipments", "Portal Messaging", "Invoice Claims"],
+        responseTime: { avg: "3.5 hrs", unanswered: 12, delayed: 4 },
+        executiveSummary: "High inquiry volume about lab portal logins and supplement order tracking. Churn signals increased due to delays in blood work review schedules. Urgent replies relate to prescription refill approvals."
+      },
+      "Core Wellness & Recovery": {
+        sentiment: { positive: 135, neutral: 80, negative: 12, pct: 87, summary: "Customer sentiment is 87% positive. Main complaints are cryotherapy machine downtime and lockers." },
+        complaints: [
+          { name: "Cryo chamber offline", mentions: 8 },
+          { name: "Locker room crowd", mentions: 6 },
+          { name: "Membership freeze rules", mentions: 5 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 52 },
+          { category: "Support Request", count: 20 },
+          { category: "Complaint", count: 8 },
+          { category: "Cancellation", count: 3 },
+          { category: "Billing Question", count: 5 }
+        ],
+        churn: { count: 1, risk: "Low" },
+        urgency: { count: 3 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [85, 86, 87],
+          alert: "Customer satisfaction remains exceptionally high, peaking at 87% in June."
+        },
+        topics: ["Cryotherapy Sessions", "Sauna Bookings", "Cold Plunge Pass", "Corporate Discounts", "Account Suspensions"],
+        responseTime: { avg: "1.5 hrs", unanswered: 2, delayed: 0 },
+        executiveSummary: "Excellent weekly reviews focusing on sauna and cold plunge therapies. Cryotherapy downtime caused minor complaints, which are being resolved. Churn risk is extremely low."
+      },
+      "Vitality Medical Spa": {
+        sentiment: { positive: 90, neutral: 62, negative: 18, pct: 81, summary: "Customer sentiment is 81% positive. Main complaints are receptionist coordination and parking." },
+        complaints: [
+          { name: "Receptionist check-in delays", mentions: 12 },
+          { name: "No parking spaces", mentions: 8 },
+          { name: "Incorrect invoice details", mentions: 4 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 32 },
+          { category: "Support Request", count: 24 },
+          { category: "Complaint", count: 11 },
+          { category: "Cancellation", count: 5 },
+          { category: "Billing Question", count: 9 }
+        ],
+        churn: { count: 3, risk: "Medium" },
+        urgency: { count: 6 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [82, 80, 81],
+          alert: "Satisfaction is stable, hovering around 81%. Front desk staffing is being adjusted."
+        },
+        topics: ["Dermal Fillers", "IV Hydration Therapy", "Facial Packages", "Staff Invoicing", "Membership Discounts"],
+        responseTime: { avg: "2.1 hrs", unanswered: 5, delayed: 2 },
+        executiveSummary: "Positive feedback on IV hydration packages. Reception check-in delays raised minor negative feedback. 3 customers requested cancellations due to personal financial adjustments."
+      },
+      "Inner Calm Therapy Center": {
+        sentiment: { positive: 115, neutral: 58, negative: 10, pct: 88, summary: "Customer sentiment is 88% positive. Minor complaints around session rescheduling policies." },
+        complaints: [
+          { name: "Late cancel penalty fee", mentions: 7 },
+          { name: "Room acoustic privacy", mentions: 4 },
+          { name: "Therapist delay", mentions: 2 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 38 },
+          { category: "Support Request", count: 15 },
+          { category: "Complaint", count: 6 },
+          { category: "Cancellation", count: 2 },
+          { category: "Billing Question", count: 4 }
+        ],
+        churn: { count: 1, risk: "Low" },
+        urgency: { count: 2 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [85, 87, 88],
+          alert: "Satisfaction scores rose 3 points this quarter. Therapy outcomes are highly rated."
+        },
+        topics: ["CBT Sessions", "Massage Therapy", "Therapist Matches", "Cancellation Policy", "Insurance Claims"],
+        responseTime: { avg: "1.7 hrs", unanswered: 1, delayed: 0 },
+        executiveSummary: "Exceptional feedback regarding patient-therapist matchmaking. The main source of friction is the strict 24-hour cancellation penalty fee policy. Churn signals are near zero."
+      },
+      "Precision HVAC Experts": {
+        sentiment: { positive: 124, neutral: 89, negative: 21, pct: 82, summary: "Customer sentiment is 82% positive. Main complaints are delayed service appointments and pricing concerns." },
+        complaints: [
+          { name: "Service appointment delay", mentions: 32 },
+          { name: "Price too high", mentions: 19 },
+          { name: "No response to inquiry", mentions: 15 },
+          { name: "Scheduling issue", mentions: 12 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 48 },
+          { category: "Support Request", count: 22 },
+          { category: "Complaint", count: 15 },
+          { category: "Cancellation", count: 8 },
+          { category: "Billing Question", count: 12 }
+        ],
+        churn: { count: 5, risk: "High" },
+        urgency: { count: 14 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [81, 84, 72],
+          alert: "Satisfaction dropped 12 points in June due to summer AC repair response delays."
+        },
+        topics: ["Pricing & Quotes", "HVAC Repairs", "Maintenance Plans", "Appointment Scheduling", "Financing Options"],
+        responseTime: { avg: "3.2 hrs", unanswered: 17, delayed: 5 },
+        executiveSummary: "This week customers were primarily asking about maintenance plans and financing options. Negative sentiment increased by 8%, mainly related to appointment delays. 12 customers showed strong purchase intent and 3 customers showed churn risk."
+      },
+      "Apex Climate Control": {
+        sentiment: { positive: 104, neutral: 78, negative: 32, pct: 75, summary: "Customer sentiment is 75% positive. Main complaints are high dispatch fees and slow emergency callback times." },
+        complaints: [
+          { name: "Slow callback response", mentions: 24 },
+          { name: "High dispatch fee", mentions: 21 },
+          { name: "Unprofessional technician", mentions: 12 },
+          { name: "Parts out of stock", mentions: 8 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 39 },
+          { category: "Support Request", count: 28 },
+          { category: "Complaint", count: 22 },
+          { category: "Cancellation", count: 11 },
+          { category: "Billing Question", count: 15 }
+        ],
+        churn: { count: 7, risk: "High" },
+        urgency: { count: 18 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [80, 77, 75],
+          alert: "Satisfaction has slipped 5 points over the summer. Long callback queues are the main issue."
+        },
+        topics: ["AC Recharging", "Ductwork Leaks", "Dispatch Fees", "Thermostat Reset", "Warranty Claims"],
+        responseTime: { avg: "4.1 hrs", unanswered: 22, delayed: 8 },
+        executiveSummary: "High complaint volume about dispatch costs. Technical support queues are backlogged. Multiple customers threatened to switch providers due to slow dispatch times during the heatwave."
+      },
+      "Comfort Zone Heating & Air": {
+        sentiment: { positive: 118, neutral: 66, negative: 14, pct: 85, summary: "Customer sentiment is 85% positive. Complaints involve billing mismatches and quote accuracy." },
+        complaints: [
+          { name: "Quote mismatch on invoice", mentions: 11 },
+          { name: "Delayed email replies", mentions: 7 },
+          { name: "Filter delivery delays", mentions: 5 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 41 },
+          { category: "Support Request", count: 19 },
+          { category: "Complaint", count: 11 },
+          { category: "Cancellation", count: 3 },
+          { category: "Billing Question", count: 10 }
+        ],
+        churn: { count: 2, risk: "Low" },
+        urgency: { count: 6 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [82, 84, 85],
+          alert: "Satisfaction increased 3 points. Technical performance ratings remain excellent."
+        },
+        topics: ["Heat Pump Install", "Filter Subscription", "Service Estimates", "Billing Audits", "Winter Prep"],
+        responseTime: { avg: "2.1 hrs", unanswered: 4, delayed: 1 },
+        executiveSummary: "Excellent reviews for residential heat pump installations. Minor billing adjustments required for quote mismatches. Overall churn risk is very low."
+      },
+      "Elite Air Systems": {
+        sentiment: { positive: 95, neutral: 84, negative: 25, pct: 78, summary: "Customer sentiment is 78% positive. Main complaints center around scheduling conflicts and parts delays." },
+        complaints: [
+          { name: "Rescheduled appointments", mentions: 16 },
+          { name: "Backordered parts delay", mentions: 14 },
+          { name: "No technician callback", mentions: 10 },
+          { name: "Overpriced diagnostics", mentions: 7 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 32 },
+          { category: "Support Request", count: 25 },
+          { category: "Complaint", count: 18 },
+          { category: "Cancellation", count: 6 },
+          { category: "Billing Question", count: 11 }
+        ],
+        churn: { count: 4, risk: "Medium" },
+        urgency: { count: 8 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [81, 79, 78],
+          alert: "Satisfaction score dropped 3 points this quarter, primarily due to backordered replacement blowers."
+        },
+        topics: ["Compressor Swap", "Parts Ordering", "Diagnostic Billing", "Rescheduling Alerts", "System Upgrades"],
+        responseTime: { avg: "3.0 hrs", unanswered: 9, delayed: 3 },
+        executiveSummary: "Parts delays for older systems caused minor friction. High inquiry volume regarding replacement warranty coverage. 4 customers flagged for cancellation due to rescheduled technician appointments."
+      },
+      "Rapid Response Air": {
+        sentiment: { positive: 88, neutral: 52, negative: 36, pct: 71, summary: "Customer sentiment is 71% positive. Customer complaints focus heavily on missed emergency appointment promises." },
+        complaints: [
+          { name: "Missed emergency window", mentions: 28 },
+          { name: "No technician show", mentions: 20 },
+          { name: "Unresponsive dispatcher", mentions: 18 },
+          { name: "Unfair overtime rates", mentions: 12 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 28 },
+          { category: "Support Request", count: 34 },
+          { category: "Complaint", count: 26 },
+          { category: "Cancellation", count: 15 },
+          { category: "Billing Question", count: 19 }
+        ],
+        churn: { count: 9, risk: "High" },
+        urgency: { count: 21 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [78, 74, 71],
+          alert: "Satisfaction fell 7 points. Customers complain that emergency dispatch promises are not being met."
+        },
+        topics: ["Emergency Dispatch", "Overtime Billing", "No-Show Investigations", "Tech Live Tracking", "Compressor Repairs"],
+        responseTime: { avg: "4.8 hrs", unanswered: 25, delayed: 11 },
+        executiveSummary: "High volume of emergency dispatcher escalations. Major negative sentiment due to techs missing scheduled night windows. 9 customers showed extreme churn risk."
+      },
+      "Pure Air Solutions": {
+        sentiment: { positive: 110, neutral: 74, negative: 16, pct: 83, summary: "Customer sentiment is 83% positive. Complaints involve air filter subscription shipping charges." },
+        complaints: [
+          { name: "Shipping costs on filters", mentions: 14 },
+          { name: "Wrong filter size sent", mentions: 9 },
+          { name: "Billing portal glitch", mentions: 6 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 44 },
+          { category: "Support Request", count: 21 },
+          { category: "Complaint", count: 12 },
+          { category: "Cancellation", count: 5 },
+          { category: "Billing Question", count: 8 }
+        ],
+        churn: { count: 2, risk: "Low" },
+        urgency: { count: 4 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [82, 85, 83],
+          alert: "Satisfaction is stable. Filter subscription shipping fees are the primary source of complaints."
+        },
+        topics: ["UV Air Purifiers", "Filter Sizing Guide", "Auto-Delivery Plans", "Billing Errors", "Indoor Air Quality"],
+        responseTime: { avg: "2.3 hrs", unanswered: 5, delayed: 1 },
+        executiveSummary: "Strong sales of residential UV purifier upgrades. Minor complaints about subscription shipment billing details. Low overall churn risk."
+      },
+      "Airflow Masters": {
+        sentiment: { positive: 102, neutral: 80, negative: 20, pct: 81, summary: "Customer sentiment is 81% positive. Main complaints relate to thermostat configuration difficulties." },
+        complaints: [
+          { name: "Smart thermostat setup", mentions: 15 },
+          { name: "Uneven room heating", mentions: 12 },
+          { name: "Delayed email responses", mentions: 9 },
+          { name: "Diagnostic fee cost", mentions: 6 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 36 },
+          { category: "Support Request", count: 29 },
+          { category: "Complaint", count: 14 },
+          { category: "Cancellation", count: 4 },
+          { category: "Billing Question", count: 9 }
+        ],
+        churn: { count: 3, risk: "Medium" },
+        urgency: { count: 6 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [83, 80, 81],
+          alert: "Satisfaction remains constant at 81%. Smart thermostat tech issues are being addressed with video guides."
+        },
+        topics: ["Smart Thermostats", "Zoned Damper Controls", "Air Balance Reports", "Diagnostic Fees", "Email Support Response"],
+        responseTime: { avg: "2.9 hrs", unanswered: 7, delayed: 3 },
+        executiveSummary: "Zoned air balancing requests increased. Smart thermostat setup issues represent the highest support queue volume. 3 customers showing churn indicators due to communication delays."
+      },
+      "Frosty Systems": {
+        sentiment: { positive: 91, neutral: 76, negative: 28, pct: 77, summary: "Customer sentiment is 77% positive. Complaints are centered on refrigerator coolant leaks and scheduling delays." },
+        complaints: [
+          { name: "Coolant leak callbacks", mentions: 18 },
+          { name: "Commercial scheduler lag", mentions: 14 },
+          { name: "Tech arrival delays", mentions: 12 },
+          { name: "Emergency rates hike", mentions: 9 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 31 },
+          { category: "Support Request", count: 28 },
+          { category: "Complaint", count: 19 },
+          { category: "Cancellation", count: 8 },
+          { category: "Billing Question", count: 11 }
+        ],
+        churn: { count: 5, risk: "High" },
+        urgency: { count: 12 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [80, 78, 77],
+          alert: "Satisfaction decreased 3 points. Commercial customers report slower daytime callback response times."
+        },
+        topics: ["Coolant Recharging", "Commercial Freezers", "Scheduling Priority", "Overtime Dispatch", "Condenser Coils"],
+        responseTime: { avg: "3.8 hrs", unanswered: 14, delayed: 6 },
+        executiveSummary: "High volume of commercial refrigeration inquiries. Coolant recharge callback disputes increased. Churn indicators are high among retail restaurant accounts."
+      },
+      "Prime Comfort HVAC": {
+        sentiment: { positive: 116, neutral: 68, negative: 12, pct: 86, summary: "Customer sentiment is 86% positive. Customer complaints involve new installation duct noise." },
+        complaints: [
+          { name: "Duct vibration noise", mentions: 10 },
+          { name: "Thermostat app sync", mentions: 7 },
+          { name: "Paper invoices request", mentions: 4 }
+        ],
+        intent: [
+          { category: "Purchase Inquiry", count: 45 },
+          { category: "Support Request", count: 18 },
+          { category: "Complaint", count: 9 },
+          { category: "Cancellation", count: 2 },
+          { category: "Billing Question", count: 6 }
+        ],
+        churn: { count: 1, risk: "Low" },
+        urgency: { count: 5 },
+        satisfactionTrend: {
+          months: ["April", "May", "June"],
+          scores: [83, 85, 86],
+          alert: "Satisfaction increased 3 points. Install satisfaction is rated exceptionally high."
+        },
+        topics: ["Duct Vibration Dampers", "System Commissioning", "App Integrations", "Invoice Processing", "Extended Warranties"],
+        responseTime: { avg: "2.0 hrs", unanswered: 3, delayed: 1 },
+        executiveSummary: "Excellent installation reviews this week. Technical team successfully addressed minor duct vibration reports. Churn and support backlogs remain extremely low."
+      }
+    };
+
+    const GHL_CLIENT_DATA = {
+      "Foundation Health & Wellness": {
+        pipelineValue: "$34,500",
+        totalLeads: 142,
+        conversionRate: 72,
+        noShowRate: 6.8,
+        leads: [
+          { name: "John Miller", email: "john@example.com", phone: "+1 (555) 321-4567", source: "Facebook Ads", tags: ["Hot Lead", "IV Drip"], serviceType: "IV Therapy Package", budget: "$450", history: "Form Submitted → SMS Auto-reply → Consultation Booked" },
+          { name: "Evelyn Carter", email: "evelyn.c@example.com", phone: "+1 (555) 987-6543", source: "Google Ads", tags: ["Booking Request"], serviceType: "Botox Treatment", budget: "$600", history: "Call Answered → Appt Scheduled" },
+          { name: "Daniel Smith", email: "daniel@example.com", phone: "+1 (555) 123-9876", source: "Organic Map", tags: ["New Lead"], serviceType: "Skin Care Assessment", budget: "$150", history: "GMB Chat Initiated → SMS Nurture" },
+          { name: "Sarah Connor", email: "sconnor@example.com", phone: "+1 (555) 456-7890", source: "Referral", tags: ["Closed Won"], serviceType: "Therapeutic Massage", budget: "$250", history: "Referral Form Rec'd → Paid Invoice INV-009" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 10:00 AM", contact: "John Miller", staff: "Sarah K. (Nurse)", status: "Booked" },
+          { dateTime: "Jun 11, 2026 at 11:30 AM", contact: "Evelyn Carter", staff: "Dr. Stone (MD)", status: "Booked" },
+          { dateTime: "Jun 09, 2026 at 02:00 PM", contact: "Daniel Smith", staff: "Sarah K. (Nurse)", status: "Completed" },
+          { dateTime: "Jun 08, 2026 at 09:30 AM", contact: "Mark Ruffalo", staff: "Alex M. (Rep)", status: "No-Show" }
+        ],
+        funnelStages: [142, 110, 85, 79, 62],
+        sourceBreakdown: [
+          { source: "Google Ads", count: 58 },
+          { source: "Facebook Ads", count: 48 },
+          { source: "Organic Map", count: 24 },
+          { source: "Referrals", count: 12 }
+        ]
+      },
+      "JAG Medical Spa": {
+        pipelineValue: "$28,400",
+        totalLeads: 110,
+        conversionRate: 75,
+        noShowRate: 5.2,
+        leads: [
+          { name: "Jessica Alba", email: "jalba@example.com", phone: "+1 (555) 789-1234", source: "Instagram Post", tags: ["Hot Lead", "Lip Filler"], serviceType: "Dermal Fillers", budget: "$750", history: "GHL DM Form → Callback Completed → Booking Confirmed" },
+          { name: "Robert Downey", email: "rdj@example.com", phone: "+1 (555) 234-5678", source: "Google Search", tags: ["Booking Request"], serviceType: "Laser Treatment", budget: "$400", history: "GMB Form → Call Scheduled" },
+          { name: "Gwyneth Paltrow", email: "gwyneth@example.com", phone: "+1 (555) 876-5432", source: "Website Blog", tags: ["Nurturing"], serviceType: "Functional Consultation", budget: "$300", history: "Newsletter Opt-In → Ebook Downloaded" }
+        ],
+        appointments: [
+          { dateTime: "Jun 12, 2026 at 09:00 AM", contact: "Jessica Alba", staff: "Sarah K. (Nurse)", status: "Booked" },
+          { dateTime: "Jun 12, 2026 at 10:30 AM", contact: "Robert Downey", staff: "Dr. Stone (MD)", status: "Booked" },
+          { dateTime: "Jun 10, 2026 at 04:00 PM", contact: "Gwyneth Paltrow", staff: "Esthetician Lisa", status: "Completed" }
+        ],
+        funnelStages: [110, 92, 75, 71, 56],
+        sourceBreakdown: [
+          { source: "Google Search", count: 42 },
+          { source: "Instagram Post", count: 38 },
+          { source: "Website Blog", count: 20 },
+          { source: "Referrals", count: 10 }
+        ]
+      },
+      "Vital Roots Functional Medicine": {
+        pipelineValue: "$18,200",
+        totalLeads: 85,
+        conversionRate: 58,
+        noShowRate: 14.5,
+        leads: [
+          { name: "Laura Palmer", email: "lpalmer@example.com", phone: "+1 (555) 666-0000", source: "Facebook Ads", tags: ["Hot Lead", "Thyroid Help"], serviceType: "Thyroid Protocol Consultation", budget: "$350", history: "Ad Click → Lead Form → Consultation Pending" },
+          { name: "Dale Cooper", email: "dcooper@example.com", phone: "+1 (555) 777-1111", source: "Google Search", tags: ["Booking Request"], serviceType: "Gut Health Analysis", budget: "$500", history: "Web Search → Appointment Booked → Portal Account Created" },
+          { name: "Audrey Horne", email: "audrey@example.com", phone: "+1 (555) 888-2222", source: "Facebook Ads", tags: ["Cold Lead"], serviceType: "Adrenal Fatigue Assessment", budget: "$300", history: "Ebook Download → Unsubscribe Request Pending" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 02:00 PM", contact: "Dale Cooper", staff: "Dr. Stone (MD)", status: "Booked" },
+          { dateTime: "Jun 10, 2026 at 11:00 AM", contact: "Laura Palmer", staff: "Sarah K. (Nurse)", status: "Canceled" },
+          { dateTime: "Jun 09, 2026 at 09:00 AM", contact: "Audrey Horne", staff: "Dr. Stone (MD)", status: "No-Show" }
+        ],
+        funnelStages: [85, 65, 49, 42, 30],
+        sourceBreakdown: [
+          { source: "Facebook Ads", count: 45 },
+          { source: "Google Search", count: 28 },
+          { source: "Website Blog", count: 12 }
+        ]
+      },
+      "Core Wellness & Recovery": {
+        pipelineValue: "$41,000",
+        totalLeads: 168,
+        conversionRate: 80,
+        noShowRate: 3.2,
+        leads: [
+          { name: "Bruce Wayne", email: "bwayne@example.com", phone: "+1 (555) 911-0000", source: "Referral", tags: ["Hot Lead", "Cryo Pass"], serviceType: "Corporate Wellness Membership", budget: "$1200", history: "Referral Email → Demo Attended → Booking Scheduled" },
+          { name: "Diana Prince", email: "diana@example.com", phone: "+1 (555) 700-1111", source: "Instagram Post", tags: ["Closed Won"], serviceType: "Cold Plunge Monthly Pass", budget: "$200", history: "Insta DM → Paid in Portal" },
+          { name: "Clark Kent", email: "ckent@example.com", phone: "+1 (555) 800-2222", source: "Google Search", tags: ["Booking Request"], serviceType: "Hyperbaric Chamber Session", budget: "$500", history: "Form Submitted → Booking Scheduled" }
+        ],
+        appointments: [
+          { dateTime: "Jun 12, 2026 at 01:00 PM", contact: "Bruce Wayne", staff: "Alex M. (Rep)", status: "Booked" },
+          { dateTime: "Jun 12, 2026 at 03:00 PM", contact: "Clark Kent", staff: "Esthetician Lisa", status: "Booked" },
+          { dateTime: "Jun 10, 2026 at 10:00 AM", contact: "Diana Prince", staff: "Alex M. (Rep)", status: "Completed" }
+        ],
+        funnelStages: [168, 140, 134, 130, 112],
+        sourceBreakdown: [
+          { source: "Google Search", count: 62 },
+          { source: "Instagram Post", count: 54 },
+          { source: "Referrals", count: 32 },
+          { source: "Facebook Ads", count: 20 }
+        ]
+      },
+      "Vitality Medical Spa": {
+        pipelineValue: "$21,500",
+        totalLeads: 95,
+        conversionRate: 68,
+        noShowRate: 8.5,
+        leads: [
+          { name: "Tony Stark", email: "tstark@example.com", phone: "+1 (555) 300-3000", source: "Google Ads", tags: ["Hot Lead", "IV Therapy"], serviceType: "IV Hydration Bundle", budget: "$800", history: "Ad Click → Consultation Complete → Appt Booked" },
+          { name: "Steve Rogers", email: "srogers@example.com", phone: "+1 (555) 194-0000", source: "Facebook Ads", tags: ["Booking Request"], serviceType: "Facial Package", budget: "$250", history: "GHL Ad Form → Call Answered → Appt Booked" },
+          { name: "Natasha Romanoff", email: "natasha@example.com", phone: "+1 (555) 400-0000", source: "Referral", tags: ["Closed Won"], serviceType: "Dermal Fillers", budget: "$900", history: "Referral Received → Consultation Done → Closed Won" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 03:00 PM", contact: "Tony Stark", staff: "Sarah K. (Nurse)", status: "Booked" },
+          { dateTime: "Jun 11, 2026 at 04:30 PM", contact: "Steve Rogers", staff: "Esthetician Lisa", status: "Booked" },
+          { dateTime: "Jun 09, 2026 at 01:00 PM", contact: "Natasha Romanoff", staff: "Sarah K. (Nurse)", status: "Completed" },
+          { dateTime: "Jun 08, 2026 at 10:00 AM", contact: "Peter Parker", staff: "Esthetician Lisa", status: "No-Show" }
+        ],
+        funnelStages: [95, 78, 65, 59, 48],
+        sourceBreakdown: [
+          { source: "Google Ads", count: 38 },
+          { source: "Facebook Ads", count: 32 },
+          { source: "Referrals", count: 25 }
+        ]
+      },
+      "Inner Calm Therapy Center": {
+        pipelineValue: "$15,600",
+        totalLeads: 78,
+        conversionRate: 82,
+        noShowRate: 2.5,
+        leads: [
+          { name: "Barry Allen", email: "ballen@example.com", phone: "+1 (555) 444-1111", source: "Google Search", tags: ["Hot Lead", "Stress CBT"], serviceType: "Mindfulness Package", budget: "$450", history: "Search Click → Intake Form Submitted → Confirmed" },
+          { name: "Iris West", email: "iwest@example.com", phone: "+1 (555) 444-2222", source: "Referral", tags: ["Closed Won"], serviceType: "Therapeutic Counseling", budget: "$350", history: "Referral Form → Intake Complete" }
+        ],
+        appointments: [
+          { dateTime: "Jun 12, 2026 at 11:00 AM", contact: "Barry Allen", staff: "Sarah K. (Nurse)", status: "Booked" },
+          { dateTime: "Jun 10, 2026 at 02:00 PM", contact: "Iris West", staff: "Sarah K. (Nurse)", status: "Completed" }
+        ],
+        funnelStages: [78, 70, 64, 62, 54],
+        sourceBreakdown: [
+          { source: "Google Search", count: 48 },
+          { source: "Referrals", count: 30 }
+        ]
+      },
+      "Precision HVAC Experts": {
+        pipelineValue: "$48,900",
+        totalLeads: 154,
+        conversionRate: 64,
+        noShowRate: 7.8,
+        leads: [
+          { name: "Frank Castle", email: "fcastle@example.com", phone: "+1 (555) 100-2000", source: "Google Local Service Ads", tags: ["Hot Lead", "AC Install"], serviceType: "Full System Replacement", budget: "$8500", history: "LSA Call → Site Inspection Complete → Estimate Sent" },
+          { name: "Matt Murdock", email: "mmurdock@example.com", phone: "+1 (555) 200-3000", source: "Organic Search", tags: ["Emergency Repair"], serviceType: "Emergency AC Repair", budget: "$450", history: "Emergency Hotline → Tech Dispatched" },
+          { name: "Karen Page", email: "kpage@example.com", phone: "+1 (555) 300-4000", source: "Facebook Ads", tags: ["Cold Lead"], serviceType: "Duct Maintenance", budget: "$300", history: "Promo Signup → Email Nurture" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 08:30 AM", contact: "Frank Castle", staff: "Tech Alex (HVAC)", status: "Booked" },
+          { dateTime: "Jun 11, 2026 at 01:00 PM", contact: "Matt Murdock", staff: "Tech Marcus (HVAC)", status: "Booked" },
+          { dateTime: "Jun 09, 2026 at 10:00 AM", contact: "Foggy Nelson", staff: "Tech Alex (HVAC)", status: "Completed" }
+        ],
+        funnelStages: [154, 122, 98, 91, 74],
+        sourceBreakdown: [
+          { source: "Google Local Service Ads", count: 72 },
+          { source: "Organic Search", count: 44 },
+          { source: "Facebook Ads", count: 38 }
+        ]
+      },
+      "Apex Climate Control": {
+        pipelineValue: "$56,000",
+        totalLeads: 184,
+        conversionRate: 60,
+        noShowRate: 9.2,
+        leads: [
+          { name: "Peter Parker", email: "spidey@example.com", phone: "+1 (555) 800-4444", source: "Google LSA", tags: ["Hot Lead", "AC Repair"], serviceType: "Condenser Coils Repair", budget: "$950", history: "Call Ingested → Tech Dispatched → Estimate Pending" },
+          { name: "Mary Jane", email: "mj@example.com", phone: "+1 (555) 800-5555", source: "Facebook Ads", tags: ["Booking Request"], serviceType: "AC Tuneup", budget: "$150", history: "Promo Form → SMS Auto-reply → Appt Scheduled" },
+          { name: "Harry Osborn", email: "harry@example.com", phone: "+1 (555) 800-6666", source: "Google Ads", tags: ["High Pipeline Value"], serviceType: "Multi-Zone HVAC Retrofit", budget: "$12000", history: "Web Quote Request → Callback Done" }
+        ],
+        appointments: [
+          { dateTime: "Jun 12, 2026 at 09:30 AM", contact: "Peter Parker", staff: "Tech Marcus (HVAC)", status: "Booked" },
+          { dateTime: "Jun 12, 2026 at 02:30 PM", contact: "Mary Jane", staff: "Tech Roger (HVAC)", status: "Booked" },
+          { dateTime: "Jun 10, 2026 at 04:00 PM", contact: "Harry Osborn", staff: "Tech Marcus (HVAC)", status: "Completed" },
+          { dateTime: "Jun 09, 2026 at 11:00 AM", contact: "Norman Osborn", staff: "Tech Roger (HVAC)", status: "No-Show" }
+        ],
+        funnelStages: [184, 138, 110, 100, 82],
+        sourceBreakdown: [
+          { source: "Google LSA", count: 88 },
+          { source: "Facebook Ads", count: 52 },
+          { source: "Google Ads", count: 44 }
+        ]
+      },
+      "Comfort Zone Heating & Air": {
+        pipelineValue: "$38,400",
+        totalLeads: 118,
+        conversionRate: 74,
+        noShowRate: 3.5,
+        leads: [
+          { name: "Arthur Dent", email: "arthur@example.com", phone: "+1 (555) 424-2424", source: "Organic Search", tags: ["Hot Lead", "Heat Pump"], serviceType: "Heat Pump Retrofit", budget: "$9800", history: "Search Click → Web Form → In-Home Quote Scheduled" },
+          { name: "Ford Prefect", email: "ford@example.com", phone: "+1 (555) 424-4242", source: "Referral", tags: ["Closed Won"], serviceType: "Filter Subscription", budget: "$200", history: "Referral Code Redeemed → Auto-Ship Activated" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 02:00 PM", contact: "Arthur Dent", staff: "Tech Alex (HVAC)", status: "Booked" },
+          { dateTime: "Jun 09, 2026 at 10:00 AM", contact: "Ford Prefect", staff: "Tech Roger (HVAC)", status: "Completed" }
+        ],
+        funnelStages: [118, 98, 87, 84, 72],
+        sourceBreakdown: [
+          { source: "Organic Search", count: 68 },
+          { source: "Referral", count: 50 }
+        ]
+      },
+      "Elite Air Systems": {
+        pipelineValue: "$29,000",
+        totalLeads: 98,
+        conversionRate: 66,
+        noShowRate: 6.0,
+        leads: [
+          { name: "Logan Howlett", email: "logan@example.com", phone: "+1 (555) 999-6666", source: "Google Ads", tags: ["Hot Lead", "AC Install"], serviceType: "Compressor Replacement", budget: "$1500", history: "Ad Click → Call Center Booked → Dispatch Scheduled" },
+          { name: "Scott Summers", email: "scott@example.com", phone: "+1 (555) 999-7777", source: "Organic Search", tags: ["Booking Request"], serviceType: "Thermostat Install", budget: "$350", history: "Web Search → Booking Requested" }
+        ],
+        appointments: [
+          { dateTime: "Jun 12, 2026 at 10:00 AM", contact: "Logan Howlett", staff: "Tech Roger (HVAC)", status: "Booked" },
+          { dateTime: "Jun 12, 2026 at 11:30 AM", contact: "Scott Summers", staff: "Tech Alex (HVAC)", status: "Booked" }
+        ],
+        funnelStages: [98, 78, 65, 61, 48],
+        sourceBreakdown: [
+          { source: "Google Ads", count: 54 },
+          { source: "Organic Search", count: 44 }
+        ]
+      },
+      "Rapid Response Air": {
+        pipelineValue: "$22,800",
+        totalLeads: 104,
+        conversionRate: 52,
+        noShowRate: 15.4,
+        leads: [
+          { name: "Walter White", email: "heisenberg@example.com", phone: "+1 (555) 509-0000", source: "Emergency Line", tags: ["Hot Lead", "SLA Delay"], serviceType: "Commercial Freezers Tuneup", budget: "$1200", history: "Dispatcher Hotline → No Show Alert Raised" },
+          { name: "Jesse Pinkman", email: "jesse@example.com", phone: "+1 (555) 509-1111", source: "Google LSA", tags: ["Booking Request", "Angry"], serviceType: "Residential AC Fix", budget: "$400", history: "Callback Delayed 4hrs → Appt Booked" },
+          { name: "Gustavo Fring", email: "gus@example.com", phone: "+1 (555) 509-2222", source: "Website SEO", tags: ["Nurturing"], serviceType: "HVAC Maintenance Plan", budget: "$2000", history: "GHL Quote Form → Callback Scheduled" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 09:00 AM", contact: "Walter White", staff: "Tech Marcus (HVAC)", status: "No-Show" },
+          { dateTime: "Jun 11, 2026 at 01:00 PM", contact: "Jesse Pinkman", staff: "Tech Alex (HVAC)", status: "Booked" },
+          { dateTime: "Jun 10, 2026 at 02:00 PM", contact: "Gustavo Fring", staff: "Tech Marcus (HVAC)", status: "Completed" }
+        ],
+        funnelStages: [104, 75, 54, 46, 32],
+        sourceBreakdown: [
+          { source: "Emergency Line", count: 42 },
+          { source: "Google LSA", count: 38 },
+          { source: "Website SEO", count: 24 }
+        ]
+      },
+      "Pure Air Solutions": {
+        pipelineValue: "$24,200",
+        totalLeads: 88,
+        conversionRate: 78,
+        noShowRate: 4.1,
+        leads: [
+          { name: "Luke Skywalker", email: "luke@example.com", phone: "+1 (555) 111-9999", source: "Facebook Ads", tags: ["Hot Lead", "UV Air Filter"], serviceType: "Whole House UV Filter", budget: "$1100", history: "Facebook Click → Form Submitted → Callback Done" },
+          { name: "Leia Organa", email: "leia@example.com", phone: "+1 (555) 222-9999", source: "Organic Search", tags: ["Closed Won"], serviceType: "Smart Thermostat", budget: "$350", history: "Web Search → Appointment Booked → Completed" }
+        ],
+        appointments: [
+          { dateTime: "Jun 12, 2026 at 08:30 AM", contact: "Luke Skywalker", staff: "Tech Alex (HVAC)", status: "Booked" },
+          { dateTime: "Jun 10, 2026 at 03:00 PM", contact: "Leia Organa", staff: "Tech Roger (HVAC)", status: "Completed" }
+        ],
+        funnelStages: [88, 74, 69, 66, 56],
+        sourceBreakdown: [
+          { source: "Facebook Ads", count: 50 },
+          { source: "Organic Search", count: 38 }
+        ]
+      },
+      "Airflow Masters": {
+        pipelineValue: "$31,000",
+        totalLeads: 112,
+        conversionRate: 70,
+        noShowRate: 5.8,
+        leads: [
+          { name: "Peter Parker", email: "pparker@example.com", phone: "+1 (555) 444-3333", source: "Google Search", tags: ["Hot Lead", "Thermostat"], serviceType: "Zoned Room Air Balancing", budget: "$600", history: "GHL Ad Form → Call Scheduled → Confirmed" },
+          { name: "Wade Wilson", email: "pool@example.com", phone: "+1 (555) 444-4444", source: "Facebook Ads", tags: ["Booking Request"], serviceType: "Dampers Configuration", budget: "$450", history: "Call Center Request → Appt Booked" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 10:30 AM", contact: "Peter Parker", staff: "Tech Alex (HVAC)", status: "Booked" },
+          { dateTime: "Jun 11, 2026 at 03:30 PM", contact: "Wade Wilson", staff: "Tech Roger (HVAC)", status: "Booked" }
+        ],
+        funnelStages: [112, 92, 78, 74, 62],
+        sourceBreakdown: [
+          { source: "Google Search", count: 64 },
+          { source: "Facebook Ads", count: 48 }
+        ]
+      },
+      "Frosty Systems": {
+        pipelineValue: "$35,400",
+        totalLeads: 124,
+        conversionRate: 62,
+        noShowRate: 11.2,
+        leads: [
+          { name: "Gordon Ramsay", email: "gordon@example.com", phone: "+1 (555) 888-9999", source: "Google Ads", tags: ["Hot Lead", "Cooler Leak"], serviceType: "Commercial Walk-in Repair", budget: "$1400", history: "Google Ad Click → Callback Done → Tech Dispatched" },
+          { name: "Bobby Flay", email: "bflay@example.com", phone: "+1 (555) 888-0000", source: "Facebook Ads", tags: ["Booking Request"], serviceType: "Refrigerator Evaporator Fix", budget: "$750", history: "Lead Form Completed → Booking Scheduled" }
+        ],
+        appointments: [
+          { dateTime: "Jun 12, 2026 at 09:00 AM", contact: "Gordon Ramsay", staff: "Tech Marcus (HVAC)", status: "Booked" },
+          { dateTime: "Jun 12, 2026 at 01:00 PM", contact: "Bobby Flay", staff: "Tech Alex (HVAC)", status: "Booked" },
+          { dateTime: "Jun 09, 2026 at 11:00 AM", contact: "Guy Fieri", staff: "Tech Marcus (HVAC)", status: "No-Show" }
+        ],
+        funnelStages: [124, 95, 77, 68, 54],
+        sourceBreakdown: [
+          { source: "Google Ads", count: 70 },
+          { source: "Facebook Ads", count: 54 }
+        ]
+      },
+      "Prime Comfort HVAC": {
+        pipelineValue: "$45,600",
+        totalLeads: 138,
+        conversionRate: 78,
+        noShowRate: 2.8,
+        leads: [
+          { name: "John Connor", email: "john.c@example.com", phone: "+1 (555) 202-9999", source: "Google LSA", tags: ["Hot Lead", "Warranty"], serviceType: "Extended Warranty Registration", budget: "$450", history: "Form Submitted → Verification Complete → Confirmed" },
+          { name: "Sarah Connor", email: "sarah.c@example.com", phone: "+1 (555) 202-8888", source: "Organic Search", tags: ["Closed Won"], serviceType: "Residential AC Install", budget: "$7800", history: "Search Click → Estimate Accepted → Paid Invoice" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 10:00 AM", contact: "John Connor", staff: "Tech Alex (HVAC)", status: "Booked" },
+          { dateTime: "Jun 09, 2026 at 02:00 PM", contact: "Sarah Connor", staff: "Tech Roger (HVAC)", status: "Completed" }
+        ],
+        funnelStages: [138, 118, 108, 105, 94],
+        sourceBreakdown: [
+          { source: "Google LSA", count: 78 },
+          { source: "Organic Search", count: 60 }
+        ]
+      }
+    };
+
+            function renderGHLDashboard() {
+      const container = document.getElementById("ghl-overview");
+      if (!container) return;
+
+      const clientName = document.getElementById("selected-client-name").innerText.replace("✓ ", "").trim();
+      const data = GHL_CLIENT_DATA[clientName] || GHL_CLIENT_DATA["Foundation Health & Wellness"];
+
+      // Retrieve only the first lead and appointment
+      const lead = data.leads[0] || { 
+        name: "No Active Lead", 
+        email: "N/A", 
+        phone: "N/A", 
+        source: "N/A", 
+        tags: ["No Lead"], 
+        serviceType: "N/A", 
+        budget: "N/A", 
+        history: "No activity history available" 
+      };
+      
+      const appt = data.appointments[0] || { 
+        dateTime: "N/A", 
+        contact: "N/A", 
+        staff: "N/A", 
+        status: "N/A" 
+      };
+
+      // Determine appropriate status badge classes for the appointment
+      let statusBadge = "badge-neutral";
+      if (appt.status === "Booked") statusBadge = "badge-blue";
+      else if (appt.status === "Attended" || appt.status === "Completed") statusBadge = "badge-success";
+      else if (appt.status === "No-Show") statusBadge = "badge-danger";
+      else if (appt.status === "Canceled") statusBadge = "badge-secondary";
+
+      // Split the activity history by "→" or "   "
+      const steps = lead.history.split(/→|   /).map(s => s.trim()).filter(Boolean);
+
+      // Determine category (Spa vs HVAC) for dynamic campaign/review fallbacks
+      const isSpa = clientName.toLowerCase().includes("spa") || clientName.toLowerCase().includes("wellness") || clientName.toLowerCase().includes("medicine") || clientName.toLowerCase().includes("therapy");
+
+      const pipelineStage = isSpa ? "Consultation Booked" : "Site Estimate Scheduled";
+      const adCampaign = isSpa ? "Premium Skincare Summer Promo" : "Emergency Furnace Outage SEO";
+      const lastCommunication = isSpa ? "SMS Auto-Reply (2 hrs ago)" : "Outbound Call Answered (Yesterday)";
+      const nextAction = isSpa ? "Send Pre-treatment Medical Consent Form" : "Confirm service tech dispatch time";
+
+      const latestReview = isSpa ? {
+        author: "Rebecca K.",
+        rating: 5,
+        text: "Absolutely loved the consultation. The staff were very knowledgeable and the clinic is stunning!"
+      } : {
+        author: "Douglas P.",
+        rating: 5,
+        text: "Super fast response on a hot day. The technician diagnosed and fixed my HVAC unit in 30 minutes flat."
+      };
+
+      container.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; width: 100%; margin-bottom: 24px;">
+          
+          <!-- Column 1: CRM Contact Details -->
+          <div class="chart-card transcript-card-animate delay-1" style="padding: 28px; display: flex; flex-direction: column; gap: 24px; border: 1px solid var(--color-border); border-radius: 16px; background: white;">
+            <div class="chart-title" style="margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--color-border); padding-bottom: 16px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="user-check" style="width: 22px; height: 22px; color: var(--color-accent);"></i>
+                <span style="font-size: 16px; font-weight: 700; color: var(--color-primary);">GHL Contact Lead Details</span>
+              </div>
+              <span class="badge badge-accent" style="margin: 0; font-size: 11px; padding: 4px 10px;">CRM Profile</span>
+            </div>
+
+            <!-- Profile Summary Header -->
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(20, 47, 69, 0.08); color: var(--color-primary); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700;">
+                ${lead.name.split(" ").map(n => n[0]).join("").toUpperCase()}
+              </div>
+              <div>
+                <div style="font-size: 17px; font-weight: 700; color: var(--color-primary);">${lead.name}</div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;">
+                  ${lead.tags.map(tag => `
+                    <span class="badge ${tag === 'Hot Lead' || tag === 'SLA Delay' ? 'badge-danger' : tag === 'Booking Request' ? 'badge-blue' : 'badge-neutral'}" style="margin: 0; font-size: 10px; padding: 2px 6px;">
+                      ${tag}
+                    </span>
+                  `).join("")}
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Fields Grid -->
+            <div style="display: grid; grid-template-columns: 1fr; gap: 16px; background: var(--color-warm); padding: 20px; border-radius: 12px; border: 1px solid var(--color-border);">
+              <div>
+                <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Email</div>
+                <div style="font-size: 13.5px; font-weight: 600; color: var(--color-primary); display: flex; align-items: center; gap: 8px;">
+                  <i data-lucide="mail" style="width: 15px; height: 15px; color: var(--color-secondary);"></i>
+                  ${lead.email}
+                </div>
+              </div>
+              
+              <div>
+                <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Phone Number</div>
+                <div style="font-size: 13.5px; font-weight: 600; color: var(--color-primary); display: flex; align-items: center; gap: 8px;">
+                  <i data-lucide="phone" style="width: 15px; height: 15px; color: var(--color-secondary);"></i>
+                  ${lead.phone}
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                  <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Lead Source</div>
+                  <div style="font-size: 13px; font-weight: 600; color: var(--color-primary); display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="compass" style="width: 14px; height: 14px; color: var(--color-secondary);"></i>
+                    ${lead.source}
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Ad Campaign</div>
+                  <div style="font-size: 13px; font-weight: 600; color: var(--color-primary); display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <i data-lucide="megaphone" style="width: 14px; height: 14px; color: var(--color-secondary);"></i>
+                    ${adCampaign}
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                  <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Service & Budget</div>
+                  <div style="font-size: 13px; font-weight: 600; color: var(--color-primary); display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="briefcase" style="width: 14px; height: 14px; color: var(--color-secondary);"></i>
+                    ${lead.serviceType} (${lead.budget})
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Pipeline Stage</div>
+                  <div style="font-size: 13px; font-weight: 600; color: var(--color-accent); display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="git-branch" style="width: 14px; height: 14px; color: var(--color-accent);"></i>
+                    ${pipelineStage}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Last Touchpoint & Action Alert -->
+            <div style="background: rgba(238, 104, 59, 0.04); border: 1px solid rgba(238, 104, 59, 0.15); padding: 16px; border-radius: 12px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px; align-items: center;">
+                <span style="font-weight: 600; color: var(--color-primary); display: flex; align-items: center; gap: 6px;">
+                  <i data-lucide="message-square" style="width: 14px; height: 14px; color: var(--color-accent);"></i> Last Touchpoint
+                </span>
+                <span style="color: var(--color-muted); font-weight: 550;">${lastCommunication}</span>
+              </div>
+              <div style="font-size: 12px; color: var(--color-primary); font-weight: 600; background: white; padding: 10px; border-radius: 8px; border: 1px solid var(--color-border); display: flex; align-items: center; gap: 8px;">
+                <span style="background: var(--color-success); width: 6px; height: 6px; border-radius: 50%;"></span>
+                <span><strong>Next Recommended Action:</strong> ${nextAction}</span>
+              </div>
+            </div>
+
+            <!-- Activity History Stepper -->
+            <div>
+              <div style="font-size: 13px; font-weight: 600; color: var(--color-primary); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="history" style="width: 16px; height: 16px; color: var(--color-accent);"></i> 
+                <span>Contact Activity History</span>
+              </div>
+              <div style="position: relative; padding-left: 24px; border-left: 2px solid var(--color-border); display: flex; flex-direction: column; gap: 16px; margin-left: 8px;">
+                ${steps.map((step, idx) => `
+                  <div style="position: relative;">
+                    <div style="position: absolute; left: -30px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: ${idx === steps.length - 1 ? 'var(--color-success)' : 'var(--color-accent)'}; border: 2px solid white; box-shadow: 0 0 0 2px ${idx === steps.length - 1 ? 'rgba(57, 181, 74, 0.2)' : 'rgba(238, 104, 59, 0.2)'};"></div>
+                    <div style="font-size: 12.5px; font-weight: 600; color: var(--color-primary);">${step}</div>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 2: CRM Appointment Details -->
+          <div class="chart-card transcript-card-animate delay-2" style="padding: 28px; display: flex; flex-direction: column; gap: 24px; border: 1px solid var(--color-border); border-radius: 16px; background: white;">
+            <div class="chart-title" style="margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--color-border); padding-bottom: 16px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="calendar" style="width: 22px; height: 22px; color: var(--color-accent);"></i>
+                <span style="font-size: 16px; font-weight: 700; color: var(--color-primary);">Appointment & Booking Details</span>
+              </div>
+              <span class="badge badge-accent" style="margin: 0; font-size: 11px; padding: 4px 10px;">GHL Calendar</span>
+            </div>
+
+            <!-- Booking Status Header -->
+            <div style="display: flex; align-items: center; justify-content: space-between; background: var(--color-warm); border: 1px solid var(--color-border); padding: 18px; border-radius: 12px;">
+              <div>
+                <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Booking Status</div>
+                <div style="font-size: 13px; color: var(--color-primary); font-weight: 550;">Current state of scheduling</div>
+              </div>
+              <span class="badge ${statusBadge}" style="margin: 0; font-size: 13px; padding: 6px 14px; font-weight: 700; border-radius: 20px;">
+                ${appt.status}
+              </span>
+            </div>
+
+            <!-- Details Block -->
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div style="display: flex; align-items: center; gap: 14px; background: rgba(238, 104, 59, 0.04); border: 1px solid rgba(238, 104, 59, 0.15); padding: 18px; border-radius: 12px;">
+                <div style="background: var(--color-accent); color: white; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i data-lucide="clock" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div>
+                  <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase;">Appointment Date & Time</div>
+                  <div style="font-size: 14.5px; font-weight: 700; color: var(--color-primary); margin-top: 2px;">${appt.dateTime}</div>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 14px; border: 1px solid var(--color-border); padding: 18px; border-radius: 12px; background: white;">
+                <div style="background: rgba(20, 47, 69, 0.08); color: var(--color-primary); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i data-lucide="user" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div>
+                  <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase;">Linked CRM Lead</div>
+                  <div style="font-size: 14.5px; font-weight: 700; color: var(--color-primary); margin-top: 2px;">${appt.contact}</div>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 14px; border: 1px solid var(--color-border); padding: 18px; border-radius: 12px; background: white;">
+                <div style="background: rgba(20, 47, 69, 0.08); color: var(--color-primary); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i data-lucide="users" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div>
+                  <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase;">Assigned Representative</div>
+                  <div style="font-size: 14.5px; font-weight: 700; color: var(--color-primary); margin-top: 2px;">${appt.staff}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reputation Management Box -->
+            <div style="border: 1px solid var(--color-border); background: var(--color-warm); padding: 20px; border-radius: 12px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--color-primary);">
+                  <i data-lucide="star" style="width: 16px; height: 16px; color: #fbbf24; fill: #fbbf24;"></i>
+                  <span>Latest Google Review</span>
+                </div>
+                <div style="display: flex; gap: 2px;">
+                  ${Array(latestReview.rating).fill('<i data-lucide="star" style="width: 12px; height: 12px; color: #fbbf24; fill: #fbbf24;"></i>').join("")}
+                </div>
+              </div>
+              <div style="font-style: italic; font-size: 12.5px; color: var(--color-text); line-height: 1.5;">
+                "${latestReview.text}"
+              </div>
+              <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-align: right;">
+                — ${latestReview.author} (via GHL Reputation)
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      `;
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    function renderMailChimpDashboard() {
+      const clientName = document.getElementById("selected-client-name").innerText.replace("✓ ", "").trim();
+      const data = MAILCHIMP_CLIENT_DATA[clientName] || MAILCHIMP_CLIENT_DATA["Foundation Health & Wellness"];
+      
+      // Update Executive Summary Text
+      if (document.getElementById("mailchimp-ai-summary-text")) {
+        document.getElementById("mailchimp-ai-summary-text").innerText = data.executiveSummary;
+      }
+      
+      // Update Sentiment Card
+      if (document.getElementById("mailchimp-sentiment-title")) {
+        document.getElementById("mailchimp-sentiment-title").innerText = `${data.sentiment.pct}% Positive`;
+      }
+      if (document.getElementById("mailchimp-sentiment-progress")) {
+        document.getElementById("mailchimp-sentiment-progress").style.width = `${data.sentiment.pct}%`;
+      }
+      if (document.getElementById("mailchimp-sentiment-pos")) {
+        document.getElementById("mailchimp-sentiment-pos").innerText = `Pos: ${data.sentiment.positive}`;
+      }
+      if (document.getElementById("mailchimp-sentiment-neu")) {
+        document.getElementById("mailchimp-sentiment-neu").innerText = `Neu: ${data.sentiment.neutral}`;
+      }
+      if (document.getElementById("mailchimp-sentiment-neg")) {
+        document.getElementById("mailchimp-sentiment-neg").innerText = `Neg: ${data.sentiment.negative}`;
+      }
+      
+      // Update Top Complaint Card
+      const topComplaint = data.complaints[0] || { name: "None", mentions: 0 };
+      if (document.getElementById("mailchimp-top-complaint-title")) {
+        document.getElementById("mailchimp-top-complaint-title").innerText = topComplaint.name;
+      }
+      if (document.getElementById("mailchimp-top-complaint-meta")) {
+        document.getElementById("mailchimp-top-complaint-meta").innerText = `${topComplaint.mentions} mentions this week`;
+      }
+      
+      // Update Unanswered & Response Time Card (Unanswered count is large font)
+      if (document.getElementById("mailchimp-unanswered-count-large")) {
+        document.getElementById("mailchimp-unanswered-count-large").innerText = data.responseTime.unanswered;
+      }
+      if (document.getElementById("mailchimp-avg-response")) {
+        document.getElementById("mailchimp-avg-response").innerText = `Avg Response: ${data.responseTime.avg}`;
+      }
+      if (document.getElementById("mailchimp-urgency-count")) {
+        document.getElementById("mailchimp-urgency-count").innerText = `${data.urgency.count} Urgent`;
+      }
+      
+      // Update MoM Trend Alert
+      if (document.getElementById("mailchimp-satisfaction-alert-text")) {
+        document.getElementById("mailchimp-satisfaction-alert-text").innerText = data.satisfactionTrend.alert;
+      }
+      
+      // Render Satisfaction MoM line chart
+      if (
+        document.getElementById("mailchimp-satisfaction-chart") &&
+        document.getElementById("mailchimp-satisfaction-chart").offsetWidth > 0
+      ) {
+        if (chartInstances["mailchimp-satisfaction-chart"]) {
+          chartInstances["mailchimp-satisfaction-chart"].destroy();
+        }
+        chartInstances["mailchimp-satisfaction-chart"] = new Chart(
+          document.getElementById("mailchimp-satisfaction-chart"),
+          {
+            type: "line",
+            data: {
+              labels: data.satisfactionTrend.months,
+              datasets: [
+                {
+                  label: "Sentiment Score",
+                  data: data.satisfactionTrend.scores,
+                  borderColor: "#ee683b",
+                  backgroundColor: "rgba(238, 104, 59, 0.05)",
+                  borderWidth: 3,
+                  pointRadius: 5,
+                  pointHoverRadius: 7,
+                  tension: 0.3,
+                  fill: true
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: { min: 0, max: 100, ticks: { stepSize: 20 } },
+                x: { grid: { display: false } }
+              }
+            }
+          }
+        );
+      }
+      
+      // Render Intent horizontal bar chart
+      if (
+        document.getElementById("mailchimp-intent-chart") &&
+        document.getElementById("mailchimp-intent-chart").offsetWidth > 0
+      ) {
+        if (chartInstances["mailchimp-intent-chart"]) {
+          chartInstances["mailchimp-intent-chart"].destroy();
+        }
+        chartInstances["mailchimp-intent-chart"] = new Chart(
+          document.getElementById("mailchimp-intent-chart"),
+          {
+            type: "bar",
+            data: {
+              labels: data.intent.map(i => i.category),
+              datasets: [
+                {
+                  label: "Email Count",
+                  data: data.intent.map(i => i.count),
+                  backgroundColor: "#142f45",
+                  borderRadius: 4
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              indexAxis: 'y',
+              scales: {
+                x: { beginAtZero: true, ticks: { precision: 0 } },
+                y: { grid: { display: false } }
+              }
+            }
+          }
+        );
+      }
+      
+      // Render Topic Clustering Tags
+      const topicsContainer = document.getElementById("mailchimp-topics-container");
+      if (topicsContainer) {
+        topicsContainer.innerHTML = data.topics.map(t => `
+          <div style="background: rgba(20, 47, 69, 0.04); color: var(--color-primary); border: 1px solid var(--color-border); border-radius: 20px; padding: 6px 14px; font-size: 12px; font-weight: 600; cursor: default; transition: all 0.2s;" class="topic-bubble">
+            ${t}
+          </div>
+        `).join("");
+      }
+      
+      // Render Complaints Table Rows
+      const complaintsTbody = document.getElementById("mailchimp-complaints-tbody");
+      if (complaintsTbody) {
+        const maxMentions = Math.max(...data.complaints.map(c => c.mentions)) || 1;
+        complaintsTbody.innerHTML = data.complaints.map(c => {
+          const pct = (c.mentions / maxMentions) * 100;
+          return `
+            <tr style="border-bottom: 1px solid var(--color-border);">
+              <td style="padding: 10px; font-weight: 600; color: var(--color-primary);">${c.name}</td>
+              <td style="padding: 10px; text-align: center; font-weight: 700; color: var(--color-accent);">${c.mentions}</td>
+              <td style="padding: 10px;">
+                <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                  <div style="width: ${pct}%; height: 100%; background: var(--color-primary); border-radius: 4px;"></div>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join("");
+      }
+      
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+      
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+    
     const ALL_CLIENTS = [
       "Foundation Health & Wellness",
       "JAG Medical Spa",
