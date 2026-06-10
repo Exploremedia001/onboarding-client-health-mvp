@@ -1162,6 +1162,12 @@
             <i data-lucide="mail" style="width: 18px; height: 18px"></i> MailChimp
           </li>
         </ul>
+        <div class="sidebar-section-title">CRM & Booking</div>
+        <ul class="sidebar-nav" style="margin-top: 0">
+          <li onclick="showTab('tab-ghl')">
+            <i data-lucide="users" style="width: 18px; height: 18px"></i> GHL Insights
+          </li>
+        </ul>
       </div>
 
     </aside>
@@ -3560,6 +3566,17 @@
                 </p>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- GHL CRM & BOOKING TAB -->
+        <div id="tab-ghl" class="tab-content">
+          <div class="sub-tabs">
+            <div class="sub-tab active" onclick="showSubTab(this, 'ghl-overview', 'tab-ghl')">
+              Overview</div>
+          </div>
+          <div id="ghl-overview" class="sub-tab-content active" style="display: flex; flex-direction: column; gap: 24px;">
+            <!-- Dynamic GHL dashboard content will render here -->
           </div>
         </div>
 
@@ -7211,6 +7228,14 @@
         renderMailChimpDashboard();
       }
 
+      // Render GHL Dynamic Dashboard
+      if (
+        document.getElementById("tab-ghl") &&
+        document.getElementById("tab-ghl").offsetWidth > 0
+      ) {
+        renderGHLDashboard();
+      }
+
       // 5. Financial Flow (Billed Revenue vs Direct Media Spend)
       if (
         document.getElementById("financial-flow-chart") &&
@@ -7975,7 +8000,7 @@
       }
     };
 
-    function renderCallTranscripts() {
+        function renderCallTranscripts() {
       const container = document.getElementById("transcripts-overview");
       if (!container) return;
 
@@ -7983,84 +8008,105 @@
       const data = CALL_TRANSCRIPT_ANALYSIS_DATA[clientName] || CALL_TRANSCRIPT_ANALYSIS_DATA["Foundation Health & Wellness"];
 
       container.innerHTML = `
-        <div class="kpi-grid" style="margin-bottom: 24px;">
-          <!-- Metric 1: 🟢 Overall Client Health Score -->
-          <div class="kpi-card transcript-card-animate delay-1" style="cursor: default;">
-            <div class="kpi-label" style="background: ${data.healthLabel === 'Green' ? '#dcfce7' : data.healthLabel === 'Yellow' ? '#fef9c3' : '#ffe4e6'}; color: ${data.healthLabel === 'Green' ? '#15803d' : data.healthLabel === 'Yellow' ? '#a16207' : '#be123c'}; margin-bottom: 8px;">
-              Overall Health
+        <!-- AI Executive Summary Banner (Full Width at the Top) -->
+        <div class="chart-card w-100 transcript-card-animate delay-1" style="margin-bottom: 24px; background: linear-gradient(135deg, rgba(20,47,69,0.02) 0%, rgba(238,104,59,0.02) 100%); border-left: 4px solid var(--color-accent); cursor: default; padding: 20px; box-sizing: border-box;">
+          <div style="display: flex; align-items: flex-start; gap: 16px;">
+            <div style="background: rgba(238,104,59,0.1); border-radius: 8px; padding: 10px; display: flex; align-items: center; justify-content: center; color: var(--color-accent); flex-shrink: 0;">
+              <i data-lucide="sparkles" style="width: 24px; height: 24px;"></i>
             </div>
-            <div class="kpi-value" style="display:flex; align-items:center; gap:8px;">
-              <span style="font-size: 24px; vertical-align: middle;">
-                ${data.healthLabel === 'Green' ? '🟢' : data.healthLabel === 'Yellow' ? '🟡' : '🔴'}
-              </span>
-              ${data.healthScore}%
-            </div>
-            <div style="font-size: 11px; color: var(--color-muted); line-height: 1.4; margin-top: 4px;">
-              ${data.healthSummary}
-            </div>
-          </div>
-
-          <!-- Metric 2: ⚠️ Churn Risk Score -->
-          <div class="kpi-card transcript-card-animate delay-2" style="cursor: default;">
-            <div class="kpi-label" style="background: #f1f5f9; color: var(--color-muted); margin-bottom: 8px;">
-              Churn Risk
-            </div>
-            <div class="kpi-value" style="color: ${data.churnRisk === 'Low' ? 'var(--color-success)' : data.churnRisk === 'Medium' ? '#eab308' : 'var(--color-danger)'}; font-size: 28px; display:flex; align-items:center; gap:6px;">
-              <span>⚠️</span> ${data.churnRisk}
-            </div>
-            <div style="font-size: 11px; color: var(--color-muted); line-height: 1.4; margin-top: 4px;">
-              Warning signals: ${data.warningSignals.join(", ")}
-            </div>
-          </div>
-
-          <!-- Metric 3: 😊 Overall Sentiment Trend -->
-          <div class="kpi-card transcript-card-animate delay-3" style="cursor: default;">
-            <div class="kpi-label" style="background: #f1f5f9; color: var(--color-muted); margin-bottom: 8px;">
-              Sentiment Trend
-            </div>
-            <div class="kpi-value" style="color: ${data.sentiment === 'Positive' ? 'var(--color-success)' : data.sentiment === 'Neutral' ? '#64748b' : 'var(--color-danger)'}; font-size: 28px; display:flex; align-items:center; gap:6px;">
-              <span>${data.sentiment === 'Positive' ? '😊' : data.sentiment === 'Neutral' ? '😐' : '🙁'}</span>
-              ${data.sentiment}
-            </div>
-            <div style="font-size: 11px; color: var(--color-muted); line-height: 1.4; margin-top: 4px;">
-              Trend: ${data.sentimentTrend}
-            </div>
-          </div>
-
-          <!-- Metric 4: 📉 Client Mood Trend -->
-          <div class="kpi-card transcript-card-animate delay-4" style="cursor: default;">
-            <div class="kpi-label" style="background: #f1f5f9; color: var(--color-muted); margin-bottom: 8px;">
-              Mood Trend
-            </div>
-            <div class="kpi-value" style="color: ${data.moodTrend === 'Improving' ? 'var(--color-success)' : data.moodTrend === 'Stable' ? '#64748b' : 'var(--color-danger)'}; font-size: 28px; display:flex; align-items:center; gap:6px;">
-              <span>${data.moodTrend === 'Improving' ? '📈' : data.moodTrend === 'Stable' ? '➡️' : '📉'}</span>
-              ${data.moodTrend}
-            </div>
-            <div style="font-size: 11px; color: var(--color-muted); line-height: 1.4; margin-top: 4px;">
-              Easy to understand mood indicator
+            <div style="flex: 1;">
+              <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--color-accent); letter-spacing: 0.05em; margin-bottom: 8px;">AI Executive Summary ("What Changed?")</div>
+              <ul style="font-size: 13.5px; line-height: 1.6; font-weight: 550; color: var(--color-primary); margin-left: 20px; padding-left: 0; display: flex; flex-direction: column; gap: 6px;">
+                ${data.executiveSummary.map(bullet => `<li>${bullet}</li>`).join("")}
+              </ul>
             </div>
           </div>
         </div>
 
-        <div class="charts-row" style="margin-bottom: 24px; gap: 24px; align-items: stretch;">
-          <!-- Metric 10: 🧠 AI Executive Summary -->
-          <div class="chart-card w-60 transcript-card-animate delay-5" style="padding: 24px; display: flex; flex-direction: column;">
-            <div class="chart-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-              <i data-lucide="brain-circuit" style="width: 20px; height: 20px; color: var(--color-accent);"></i>
-              AI Executive Summary ("What Changed?")
+        <!-- KPI Grid (4 Columns, matching visual style of Reference Image) -->
+        <div class="kpi-grid" style="margin-bottom: 24px;">
+          
+          <!-- Card 1: Sentiment & Overall Health Score -->
+          <div class="kpi-card transcript-card-animate delay-2" style="display: flex; flex-direction: column; justify-content: space-between; cursor: default;">
+            <div>
+              <div class="kpi-label">Overall Client Health Score</div>
+              <div class="kpi-value" style="font-size: 26px; font-weight: 800; margin-bottom: 8px; color: var(--color-primary); display: flex; align-items: center; gap: 6px;">
+                <span style="font-size: 20px;">
+                  ${data.healthLabel === 'Green' ? '🟢' : data.healthLabel === 'Yellow' ? '🟡' : '🔴'}
+                </span>
+                ${data.healthScore}% Healthy
+              </div>
             </div>
-            <div style="flex: 1; display: flex; flex-direction: column; gap: 12px; justify-content: center;">
-              ${data.executiveSummary.map(bullet => `
-                <div style="display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; line-height: 1.5; color: var(--color-primary);">
-                  <i data-lucide="sparkles" style="width: 14px; height: 14px; color: var(--color-accent); flex-shrink: 0; margin-top: 3px;"></i>
-                  <span>${bullet}</span>
-                </div>
-              `).join("")}
+            <div>
+              <!-- Progress bar -->
+              <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin-bottom: 8px;">
+                <div style="width: ${data.healthScore}%; height: 100%; background: ${data.healthLabel === 'Green' ? 'var(--color-success)' : data.healthLabel === 'Yellow' ? '#eab308' : 'var(--color-danger)'}; border-radius: 4px; transition: width 0.5s ease;"></div>
+              </div>
+              <!-- Sub-scores breakdown -->
+              <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 600;">
+                <span style="color: var(--color-success);">Comm: ${data.satisfaction.communication}%</span>
+                <span style="color: var(--color-secondary);">Res: ${data.satisfaction.results}%</span>
+                <span style="color: var(--color-accent);">Strat: ${data.satisfaction.strategy}%</span>
+              </div>
             </div>
           </div>
 
-          <!-- Metric 5: 📌 Open Action Items (Critical) -->
-          <div class="chart-card w-40 transcript-card-animate delay-6" style="padding: 24px; display: flex; flex-direction: column;">
+          <!-- Card 2: Top Customer Complaint / Concern -->
+          <div class="kpi-card transcript-card-animate delay-3" style="display: flex; flex-direction: column; justify-content: space-between; cursor: default;">
+            <div>
+              <div class="kpi-label">Top Customer Complaint</div>
+              <div class="kpi-value" style="font-size: 18px; font-weight: 700; line-height: 1.3; margin-top: 4px; color: var(--color-primary);">
+                ${data.concerns[0] ? data.concerns[0].name : 'None'}
+              </div>
+            </div>
+            <div style="font-size: 12px; color: var(--color-muted); display: flex; align-items: center; gap: 4px; margin-top: auto;">
+              <i data-lucide="alert-circle" style="width: 14px; height: 14px; color: var(--color-accent);"></i>
+              <span>${data.concerns[0] ? data.concerns[0].count : 0} mentions on calls this week</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Churn Risk Detection -->
+          <div class="kpi-card transcript-card-animate delay-4" style="display: flex; flex-direction: column; justify-content: space-between; cursor: default;">
+            <div>
+              <div class="kpi-label">Churn Risk Detection</div>
+              <div class="kpi-value" style="font-size: 26px; font-weight: 800; color: ${data.churnRisk === 'Low' ? 'var(--color-success)' : data.churnRisk === 'Medium' ? '#eab308' : 'var(--color-danger)'}; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="alert-triangle" style="width: 24px; height: 24px;"></i>
+                ${data.churnRisk} Risk
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+              <span style="font-size: 11px; color: var(--color-muted);">Warning signals: ${data.warningSignals.length}</span>
+              <span class="badge ${data.churnRisk === 'High' ? 'badge-danger' : data.churnRisk === 'Medium' ? 'badge-blue' : 'badge-neutral'}" style="margin: 0; font-size: 10px; font-weight: 700; padding: 2px 8px;">
+                ${data.churnRisk.toUpperCase()}
+              </span>
+            </div>
+          </div>
+
+          <!-- Card 4: Open Action Items & Mood -->
+          <div class="kpi-card transcript-card-animate delay-5" style="display: flex; flex-direction: column; justify-content: space-between; cursor: default;">
+            <div>
+              <div class="kpi-label">Open Action Items & Mood</div>
+              <div class="kpi-value" style="font-size: 28px; font-weight: 800; color: var(--color-primary); display: flex; align-items: baseline; gap: 6px;">
+                ${data.actionItems.total}
+                <span style="font-size: 12px; font-weight: 600; color: var(--color-muted);">Pending</span>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+              <span style="font-size: 11.5px; color: ${data.actionItems.overdue > 0 ? 'var(--color-danger)' : 'var(--color-success)'}; font-weight: 600;">
+                ${data.actionItems.overdue > 0 ? `${data.actionItems.overdue} Overdue!` : 'All on time'}
+              </span>
+              <span style="font-size: 12px; font-weight: 600; color: ${data.moodTrend === 'Improving' ? 'var(--color-success)' : data.moodTrend === 'Stable' ? 'var(--color-secondary)' : 'var(--color-danger)'}; display: flex; align-items: center; gap: 4px;">
+                Mood: ${data.moodTrend === 'Improving' ? '📈' : data.moodTrend === 'Stable' ? '➡️' : '📉'}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 1: Action Items & Key Concerns -->
+        <div class="charts-row" style="margin-bottom: 24px; gap: 24px; align-items: stretch;">
+          
+          <!-- Open Action Items Checklist -->
+          <div class="chart-card w-50 transcript-card-animate delay-6" style="padding: 24px; display: flex; flex-direction: column;">
             <div class="chart-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px; justify-content: space-between;">
               <span style="display: flex; align-items: center; gap: 8px;">
                 <i data-lucide="pin" style="width: 20px; height: 20px; color: var(--color-accent);"></i>
@@ -8090,11 +8136,44 @@
               `).join("")}
             </div>
           </div>
+
+          <!-- Key Client Concerns (Top 3) -->
+          <div class="chart-card w-50 transcript-card-animate delay-7" style="padding: 24px; display: flex; flex-direction: column;">
+            <div class="chart-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="alert-octagon" style="width: 20px; height: 20px; color: var(--color-accent);"></i>
+              Key Client Concerns (Top 3)
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 12px; justify-content: center;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 12.5px;">
+                <thead>
+                  <tr style="border-bottom: 2px solid var(--color-border); color: var(--color-muted); font-weight: 700; text-align: left;">
+                    <th style="padding: 8px 4px; font-size: 10.5px; text-transform: uppercase;">Concern Topic</th>
+                    <th style="padding: 8px 4px; font-size: 10.5px; text-transform: uppercase; text-align: center; width: 80px;">Mentions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${data.concerns.map(concern => `
+                    <tr style="border-bottom: 1px solid var(--color-border);">
+                      <td style="padding: 10px 4px; font-weight: 600; color: var(--color-primary); font-size: 13px;">${concern.name}</td>
+                      <td style="padding: 10px 4px; text-align: center;">
+                        <span class="badge ${concern.count >= 4 ? 'badge-danger' : concern.count >= 2 ? 'badge-blue' : 'badge-neutral'}" style="margin: 0; font-size: 11px; padding: 4px 10px; font-weight: 700;">
+                          ${concern.count} mentions
+                        </span>
+                      </td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
 
-        <div class="charts-row" style="gap: 24px; align-items: stretch; margin-bottom: 24px;">
-          <!-- Metrics 7 & 8: 💬 Satisfaction Score & 🤝 Trust Score -->
-          <div class="chart-card w-35 transcript-card-animate delay-7" style="padding: 24px;">
+        <!-- Row 2: Satisfaction & Trust and Repeated Issues -->
+        <div class="charts-row" style="margin-bottom: 24px; gap: 24px; align-items: stretch;">
+          
+          <!-- Satisfaction & Trust Scores -->
+          <div class="chart-card w-50 transcript-card-animate delay-8" style="padding: 24px;">
             <div class="chart-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
               <i data-lucide="smile" style="width: 20px; height: 20px; color: var(--color-accent);"></i>
               Satisfaction & Trust Scores
@@ -8165,43 +8244,13 @@
             </div>
           </div>
 
-          <!-- Metric 6: 🚨 Key Client Concerns (Top 3) -->
-          <div class="chart-card w-35 transcript-card-animate delay-8" style="padding: 24px;">
-            <div class="chart-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-              <i data-lucide="alert-octagon" style="width: 20px; height: 20px; color: var(--color-accent);"></i>
-              Key Client Concerns (Top 3)
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-              <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
-                <thead>
-                  <tr style="border-bottom: 2px solid var(--color-border); color: var(--color-muted); font-weight: 700; text-align: left;">
-                    <th style="padding: 8px 4px; font-size: 10px; text-transform: uppercase;">Concern Topic</th>
-                    <th style="padding: 8px 4px; font-size: 10px; text-transform: uppercase; text-align: center; width: 60px;">Frequency</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${data.concerns.map(concern => `
-                    <tr style="border-bottom: 1px solid var(--color-border);">
-                      <td style="padding: 10px 4px; font-weight: 600; color: var(--color-primary);">${concern.name}</td>
-                      <td style="padding: 10px 4px; text-align: center;">
-                        <span class="badge ${concern.count >= 15 ? 'badge-danger' : concern.count >= 8 ? 'badge-blue' : 'badge-neutral'}" style="margin: 0; font-size: 11px; padding: 4px 8px;">
-                          ${concern.count}x
-                        </span>
-                      </td>
-                    </tr>
-                  `).join("")}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Metric 9: 🔁 Repeated Issues / Escalation Risk -->
-          <div class="chart-card w-30 transcript-card-animate delay-9" style="padding: 24px;">
+          <!-- Repeated Issues & Escalations -->
+          <div class="chart-card w-50 transcript-card-animate delay-9" style="padding: 24px; display: flex; flex-direction: column;">
             <div class="chart-title" style="margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
               <i data-lucide="refresh-cw" style="width: 20px; height: 20px; color: var(--color-accent);"></i>
               Repeated Issues & Escalation Risk
             </div>
-            <div style="display: flex; flex-direction: column; gap: 10px; overflow-y: auto;">
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 10px; overflow-y: auto;">
               ${data.repeatedIssues.map(issue => `
                 <div style="padding: 12px; border-radius: 8px; border: 1px solid ${issue.resolved ? 'var(--color-border)' : 'rgba(238, 104, 59, 0.3)'}; background: ${issue.resolved ? '#f8fafc' : 'rgba(238, 104, 59, 0.02)'}; display: flex; flex-direction: column; gap: 6px;">
                   <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
@@ -8220,6 +8269,7 @@
               `).join("")}
             </div>
           </div>
+
         </div>
       `;
 
@@ -8655,6 +8705,577 @@
         executiveSummary: "Excellent installation reviews this week. Technical team successfully addressed minor duct vibration reports. Churn and support backlogs remain extremely low."
       }
     };
+
+    const GHL_CLIENT_DATA = {
+      "Foundation Health & Wellness": {
+        pipelineValue: "$34,500",
+        totalLeads: 142,
+        conversionRate: 72,
+        noShowRate: 6.8,
+        leads: [
+          { name: "John Miller", email: "john@example.com", phone: "+1 (555) 321-4567", source: "Facebook Ads", tags: ["Hot Lead", "IV Drip"], serviceType: "IV Therapy Package", budget: "$450", history: "Form Submitted → SMS Auto-reply → Consultation Booked" },
+          { name: "Evelyn Carter", email: "evelyn.c@example.com", phone: "+1 (555) 987-6543", source: "Google Ads", tags: ["Booking Request"], serviceType: "Botox Treatment", budget: "$600", history: "Call Answered → Appt Scheduled" },
+          { name: "Daniel Smith", email: "daniel@example.com", phone: "+1 (555) 123-9876", source: "Organic Map", tags: ["New Lead"], serviceType: "Skin Care Assessment", budget: "$150", history: "GMB Chat Initiated → SMS Nurture" },
+          { name: "Sarah Connor", email: "sconnor@example.com", phone: "+1 (555) 456-7890", source: "Referral", tags: ["Closed Won"], serviceType: "Therapeutic Massage", budget: "$250", history: "Referral Form Rec'd → Paid Invoice INV-009" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 10:00 AM", contact: "John Miller", staff: "Sarah K. (Nurse)", status: "Booked" },
+          { dateTime: "Jun 11, 2026 at 11:30 AM", contact: "Evelyn Carter", staff: "Dr. Stone (MD)", status: "Booked" },
+          { dateTime: "Jun 09, 2026 at 02:00 PM", contact: "Daniel Smith", staff: "Sarah K. (Nurse)", status: "Completed" },
+          { dateTime: "Jun 08, 2026 at 09:30 AM", contact: "Mark Ruffalo", staff: "Alex M. (Rep)", status: "No-Show" }
+        ],
+        funnelStages: [142, 110, 85, 79, 62],
+        sourceBreakdown: [
+          { source: "Google Ads", count: 58 },
+          { source: "Facebook Ads", count: 48 },
+          { source: "Organic Map", count: 24 },
+          { source: "Referrals", count: 12 }
+        ]
+      },
+      "JAG Medical Spa": {
+        pipelineValue: "$28,400",
+        totalLeads: 110,
+        conversionRate: 75,
+        noShowRate: 5.2,
+        leads: [
+          { name: "Jessica Alba", email: "jalba@example.com", phone: "+1 (555) 789-1234", source: "Instagram Post", tags: ["Hot Lead", "Lip Filler"], serviceType: "Dermal Fillers", budget: "$750", history: "GHL DM Form → Callback Completed → Booking Confirmed" },
+          { name: "Robert Downey", email: "rdj@example.com", phone: "+1 (555) 234-5678", source: "Google Search", tags: ["Booking Request"], serviceType: "Laser Treatment", budget: "$400", history: "GMB Form → Call Scheduled" },
+          { name: "Gwyneth Paltrow", email: "gwyneth@example.com", phone: "+1 (555) 876-5432", source: "Website Blog", tags: ["Nurturing"], serviceType: "Functional Consultation", budget: "$300", history: "Newsletter Opt-In → Ebook Downloaded" }
+        ],
+        appointments: [
+          { dateTime: "Jun 12, 2026 at 09:00 AM", contact: "Jessica Alba", staff: "Sarah K. (Nurse)", status: "Booked" },
+          { dateTime: "Jun 12, 2026 at 10:30 AM", contact: "Robert Downey", staff: "Dr. Stone (MD)", status: "Booked" },
+          { dateTime: "Jun 10, 2026 at 04:00 PM", contact: "Gwyneth Paltrow", staff: "Esthetician Lisa", status: "Completed" }
+        ],
+        funnelStages: [110, 92, 75, 71, 56],
+        sourceBreakdown: [
+          { source: "Google Search", count: 42 },
+          { source: "Instagram Post", count: 38 },
+          { source: "Website Blog", count: 20 },
+          { source: "Referrals", count: 10 }
+        ]
+      },
+      "Vital Roots Functional Medicine": {
+        pipelineValue: "$18,200",
+        totalLeads: 85,
+        conversionRate: 58,
+        noShowRate: 14.5,
+        leads: [
+          { name: "Laura Palmer", email: "lpalmer@example.com", phone: "+1 (555) 666-0000", source: "Facebook Ads", tags: ["Hot Lead", "Thyroid Help"], serviceType: "Thyroid Protocol Consultation", budget: "$350", history: "Ad Click → Lead Form → Consultation Pending" },
+          { name: "Dale Cooper", email: "dcooper@example.com", phone: "+1 (555) 777-1111", source: "Google Search", tags: ["Booking Request"], serviceType: "Gut Health Analysis", budget: "$500", history: "Web Search → Appointment Booked → Portal Account Created" },
+          { name: "Audrey Horne", email: "audrey@example.com", phone: "+1 (555) 888-2222", source: "Facebook Ads", tags: ["Cold Lead"], serviceType: "Adrenal Fatigue Assessment", budget: "$300", history: "Ebook Download → Unsubscribe Request Pending" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 02:00 PM", contact: "Dale Cooper", staff: "Dr. Stone (MD)", status: "Booked" },
+          { dateTime: "Jun 10, 2026 at 11:00 AM", contact: "Laura Palmer", staff: "Sarah K. (Nurse)", status: "Canceled" },
+          { dateTime: "Jun 09, 2026 at 09:00 AM", contact: "Audrey Horne", staff: "Dr. Stone (MD)", status: "No-Show" }
+        ],
+        funnelStages: [85, 65, 49, 42, 30],
+        sourceBreakdown: [
+          { source: "Facebook Ads", count: 45 },
+          { source: "Google Search", count: 28 },
+          { source: "Website Blog", count: 12 }
+        ]
+      },
+      "Core Wellness & Recovery": {
+        pipelineValue: "$41,000",
+        totalLeads: 168,
+        conversionRate: 80,
+        noShowRate: 3.2,
+        leads: [
+          { name: "Bruce Wayne", email: "bwayne@example.com", phone: "+1 (555) 911-0000", source: "Referral", tags: ["Hot Lead", "Cryo Pass"], serviceType: "Corporate Wellness Membership", budget: "$1200", history: "Referral Email → Demo Attended → Booking Scheduled" },
+          { name: "Diana Prince", email: "diana@example.com", phone: "+1 (555) 700-1111", source: "Instagram Post", tags: ["Closed Won"], serviceType: "Cold Plunge Monthly Pass", budget: "$200", history: "Insta DM → Paid in Portal" },
+          { name: "Clark Kent", email: "ckent@example.com", phone: "+1 (555) 800-2222", source: "Google Search", tags: ["Booking Request"], serviceType: "Hyperbaric Chamber Session", budget: "$500", history: "Form Submitted → Booking Scheduled" }
+        ],
+        appointments: [
+          { dateTime: "Jun 12, 2026 at 01:00 PM", contact: "Bruce Wayne", staff: "Alex M. (Rep)", status: "Booked" },
+          { dateTime: "Jun 12, 2026 at 03:00 PM", contact: "Clark Kent", staff: "Esthetician Lisa", status: "Booked" },
+          { dateTime: "Jun 10, 2026 at 10:00 AM", contact: "Diana Prince", staff: "Alex M. (Rep)", status: "Completed" }
+        ],
+        funnelStages: [168, 140, 134, 130, 112],
+        sourceBreakdown: [
+          { source: "Google Search", count: 62 },
+          { source: "Instagram Post", count: 54 },
+          { source: "Referrals", count: 32 },
+          { source: "Facebook Ads", count: 20 }
+        ]
+      },
+      "Vitality Medical Spa": {
+        pipelineValue: "$21,500",
+        totalLeads: 95,
+        conversionRate: 68,
+        noShowRate: 8.5,
+        leads: [
+          { name: "Tony Stark", email: "tstark@example.com", phone: "+1 (555) 300-3000", source: "Google Ads", tags: ["Hot Lead", "IV Therapy"], serviceType: "IV Hydration Bundle", budget: "$800", history: "Ad Click → Consultation Complete → Appt Booked" },
+          { name: "Steve Rogers", email: "srogers@example.com", phone: "+1 (555) 194-0000", source: "Facebook Ads", tags: ["Booking Request"], serviceType: "Facial Package", budget: "$250", history: "GHL Ad Form → Call Answered → Appt Booked" },
+          { name: "Natasha Romanoff", email: "natasha@example.com", phone: "+1 (555) 400-0000", source: "Referral", tags: ["Closed Won"], serviceType: "Dermal Fillers", budget: "$900", history: "Referral Received → Consultation Done → Closed Won" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 03:00 PM", contact: "Tony Stark", staff: "Sarah K. (Nurse)", status: "Booked" },
+          { dateTime: "Jun 11, 2026 at 04:30 PM", contact: "Steve Rogers", staff: "Esthetician Lisa", status: "Booked" },
+          { dateTime: "Jun 09, 2026 at 01:00 PM", contact: "Natasha Romanoff", staff: "Sarah K. (Nurse)", status: "Completed" },
+          { dateTime: "Jun 08, 2026 at 10:00 AM", contact: "Peter Parker", staff: "Esthetician Lisa", status: "No-Show" }
+        ],
+        funnelStages: [95, 78, 65, 59, 48],
+        sourceBreakdown: [
+          { source: "Google Ads", count: 38 },
+          { source: "Facebook Ads", count: 32 },
+          { source: "Referrals", count: 25 }
+        ]
+      },
+      "Inner Calm Therapy Center": {
+        pipelineValue: "$15,600",
+        totalLeads: 78,
+        conversionRate: 82,
+        noShowRate: 2.5,
+        leads: [
+          { name: "Barry Allen", email: "ballen@example.com", phone: "+1 (555) 444-1111", source: "Google Search", tags: ["Hot Lead", "Stress CBT"], serviceType: "Mindfulness Package", budget: "$450", history: "Search Click → Intake Form Submitted → Confirmed" },
+          { name: "Iris West", email: "iwest@example.com", phone: "+1 (555) 444-2222", source: "Referral", tags: ["Closed Won"], serviceType: "Therapeutic Counseling", budget: "$350", history: "Referral Form → Intake Complete" }
+        ],
+        appointments: [
+          { dateTime: "Jun 12, 2026 at 11:00 AM", contact: "Barry Allen", staff: "Sarah K. (Nurse)", status: "Booked" },
+          { dateTime: "Jun 10, 2026 at 02:00 PM", contact: "Iris West", staff: "Sarah K. (Nurse)", status: "Completed" }
+        ],
+        funnelStages: [78, 70, 64, 62, 54],
+        sourceBreakdown: [
+          { source: "Google Search", count: 48 },
+          { source: "Referrals", count: 30 }
+        ]
+      },
+      "Precision HVAC Experts": {
+        pipelineValue: "$48,900",
+        totalLeads: 154,
+        conversionRate: 64,
+        noShowRate: 7.8,
+        leads: [
+          { name: "Frank Castle", email: "fcastle@example.com", phone: "+1 (555) 100-2000", source: "Google Local Service Ads", tags: ["Hot Lead", "AC Install"], serviceType: "Full System Replacement", budget: "$8500", history: "LSA Call → Site Inspection Complete → Estimate Sent" },
+          { name: "Matt Murdock", email: "mmurdock@example.com", phone: "+1 (555) 200-3000", source: "Organic Search", tags: ["Emergency Repair"], serviceType: "Emergency AC Repair", budget: "$450", history: "Emergency Hotline → Tech Dispatched" },
+          { name: "Karen Page", email: "kpage@example.com", phone: "+1 (555) 300-4000", source: "Facebook Ads", tags: ["Cold Lead"], serviceType: "Duct Maintenance", budget: "$300", history: "Promo Signup → Email Nurture" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 08:30 AM", contact: "Frank Castle", staff: "Tech Alex (HVAC)", status: "Booked" },
+          { dateTime: "Jun 11, 2026 at 01:00 PM", contact: "Matt Murdock", staff: "Tech Marcus (HVAC)", status: "Booked" },
+          { dateTime: "Jun 09, 2026 at 10:00 AM", contact: "Foggy Nelson", staff: "Tech Alex (HVAC)", status: "Completed" }
+        ],
+        funnelStages: [154, 122, 98, 91, 74],
+        sourceBreakdown: [
+          { source: "Google Local Service Ads", count: 72 },
+          { source: "Organic Search", count: 44 },
+          { source: "Facebook Ads", count: 38 }
+        ]
+      },
+      "Apex Climate Control": {
+        pipelineValue: "$56,000",
+        totalLeads: 184,
+        conversionRate: 60,
+        noShowRate: 9.2,
+        leads: [
+          { name: "Peter Parker", email: "spidey@example.com", phone: "+1 (555) 800-4444", source: "Google LSA", tags: ["Hot Lead", "AC Repair"], serviceType: "Condenser Coils Repair", budget: "$950", history: "Call Ingested → Tech Dispatched → Estimate Pending" },
+          { name: "Mary Jane", email: "mj@example.com", phone: "+1 (555) 800-5555", source: "Facebook Ads", tags: ["Booking Request"], serviceType: "AC Tuneup", budget: "$150", history: "Promo Form → SMS Auto-reply → Appt Scheduled" },
+          { name: "Harry Osborn", email: "harry@example.com", phone: "+1 (555) 800-6666", source: "Google Ads", tags: ["High Pipeline Value"], serviceType: "Multi-Zone HVAC Retrofit", budget: "$12000", history: "Web Quote Request → Callback Done" }
+        ],
+        appointments: [
+          { dateTime: "Jun 12, 2026 at 09:30 AM", contact: "Peter Parker", staff: "Tech Marcus (HVAC)", status: "Booked" },
+          { dateTime: "Jun 12, 2026 at 02:30 PM", contact: "Mary Jane", staff: "Tech Roger (HVAC)", status: "Booked" },
+          { dateTime: "Jun 10, 2026 at 04:00 PM", contact: "Harry Osborn", staff: "Tech Marcus (HVAC)", status: "Completed" },
+          { dateTime: "Jun 09, 2026 at 11:00 AM", contact: "Norman Osborn", staff: "Tech Roger (HVAC)", status: "No-Show" }
+        ],
+        funnelStages: [184, 138, 110, 100, 82],
+        sourceBreakdown: [
+          { source: "Google LSA", count: 88 },
+          { source: "Facebook Ads", count: 52 },
+          { source: "Google Ads", count: 44 }
+        ]
+      },
+      "Comfort Zone Heating & Air": {
+        pipelineValue: "$38,400",
+        totalLeads: 118,
+        conversionRate: 74,
+        noShowRate: 3.5,
+        leads: [
+          { name: "Arthur Dent", email: "arthur@example.com", phone: "+1 (555) 424-2424", source: "Organic Search", tags: ["Hot Lead", "Heat Pump"], serviceType: "Heat Pump Retrofit", budget: "$9800", history: "Search Click → Web Form → In-Home Quote Scheduled" },
+          { name: "Ford Prefect", email: "ford@example.com", phone: "+1 (555) 424-4242", source: "Referral", tags: ["Closed Won"], serviceType: "Filter Subscription", budget: "$200", history: "Referral Code Redeemed → Auto-Ship Activated" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 02:00 PM", contact: "Arthur Dent", staff: "Tech Alex (HVAC)", status: "Booked" },
+          { dateTime: "Jun 09, 2026 at 10:00 AM", contact: "Ford Prefect", staff: "Tech Roger (HVAC)", status: "Completed" }
+        ],
+        funnelStages: [118, 98, 87, 84, 72],
+        sourceBreakdown: [
+          { source: "Organic Search", count: 68 },
+          { source: "Referral", count: 50 }
+        ]
+      },
+      "Elite Air Systems": {
+        pipelineValue: "$29,000",
+        totalLeads: 98,
+        conversionRate: 66,
+        noShowRate: 6.0,
+        leads: [
+          { name: "Logan Howlett", email: "logan@example.com", phone: "+1 (555) 999-6666", source: "Google Ads", tags: ["Hot Lead", "AC Install"], serviceType: "Compressor Replacement", budget: "$1500", history: "Ad Click → Call Center Booked → Dispatch Scheduled" },
+          { name: "Scott Summers", email: "scott@example.com", phone: "+1 (555) 999-7777", source: "Organic Search", tags: ["Booking Request"], serviceType: "Thermostat Install", budget: "$350", history: "Web Search → Booking Requested" }
+        ],
+        appointments: [
+          { dateTime: "Jun 12, 2026 at 10:00 AM", contact: "Logan Howlett", staff: "Tech Roger (HVAC)", status: "Booked" },
+          { dateTime: "Jun 12, 2026 at 11:30 AM", contact: "Scott Summers", staff: "Tech Alex (HVAC)", status: "Booked" }
+        ],
+        funnelStages: [98, 78, 65, 61, 48],
+        sourceBreakdown: [
+          { source: "Google Ads", count: 54 },
+          { source: "Organic Search", count: 44 }
+        ]
+      },
+      "Rapid Response Air": {
+        pipelineValue: "$22,800",
+        totalLeads: 104,
+        conversionRate: 52,
+        noShowRate: 15.4,
+        leads: [
+          { name: "Walter White", email: "heisenberg@example.com", phone: "+1 (555) 509-0000", source: "Emergency Line", tags: ["Hot Lead", "SLA Delay"], serviceType: "Commercial Freezers Tuneup", budget: "$1200", history: "Dispatcher Hotline → No Show Alert Raised" },
+          { name: "Jesse Pinkman", email: "jesse@example.com", phone: "+1 (555) 509-1111", source: "Google LSA", tags: ["Booking Request", "Angry"], serviceType: "Residential AC Fix", budget: "$400", history: "Callback Delayed 4hrs → Appt Booked" },
+          { name: "Gustavo Fring", email: "gus@example.com", phone: "+1 (555) 509-2222", source: "Website SEO", tags: ["Nurturing"], serviceType: "HVAC Maintenance Plan", budget: "$2000", history: "GHL Quote Form → Callback Scheduled" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 09:00 AM", contact: "Walter White", staff: "Tech Marcus (HVAC)", status: "No-Show" },
+          { dateTime: "Jun 11, 2026 at 01:00 PM", contact: "Jesse Pinkman", staff: "Tech Alex (HVAC)", status: "Booked" },
+          { dateTime: "Jun 10, 2026 at 02:00 PM", contact: "Gustavo Fring", staff: "Tech Marcus (HVAC)", status: "Completed" }
+        ],
+        funnelStages: [104, 75, 54, 46, 32],
+        sourceBreakdown: [
+          { source: "Emergency Line", count: 42 },
+          { source: "Google LSA", count: 38 },
+          { source: "Website SEO", count: 24 }
+        ]
+      },
+      "Pure Air Solutions": {
+        pipelineValue: "$24,200",
+        totalLeads: 88,
+        conversionRate: 78,
+        noShowRate: 4.1,
+        leads: [
+          { name: "Luke Skywalker", email: "luke@example.com", phone: "+1 (555) 111-9999", source: "Facebook Ads", tags: ["Hot Lead", "UV Air Filter"], serviceType: "Whole House UV Filter", budget: "$1100", history: "Facebook Click → Form Submitted → Callback Done" },
+          { name: "Leia Organa", email: "leia@example.com", phone: "+1 (555) 222-9999", source: "Organic Search", tags: ["Closed Won"], serviceType: "Smart Thermostat", budget: "$350", history: "Web Search → Appointment Booked → Completed" }
+        ],
+        appointments: [
+          { dateTime: "Jun 12, 2026 at 08:30 AM", contact: "Luke Skywalker", staff: "Tech Alex (HVAC)", status: "Booked" },
+          { dateTime: "Jun 10, 2026 at 03:00 PM", contact: "Leia Organa", staff: "Tech Roger (HVAC)", status: "Completed" }
+        ],
+        funnelStages: [88, 74, 69, 66, 56],
+        sourceBreakdown: [
+          { source: "Facebook Ads", count: 50 },
+          { source: "Organic Search", count: 38 }
+        ]
+      },
+      "Airflow Masters": {
+        pipelineValue: "$31,000",
+        totalLeads: 112,
+        conversionRate: 70,
+        noShowRate: 5.8,
+        leads: [
+          { name: "Peter Parker", email: "pparker@example.com", phone: "+1 (555) 444-3333", source: "Google Search", tags: ["Hot Lead", "Thermostat"], serviceType: "Zoned Room Air Balancing", budget: "$600", history: "GHL Ad Form → Call Scheduled → Confirmed" },
+          { name: "Wade Wilson", email: "pool@example.com", phone: "+1 (555) 444-4444", source: "Facebook Ads", tags: ["Booking Request"], serviceType: "Dampers Configuration", budget: "$450", history: "Call Center Request → Appt Booked" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 10:30 AM", contact: "Peter Parker", staff: "Tech Alex (HVAC)", status: "Booked" },
+          { dateTime: "Jun 11, 2026 at 03:30 PM", contact: "Wade Wilson", staff: "Tech Roger (HVAC)", status: "Booked" }
+        ],
+        funnelStages: [112, 92, 78, 74, 62],
+        sourceBreakdown: [
+          { source: "Google Search", count: 64 },
+          { source: "Facebook Ads", count: 48 }
+        ]
+      },
+      "Frosty Systems": {
+        pipelineValue: "$35,400",
+        totalLeads: 124,
+        conversionRate: 62,
+        noShowRate: 11.2,
+        leads: [
+          { name: "Gordon Ramsay", email: "gordon@example.com", phone: "+1 (555) 888-9999", source: "Google Ads", tags: ["Hot Lead", "Cooler Leak"], serviceType: "Commercial Walk-in Repair", budget: "$1400", history: "Google Ad Click → Callback Done → Tech Dispatched" },
+          { name: "Bobby Flay", email: "bflay@example.com", phone: "+1 (555) 888-0000", source: "Facebook Ads", tags: ["Booking Request"], serviceType: "Refrigerator Evaporator Fix", budget: "$750", history: "Lead Form Completed → Booking Scheduled" }
+        ],
+        appointments: [
+          { dateTime: "Jun 12, 2026 at 09:00 AM", contact: "Gordon Ramsay", staff: "Tech Marcus (HVAC)", status: "Booked" },
+          { dateTime: "Jun 12, 2026 at 01:00 PM", contact: "Bobby Flay", staff: "Tech Alex (HVAC)", status: "Booked" },
+          { dateTime: "Jun 09, 2026 at 11:00 AM", contact: "Guy Fieri", staff: "Tech Marcus (HVAC)", status: "No-Show" }
+        ],
+        funnelStages: [124, 95, 77, 68, 54],
+        sourceBreakdown: [
+          { source: "Google Ads", count: 70 },
+          { source: "Facebook Ads", count: 54 }
+        ]
+      },
+      "Prime Comfort HVAC": {
+        pipelineValue: "$45,600",
+        totalLeads: 138,
+        conversionRate: 78,
+        noShowRate: 2.8,
+        leads: [
+          { name: "John Connor", email: "john.c@example.com", phone: "+1 (555) 202-9999", source: "Google LSA", tags: ["Hot Lead", "Warranty"], serviceType: "Extended Warranty Registration", budget: "$450", history: "Form Submitted → Verification Complete → Confirmed" },
+          { name: "Sarah Connor", email: "sarah.c@example.com", phone: "+1 (555) 202-8888", source: "Organic Search", tags: ["Closed Won"], serviceType: "Residential AC Install", budget: "$7800", history: "Search Click → Estimate Accepted → Paid Invoice" }
+        ],
+        appointments: [
+          { dateTime: "Jun 11, 2026 at 10:00 AM", contact: "John Connor", staff: "Tech Alex (HVAC)", status: "Booked" },
+          { dateTime: "Jun 09, 2026 at 02:00 PM", contact: "Sarah Connor", staff: "Tech Roger (HVAC)", status: "Completed" }
+        ],
+        funnelStages: [138, 118, 108, 105, 94],
+        sourceBreakdown: [
+          { source: "Google LSA", count: 78 },
+          { source: "Organic Search", count: 60 }
+        ]
+      }
+    };
+
+            function renderGHLDashboard() {
+      const container = document.getElementById("ghl-overview");
+      if (!container) return;
+
+      const clientName = document.getElementById("selected-client-name").innerText.replace("✓ ", "").trim();
+      const data = GHL_CLIENT_DATA[clientName] || GHL_CLIENT_DATA["Foundation Health & Wellness"];
+
+      // Retrieve only the first lead and appointment
+      const lead = data.leads[0] || { 
+        name: "No Active Lead", 
+        email: "N/A", 
+        phone: "N/A", 
+        source: "N/A", 
+        tags: ["No Lead"], 
+        serviceType: "N/A", 
+        budget: "N/A", 
+        history: "No activity history available" 
+      };
+      
+      const appt = data.appointments[0] || { 
+        dateTime: "N/A", 
+        contact: "N/A", 
+        staff: "N/A", 
+        status: "N/A" 
+      };
+
+      // Determine appropriate status badge classes for the appointment
+      let statusBadge = "badge-neutral";
+      if (appt.status === "Booked") statusBadge = "badge-blue";
+      else if (appt.status === "Attended" || appt.status === "Completed") statusBadge = "badge-success";
+      else if (appt.status === "No-Show") statusBadge = "badge-danger";
+      else if (appt.status === "Canceled") statusBadge = "badge-secondary";
+
+      // Split the activity history by "→" or "   "
+      const steps = lead.history.split(/→|   /).map(s => s.trim()).filter(Boolean);
+
+      // Determine category (Spa vs HVAC) for dynamic campaign/review fallbacks
+      const isSpa = clientName.toLowerCase().includes("spa") || clientName.toLowerCase().includes("wellness") || clientName.toLowerCase().includes("medicine") || clientName.toLowerCase().includes("therapy");
+
+      const pipelineStage = isSpa ? "Consultation Booked" : "Site Estimate Scheduled";
+      const adCampaign = isSpa ? "Premium Skincare Summer Promo" : "Emergency Furnace Outage SEO";
+      const lastCommunication = isSpa ? "SMS Auto-Reply (2 hrs ago)" : "Outbound Call Answered (Yesterday)";
+      const nextAction = isSpa ? "Send Pre-treatment Medical Consent Form" : "Confirm service tech dispatch time";
+
+      const latestReview = isSpa ? {
+        author: "Rebecca K.",
+        rating: 5,
+        text: "Absolutely loved the consultation. The staff were very knowledgeable and the clinic is stunning!"
+      } : {
+        author: "Douglas P.",
+        rating: 5,
+        text: "Super fast response on a hot day. The technician diagnosed and fixed my HVAC unit in 30 minutes flat."
+      };
+
+      container.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 24px; width: 100%; margin-bottom: 24px;">
+          
+          <!-- Column 1: CRM Contact Details -->
+          <div class="chart-card transcript-card-animate delay-1" style="padding: 28px; display: flex; flex-direction: column; gap: 24px; border: 1px solid var(--color-border); border-radius: 16px; background: white;">
+            <div class="chart-title" style="margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--color-border); padding-bottom: 16px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="user-check" style="width: 22px; height: 22px; color: var(--color-accent);"></i>
+                <span style="font-size: 16px; font-weight: 700; color: var(--color-primary);">GHL Contact Lead Details</span>
+              </div>
+              <span class="badge badge-accent" style="margin: 0; font-size: 11px; padding: 4px 10px;">CRM Profile</span>
+            </div>
+
+            <!-- Profile Summary Header -->
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(20, 47, 69, 0.08); color: var(--color-primary); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700;">
+                ${lead.name.split(" ").map(n => n[0]).join("").toUpperCase()}
+              </div>
+              <div>
+                <div style="font-size: 17px; font-weight: 700; color: var(--color-primary);">${lead.name}</div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;">
+                  ${lead.tags.map(tag => `
+                    <span class="badge ${tag === 'Hot Lead' || tag === 'SLA Delay' ? 'badge-danger' : tag === 'Booking Request' ? 'badge-blue' : 'badge-neutral'}" style="margin: 0; font-size: 10px; padding: 2px 6px;">
+                      ${tag}
+                    </span>
+                  `).join("")}
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Fields Grid -->
+            <div style="display: grid; grid-template-columns: 1fr; gap: 16px; background: var(--color-warm); padding: 20px; border-radius: 12px; border: 1px solid var(--color-border);">
+              <div>
+                <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Email</div>
+                <div style="font-size: 13.5px; font-weight: 600; color: var(--color-primary); display: flex; align-items: center; gap: 8px;">
+                  <i data-lucide="mail" style="width: 15px; height: 15px; color: var(--color-secondary);"></i>
+                  ${lead.email}
+                </div>
+              </div>
+              
+              <div>
+                <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Phone Number</div>
+                <div style="font-size: 13.5px; font-weight: 600; color: var(--color-primary); display: flex; align-items: center; gap: 8px;">
+                  <i data-lucide="phone" style="width: 15px; height: 15px; color: var(--color-secondary);"></i>
+                  ${lead.phone}
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                  <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Lead Source</div>
+                  <div style="font-size: 13px; font-weight: 600; color: var(--color-primary); display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="compass" style="width: 14px; height: 14px; color: var(--color-secondary);"></i>
+                    ${lead.source}
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Ad Campaign</div>
+                  <div style="font-size: 13px; font-weight: 600; color: var(--color-primary); display: flex; align-items: center; gap: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <i data-lucide="megaphone" style="width: 14px; height: 14px; color: var(--color-secondary);"></i>
+                    ${adCampaign}
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div>
+                  <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Service & Budget</div>
+                  <div style="font-size: 13px; font-weight: 600; color: var(--color-primary); display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="briefcase" style="width: 14px; height: 14px; color: var(--color-secondary);"></i>
+                    ${lead.serviceType} (${lead.budget})
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Pipeline Stage</div>
+                  <div style="font-size: 13px; font-weight: 600; color: var(--color-accent); display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="git-branch" style="width: 14px; height: 14px; color: var(--color-accent);"></i>
+                    ${pipelineStage}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Last Touchpoint & Action Alert -->
+            <div style="background: rgba(238, 104, 59, 0.04); border: 1px solid rgba(238, 104, 59, 0.15); padding: 16px; border-radius: 12px; display: flex; flex-direction: column; gap: 10px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px; align-items: center;">
+                <span style="font-weight: 600; color: var(--color-primary); display: flex; align-items: center; gap: 6px;">
+                  <i data-lucide="message-square" style="width: 14px; height: 14px; color: var(--color-accent);"></i> Last Touchpoint
+                </span>
+                <span style="color: var(--color-muted); font-weight: 550;">${lastCommunication}</span>
+              </div>
+              <div style="font-size: 12px; color: var(--color-primary); font-weight: 600; background: white; padding: 10px; border-radius: 8px; border: 1px solid var(--color-border); display: flex; align-items: center; gap: 8px;">
+                <span style="background: var(--color-success); width: 6px; height: 6px; border-radius: 50%;"></span>
+                <span><strong>Next Recommended Action:</strong> ${nextAction}</span>
+              </div>
+            </div>
+
+            <!-- Activity History Stepper -->
+            <div>
+              <div style="font-size: 13px; font-weight: 600; color: var(--color-primary); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="history" style="width: 16px; height: 16px; color: var(--color-accent);"></i> 
+                <span>Contact Activity History</span>
+              </div>
+              <div style="position: relative; padding-left: 24px; border-left: 2px solid var(--color-border); display: flex; flex-direction: column; gap: 16px; margin-left: 8px;">
+                ${steps.map((step, idx) => `
+                  <div style="position: relative;">
+                    <div style="position: absolute; left: -30px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: ${idx === steps.length - 1 ? 'var(--color-success)' : 'var(--color-accent)'}; border: 2px solid white; box-shadow: 0 0 0 2px ${idx === steps.length - 1 ? 'rgba(57, 181, 74, 0.2)' : 'rgba(238, 104, 59, 0.2)'};"></div>
+                    <div style="font-size: 12.5px; font-weight: 600; color: var(--color-primary);">${step}</div>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+          </div>
+
+          <!-- Column 2: CRM Appointment Details -->
+          <div class="chart-card transcript-card-animate delay-2" style="padding: 28px; display: flex; flex-direction: column; gap: 24px; border: 1px solid var(--color-border); border-radius: 16px; background: white;">
+            <div class="chart-title" style="margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--color-border); padding-bottom: 16px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="calendar" style="width: 22px; height: 22px; color: var(--color-accent);"></i>
+                <span style="font-size: 16px; font-weight: 700; color: var(--color-primary);">Appointment & Booking Details</span>
+              </div>
+              <span class="badge badge-accent" style="margin: 0; font-size: 11px; padding: 4px 10px;">GHL Calendar</span>
+            </div>
+
+            <!-- Booking Status Header -->
+            <div style="display: flex; align-items: center; justify-content: space-between; background: var(--color-warm); border: 1px solid var(--color-border); padding: 18px; border-radius: 12px;">
+              <div>
+                <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px;">Booking Status</div>
+                <div style="font-size: 13px; color: var(--color-primary); font-weight: 550;">Current state of scheduling</div>
+              </div>
+              <span class="badge ${statusBadge}" style="margin: 0; font-size: 13px; padding: 6px 14px; font-weight: 700; border-radius: 20px;">
+                ${appt.status}
+              </span>
+            </div>
+
+            <!-- Details Block -->
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div style="display: flex; align-items: center; gap: 14px; background: rgba(238, 104, 59, 0.04); border: 1px solid rgba(238, 104, 59, 0.15); padding: 18px; border-radius: 12px;">
+                <div style="background: var(--color-accent); color: white; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i data-lucide="clock" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div>
+                  <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase;">Appointment Date & Time</div>
+                  <div style="font-size: 14.5px; font-weight: 700; color: var(--color-primary); margin-top: 2px;">${appt.dateTime}</div>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 14px; border: 1px solid var(--color-border); padding: 18px; border-radius: 12px; background: white;">
+                <div style="background: rgba(20, 47, 69, 0.08); color: var(--color-primary); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i data-lucide="user" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div>
+                  <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase;">Linked CRM Lead</div>
+                  <div style="font-size: 14.5px; font-weight: 700; color: var(--color-primary); margin-top: 2px;">${appt.contact}</div>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 14px; border: 1px solid var(--color-border); padding: 18px; border-radius: 12px; background: white;">
+                <div style="background: rgba(20, 47, 69, 0.08); color: var(--color-primary); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i data-lucide="users" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div>
+                  <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-transform: uppercase;">Assigned Representative</div>
+                  <div style="font-size: 14.5px; font-weight: 700; color: var(--color-primary); margin-top: 2px;">${appt.staff}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reputation Management Box -->
+            <div style="border: 1px solid var(--color-border); background: var(--color-warm); padding: 20px; border-radius: 12px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--color-primary);">
+                  <i data-lucide="star" style="width: 16px; height: 16px; color: #fbbf24; fill: #fbbf24;"></i>
+                  <span>Latest Google Review</span>
+                </div>
+                <div style="display: flex; gap: 2px;">
+                  ${Array(latestReview.rating).fill('<i data-lucide="star" style="width: 12px; height: 12px; color: #fbbf24; fill: #fbbf24;"></i>').join("")}
+                </div>
+              </div>
+              <div style="font-style: italic; font-size: 12.5px; color: var(--color-text); line-height: 1.5;">
+                "${latestReview.text}"
+              </div>
+              <div style="font-size: 11px; color: var(--color-muted); font-weight: 600; text-align: right;">
+                — ${latestReview.author} (via GHL Reputation)
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      `;
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
 
     function renderMailChimpDashboard() {
       const clientName = document.getElementById("selected-client-name").innerText.replace("✓ ", "").trim();
